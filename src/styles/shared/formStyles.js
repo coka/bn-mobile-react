@@ -5,19 +5,20 @@ import {
   borderColor,
   searchIconColor,
   inputBackgroundColor,
+  disabledColor,
   globalFontRegular,
   globalFontSemiBold,
   iconFontSize,
+  globalPaddingMedium,
   globalPadding,
   globalPaddingSmall,
   globalPaddingTiny,
   globalMargin,
+  globalMarginSmall,
 } from '../shared/sharedStyles'
 import {StyleSheet, Dimensions, Platform} from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
-
-export const disabledColor = '#F7F7F7'
 
 export const bodyFontSize = 18
 export const searchIconFontSize = 21
@@ -54,12 +55,16 @@ const FormStyles = {
     paddingTop: globalPaddingSmall,
   },
   searchContainer: {
+    alignItems: 'center',
     backgroundColor: disabledColor,
+    borderColor: 'transparent',
+    borderRadius: 7,
+    borderWidth: 1,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: globalMargin,
+    marginVertical: globalMarginSmall,
+    paddingLeft: globalPaddingSmall,
   },
 
   // TEXTAREA STYLES
@@ -84,10 +89,11 @@ const FormStyles = {
     color: textColor,
     alignContent: 'center',
     backgroundColor: disabledColor,
+    borderColor: 'transparent',
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
-    height: 40,
-    marginBottom: globalPaddingSmall + 5,
+    fontSize: bodyFontSize, 
+    height: 50,
+    marginBottom: globalPaddingMedium,
     paddingHorizontal: globalPadding,
     width: '100%',
   },
@@ -109,19 +115,19 @@ const FormStyles = {
 
   // SEARCH STYLES
   searchIcon: {
-    color: searchIconColor,
-    fontSize: searchIconFontSize,
-    padding: globalPaddingSmall,
+    height: 15,
+    marginHorizontal: globalMarginSmall,
+    width: 15,
   },
   searchInput: {
-    flex: 1,
-    color: textColor,
     alignContent: 'center',
     backgroundColor: disabledColor,
+    color: textColor,
+    flex: 1,
     fontFamily: globalFontRegular,
     fontSize: bodyFontSize,
-    marginTop: globalPaddingTiny,
     height: 40,
+    marginTop: globalPaddingTiny,
     width: '100%',
   },
 

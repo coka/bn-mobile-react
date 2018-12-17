@@ -13,8 +13,8 @@ const orderHistoryStyles = OrderHistoryStyles.createStyles()
 
 export default function OrderHistory() {
   return (
-    <ScrollView>
-      <View style={accountStyles.containerDark}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.containerDark}>
+      <View style={styles.paddingVerticalMedium}>
 
         <Text style={accountStyles.sectionHeader}>Order Receipts</Text>
 

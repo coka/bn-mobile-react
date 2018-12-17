@@ -1,19 +1,16 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
-import {ScrollView, Modal, Text, View, Image, TouchableHighlight, Button} from 'react-native';
+import {ScrollView, Modal, Text, View, Image, TouchableHighlight} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
-import TicketStyles from '../styles/tickets/ticketStyles'
-import TicketShowStyles from '../styles/tickets/ticketShowStyles'
-import EventStyles from '../styles/shared/eventStyles'
 import ModalStyles from '../styles/shared/modalStyles'
+import coverPhotoPlaceholder from '../../assets/account-placeholder-bkgd.png'
+import qrCodePlaceholder from '../../assets/qr-code-placeholder.png'
+import qrCodeIcon from '../../assets/qr-code-small.png'
 
 const styles = SharedStyles.createStyles()
 const accountStyles = AccountStyles.createStyles()
-const ticketStyles = TicketStyles.createStyles()
-const ticketShowStyles = TicketShowStyles.createStyles()
-const eventStyles = EventStyles.createStyles()
 const modalStyles = ModalStyles.createStyles()
 
 
@@ -23,13 +20,13 @@ const QRCode = ({_qrCode, toggleModal, modalVisible}) => (
       toggleModal(!modalVisible)
     }}
     visible={modalVisible}
-    transparent={true}
+    transparent
   >
     <View style={modalStyles.modalContainer}>
       <View style={modalStyles.contentWrapper}>
         <Image
           style={modalStyles.qrCode}
-          source={require('../../assets/qr-code-placeholder.png')}
+          source={qrCodePlaceholder}
         />
         <Text style={modalStyles.header}>Show this to complete a ticket transfer.</Text>
         <View style={styles.buttonContainer}>
@@ -58,10 +55,20 @@ QRCode.propTypes = {
 export default class Account extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
+    screenProps: PropTypes.object.isRequired,
   }
 
-  state = {
-    showQRModal: false,
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      showQRModal: false,
+      user: this.user,
+    }
+  }
+
+  get user() {
+    return this.props.screenProps.auth.state.currentUser.user
   }
 
   toggleQRModal = (visible) => {
@@ -69,47 +76,56 @@ export default class Account extends Component {
   }
 
   render() {
-    const {navigation: {navigate}} = this.props
-    const {showQRModal} = this.state
+    const {
+      props: {
+        navigation: {navigate},
+        screenProps: {auth: {canScanTickets}},
+      },
+      state: {user, showQRModal},
+    } = this
 
     return (
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.containerDark}>
         <QRCode _qrCode="" toggleModal={this.toggleQRModal} modalVisible={showQRModal} />
         <View style={accountStyles.accountBkgdContainer}>
           <Image
             style={accountStyles.accountBkgd}
-            source={require('../../assets/account-placeholder-bkgd.png')}
+            source={user.cover_photo_url || coverPhotoPlaceholder}
           />
+          {false &&  // TODO: Re-enable when functionality is implemented.
           <View style={accountStyles.accountPhotoContainer}>
             <TouchableHighlight underlayColor="rgba(0, 0, 0, 0)">
               <Text style={accountStyles.accountPhotoText}>+ TAP TO ADD A COVER PHOTO</Text>
             </TouchableHighlight>
           </View>
+          }
         </View>
 
-        <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          {false && // TODO: Re-enable when functionality is implemented.
           <View style={accountStyles.avatarPlaceholderContainer}>
             <Icon style={accountStyles.avatarIcon} name="person-add" />
           </View>
+          }
 
-          <View style={accountStyles.accountHeaderContainer}>
+          <View style={accountStyles.accountHeaderWrapper}>
             <View>
-              <Text style={accountStyles.accountEmailHeader}>Kook McDropin</Text>
+              <Text style={accountStyles.accountEmailHeader}>{user.first_name} {user.last_name}</Text>
               <View style={accountStyles.emailWrapper}>
                 <Icon style={accountStyles.emailIcon} name="mail" />
-                <Text style={accountStyles.accountEmail}>KOOKMCDROPZ@GMAIL.COM</Text>
+                <Text style={accountStyles.accountEmail}>{user.email}</Text>
               </View>
             </View>
             <TouchableHighlight onPress={() => this.toggleQRModal(true)}>
               <Image
                 style={accountStyles.qrCodeSmall}
-                source={require('../../assets/qr-code-small.png')}
+                source={qrCodeIcon}
               />
             </TouchableHighlight>
           </View>
         </View>
 
-        <View style={accountStyles.containerDark}>
+        <View style={styles.paddingVerticalMedium}>
 
           <Text style={accountStyles.sectionHeader}>Account Details</Text>
 
@@ -124,6 +140,7 @@ export default class Account extends Component {
           </TouchableHighlight>
 
 
+          {false && // TODO: Re-enable when functionality is implemented.
           <TouchableHighlight underlayColor="rgba(0, 0, 0, 0)" onPress={() => navigate('Notifications')}>
             <View style={accountStyles.rowContainer}>
               <View style={accountStyles.row}>
@@ -133,7 +150,9 @@ export default class Account extends Component {
               <Icon style={accountStyles.accountArrow} name="keyboard-arrow-right" />
             </View>
           </TouchableHighlight>
+          }
 
+          {false &&  // TODO: Re-enable when functionality is implemented.
           <TouchableHighlight underlayColor="rgba(0, 0, 0, 0)" onPress={() => navigate('Billing')}>
             <View style={accountStyles.rowContainer}>
               <View style={accountStyles.row}>
@@ -143,7 +162,9 @@ export default class Account extends Component {
               <Icon style={accountStyles.accountArrow} name="keyboard-arrow-right" />
             </View>
           </TouchableHighlight>
+          }
 
+          {false && // TODO: Re-enable when functionality is implemented.
           <TouchableHighlight underlayColor="rgba(0, 0, 0, 0)" onPress={() => navigate('OrderHistory')}>
             <View style={accountStyles.rowContainer}>
               <View style={accountStyles.row}>
@@ -153,7 +174,23 @@ export default class Account extends Component {
               <Icon style={accountStyles.accountArrow} name="keyboard-arrow-right" />
             </View>
           </TouchableHighlight>
+          }
 
+          {canScanTickets() &&
+          <Fragment>
+            <Text style={[accountStyles.sectionHeader, styles.marginTop]}>Event Tools</Text>
+
+            <TouchableHighlight underlayColor="rgba(0, 0, 0, 0)" onPress={() => navigate('ManageEvents')}>
+              <View style={accountStyles.rowContainer}>
+                <View style={accountStyles.row}>
+                  <Icon style={accountStyles.accountIcon} name="filter-center-focus" />
+                  <Text style={accountStyles.accountHeader}>Doorman</Text>
+                </View>
+                <Icon style={accountStyles.accountArrow} name="keyboard-arrow-right" />
+              </View>
+            </TouchableHighlight>
+          </Fragment>
+          || null}
         </View>
       </ScrollView>
     )

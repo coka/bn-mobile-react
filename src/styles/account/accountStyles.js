@@ -6,6 +6,7 @@ import {
   borderColor,
   containerDarkColor,
   disabledHeaderColor,
+  disabledColor,
   bodyFontSize,
   iconFontSize,
   globalFontRegular,
@@ -74,10 +75,11 @@ const AccountStyles = {
   },
 
   // ACCOUNT INFO STYLES
-  accountHeaderContainer: {
+  accountHeaderWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: globalPaddingSmall,
+    paddingBottom: globalPadding,
+    paddingTop: globalPaddingSmall,
   },
   accountEmailHeader: {
     color: textColor,
@@ -105,13 +107,6 @@ const AccountStyles = {
   },
 
   // CONTAINER STYLES
-  containerDark: {
-    backgroundColor: containerDarkColor,
-    flexDirection: 'column',
-    height: fullHeight,
-    paddingVertical: globalPaddingMedium,
-    width: fullWidth,
-  },
   sectionHeader: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
@@ -159,9 +154,22 @@ const AccountStyles = {
   },
 
   // INPUT STYLES
+  inputContainer: {
+    alignItems: 'center',
+    backgroundColor: white,
+    borderBottomColor: borderColor,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    height: 45,
+    justifyContent: 'space-between',
+    paddingHorizontal: globalPadding,
+    width: fullWidth,
+  },
   accountInputHeader: {
-    flexDirection: 'column',
-    justifyContent: 'center',
+    color: textColor,
+    fontFamily: globalFontRegular,
+    fontSize: iconFontSize,
+    width: fullWidth,
   },
   accountInputHeaderDisabled: {
     color: disabledHeaderColor,

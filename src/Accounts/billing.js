@@ -11,12 +11,12 @@ const billingStyles = BillingStyles.createStyles()
 
 export default function Billing() {
   return (
-    <ScrollView>
-      <View style={accountStyles.containerDark}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.containerDark}>
+      <View style={styles.paddingVerticalMedium}>
 
         <Text style={accountStyles.sectionHeader}>Credit Cards</Text>
 
-        <View style={billingStyles.rowContainer}>
+        <View style={accountStyles.inputContainer}>
           <View style={billingStyles.row}>
             <View style={billingStyles.imageWrapper}>
               <Image
@@ -25,19 +25,21 @@ export default function Billing() {
               />
             </View>
             <TextInput
-              style={styles.paddingRight}
+              style={billingStyles.billingInput}
               placeholder="**** **** **** 2386"
               placeholderTextColor='black'
+              underlineColorAndroid="transparent"
             />
             <TextInput
-              style={styles.paddingRight}
+              style={[billingStyles.billingInput, billingStyles.billingInputLast]}
               placeholder="12/24"
               placeholderTextColor='black'
+              underlineColorAndroid="transparent"
             />
           </View>
         </View>
 
-        <View style={billingStyles.rowContainer}>
+        <View style={accountStyles.inputContainer}>
           <View style={billingStyles.row}>
             <View style={billingStyles.imageWrapper}>
               <Image
@@ -46,33 +48,37 @@ export default function Billing() {
               />
             </View>
             <TextInput
-              style={styles.paddingRight}
+              style={billingStyles.billingInput}
               placeholder="**** **** **** 2595"
               placeholderTextColor='black'
+              underlineColorAndroid="transparent"
             />
             <TextInput
-              style={styles.paddingRight}
+              style={[billingStyles.billingInput, billingStyles.billingInputLast]}
               placeholder="04/21"
               placeholderTextColor='black'
+              underlineColorAndroid="transparent"
             />
           </View>
         </View>
 
-        <Text style={[accountStyles.sectionHeader, styles.marginTop]}>Other</Text>
-
-        <View style={billingStyles.rowContainer}>
-          <View style={billingStyles.row}>
-            <View style={billingStyles.imageWrapper}>
-              <Image
-                style={billingStyles.billingImageVenmo}
-                source={require('../../assets/icon-venmo.png')}
+        <View>
+          <Text style={[accountStyles.sectionHeader, styles.marginTop]}>Other</Text>
+          <View style={accountStyles.inputContainer}>
+            <View style={billingStyles.row}>
+              <View style={billingStyles.imageWrapper}>
+                <Image
+                  style={billingStyles.billingImageVenmo}
+                  source={require('../../assets/icon-venmo.png')}
+                />
+              </View>
+              <TextInput
+                style={accountStyles.accountInputHeader}
+                placeholder="kookster9000@hottopic.com"
+                placeholderTextColor='black'
+                underlineColorAndroid="transparent"
               />
             </View>
-            <TextInput
-              style={styles.paddingRight}
-              placeholder="kookster9000@hottopic.com"
-              placeholderTextColor='black'
-            />
           </View>
         </View>
 

@@ -2,7 +2,6 @@ import {
   white,
   primaryColor,
   textColor,
-  sectionHeaderFontSize,
   bodyFontSize,
   iconFontSize,
   globalFontRegular,
@@ -15,19 +14,18 @@ import {StyleSheet, Dimensions, Platform} from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
-export const whiteTransparent = 'rgba(255, 255, 255, 0.10)'
+export const whiteTransparent = 'rgba(255, 255, 255, 0.3)'
 
 export const headerFontSize = 38
+export const sectionHeaderFontSize = 18
 
-const EventStyles = {
+const EventCardStyles = {
   // CONTAINER STYLES
-  eventContainer: {
-    padding: globalPaddingSmall,
-  },
   detailsContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    height: 175,
+    height: 180,
+    padding: globalPadding,
   },
   detailsContainerBottom: {
     paddingBottom: globalPadding,
@@ -36,20 +34,19 @@ const EventStyles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  sectionBottom: {
-    paddingVertical: globalPadding,
-  },
 
   // TEXT STYLES
   header: {
     fontFamily: globalFontSemiBold,
     fontSize: sectionHeaderFontSize,
     color: textColor,
+    paddingTop: globalPaddingSmall,
   },
   details: {
     fontFamily: globalFontRegular,
     fontSize: bodyFontSize,
     color: textColor,
+    paddingTop: 2,
   },
 
   // ICON STYLES
@@ -75,7 +72,7 @@ const EventStyles = {
     color: primaryColor,
     fontSize: iconFontSize,
   },
-  
+
   // IMAGE BKGD STYLES
   eventImage: {
     height: 180,
@@ -85,7 +82,7 @@ const EventStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...EventStyles, ...overrides})
+  return StyleSheet.create({...EventCardStyles, ...overrides})
 }
 
 export default {

@@ -12,11 +12,17 @@ export const sectionHeaderColor = '#9DA3B4'
 export const backgroundColor = white
 export const inputBackgroundColor = '#FAFAFA'
 export const helpTextColor = '#666'
-export const borderColor = '#DCDCDC'
+export const borderColor = '#EBEBEB'
 export const containerDarkColor = '#F5F6F7'
 export const primaryTransparent = 'rgba(255, 34, 178, 0.5)'
-export const whiteTransparent = 'rgba(255, 255, 255, 0.10)'
+export const whiteTransparent = 'rgba(255, 255, 255, 0.3)'
 export const disabledHeaderColor = 'rgba(64, 64, 64, 0.5)'
+export const boxShadowColor = 'rgba(36, 36, 40, 0.08)'
+export const pillContainerColor = 'rgba(0, 0, 0, 0.6)'
+export const disabledDarkColor = '#9DA3B4'
+export const disabledColor = '#F7F7F7'
+export const successColor = '#A1F44D'
+export const errorColor = '#F7E61A'
 
 export const globalPaddingTiny = 5
 export const globalPaddingSmall = 10
@@ -25,8 +31,10 @@ export const globalPaddingMedium = 30
 export const globalPaddingLarge = 40
 export const globalPaddingLarger = 45
 export const globalPaddingJumbo = 55
-export const globalMarginSmall = 10
-export const globalMargin = 20
+
+export const globalMarginTiny = globalPaddingTiny
+export const globalMarginSmall = globalPaddingSmall
+export const globalMargin = globalPadding
 
 export const globalFontRegular = 'tt_commons_regular'
 export const globalFontMedium = 'tt_commons_medium'
@@ -35,8 +43,10 @@ export const globalFontBold = 'tt_commons_bold'
 export const globalFontItalic = 'tt_commons_italic'
 
 export const headerFontSize = 36
+export const headerSecondaryFontSize = 24
 export const sectionHeaderFontSize = 21
 export const bodyFontSize = 16
+export const subnavFontSize = 14
 export const iconFontSize = 18
 export const iconCircleFontSize = 25
 
@@ -44,16 +54,21 @@ const SharedStyles = {
   // CONTAINERS
   container: {
     backgroundColor: white,
-    paddingHorizontal: globalPadding,
-    paddingVertical: globalPadding,
-    width: fullWidth,
     flexDirection: 'column',
+    paddingHorizontal: globalPadding,
+    paddingTop: globalPadding,
+  },
+  containerFullHeight: {
+    backgroundColor: white,
+    flexDirection: 'column',
+    paddingHorizontal: globalPadding,
+    paddingTop: globalPadding,
+    flex:1
   },
   containerDark: {
     backgroundColor: containerDarkColor,
+    flex: 1,
     flexDirection: 'column',
-    paddingBottom: globalPaddingLarge,
-    paddingHorizontal: globalPadding,
     width: fullWidth,
   },
   headerContainer: {
@@ -62,7 +77,7 @@ const SharedStyles = {
     borderBottomWidth: 1,
     borderStyle: 'solid',
     paddingHorizontal: globalPadding,
-    paddingTop: globalPadding,
+    paddingTop: globalPaddingSmall,
     width: fullWidth,
     flexDirection: 'column',
   },
@@ -106,14 +121,14 @@ const SharedStyles = {
     paddingTop: globalPadding,
   },
   sectionHeaderContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     paddingTop: globalPaddingMedium,
     paddingVertical: globalPaddingSmall,
   },
   section: {
     paddingVertical: globalPaddingLarge,
+  },
+  spacer: {
+    height: 25,
   },
 
   // BUTTONS
@@ -126,11 +141,15 @@ const SharedStyles = {
     height: 60,
     justifyContent: 'center',
   },
+  buttonDisabled: {
+    backgroundColor: disabledDarkColor,
+    flex: 1,
+    height: 60,
+    justifyContent: 'center',
+  },
   buttonSecondary: {
-    alignItems: 'center',
     backgroundColor: white,
     flex: 1,
-    flexDirection: 'row',
     height: 50,
     justifyContent: 'center',
   },
@@ -148,6 +167,7 @@ const SharedStyles = {
     color: primaryColor,
     fontFamily: globalFontRegular,
     fontSize: iconFontSize,
+    textAlign: 'center',
   },
 
   // HEADERS
@@ -164,12 +184,18 @@ const SharedStyles = {
     fontSize: headerFontSize,
     paddingBottom: globalPadding,
   },
+  headerSecondary: {
+    backgroundColor: 'transparent',
+    fontFamily: globalFontBold,
+    fontSize: headerSecondaryFontSize,
+    color: textColor,
+  },
   sectionHeader: {
     backgroundColor: 'transparent',
     color: sectionHeaderColor,
     fontFamily: globalFontSemiBold,
     fontSize: sectionHeaderFontSize,
-    paddingVertical: globalPaddingSmall,
+    paddingVertical: globalPadding - globalPaddingTiny,
   },
 
   // TEXT STYLES
@@ -209,30 +235,22 @@ const SharedStyles = {
     fontFamily: globalFontSemiBold,
     fontSize: bodyFontSize,
   },
-
-  // SUBNAV STYLES
-  subnavContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingTop: globalPadding,
-    paddingVertical: globalPaddingSmall,
-  },
-  subnavHeader: {
-    color: sectionHeaderColor,
-    fontFamily: globalFontRegular,
-    fontSize: sectionHeaderFontSize,
-  },
-  subnavHeaderActive: {
+  linkTextDark: {
+    backgroundColor: 'transparent',
     color: textColor,
-    fontFamily: globalFontRegular,
-    fontSize: sectionHeaderFontSize,
+    fontFamily: globalFontMedium,
+    fontSize: bodyFontSize,
   },
 
   // ICONS
   iconLinkContainer: {
     alignItems: 'flex-start',
     flexDirection: 'row',
+  },
+  dropdownLinkContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   iconLink: {
     backgroundColor: 'transparent',
@@ -272,16 +290,50 @@ const SharedStyles = {
     height: 30,
   },
   iconImageSmall: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     marginRight: globalPaddingTiny,
+    marginTop: -2,
+  },
+
+  // SUBNAV STYLES
+  subnavContainer: {
+    alignItems: 'center',
+    backgroundColor: white,
+    borderBottomColor: borderColor,
+    borderBottomWidth: 1,
+    borderStyle: 'solid',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  subnavHeader: {
+    color: sectionHeaderColor,
+    fontFamily: globalFontRegular,
+    fontSize: subnavFontSize,
+    paddingVertical: globalPadding - globalPaddingTiny,
+    textAlign: 'center',
+    width: 150,
+  },
+  subnavHeaderActive: {
+    color: primaryColor,
+    fontFamily: globalFontRegular,
+    fontSize: subnavFontSize,
+    paddingVertical: globalPadding - globalPaddingTiny,
+    textAlign: 'center',
+    width: 150,
+  },
+  activeWrapper: {
+    borderBottomColor: primaryColor,
+    borderBottomWidth: 3,
+    borderStyle: 'solid',
+    marginBottom: -2,
   },
 
   // PRICE TAG STYLES
   priceTagContainer: {
     backgroundColor: white,
     borderRadius: 5,
-    padding: globalPaddingTiny,
+    padding: 3,
     width: 50,
   },
   priceTag: {
@@ -349,8 +401,17 @@ const SharedStyles = {
   textCenter: {
     textAlign: 'center',
   },
+  padding: {
+    padding: globalPadding,
+  },
+  paddingSmall: {
+    padding: globalPaddingSmall,
+  },
   paddingRight: {
     paddingRight: globalPadding,
+  },
+  paddingLeft: {
+    paddingLeft: globalPadding,
   },
   paddingTop: {
     paddingTop: globalPadding,
@@ -358,11 +419,8 @@ const SharedStyles = {
   paddingTopSmall: {
     paddingTop: globalPaddingSmall,
   },
-  paddingVerticalSmall: {
-    paddingVertical: globalPaddingSmall,
-  },
-  paddingLeft: {
-    paddingLeft: globalPadding,
+  paddingBottomLarge: {
+    paddingBottom: globalPaddingLarge,
   },
   paddingBottomJumbo: {
     paddingBottom: globalPaddingJumbo,
@@ -370,14 +428,54 @@ const SharedStyles = {
   noPaddingBottom: {
     paddingBottom: 0,
   },
-  marginTopSmall: {
-    marginTop: globalMarginSmall,
+  paddingVertical: {
+    paddingVertical: globalPadding,
+  },
+  paddingVerticalMedium: {
+    paddingVertical: globalPaddingMedium,
+  },
+  paddingVerticalSmall: {
+    paddingVertical: globalPaddingSmall,
+  },
+  paddingHorizontal: {
+    paddingHorizontal: globalPadding,
   },
   marginTop: {
     marginTop: globalMargin,
   },
+  marginTopSmall: {
+    marginTop: globalMarginSmall,
+  },
+  marginBottom: {
+    marginBottom: globalMargin,
+  },
+  marginBottomSmall: {
+    marginBottom: globalMarginSmall,
+  },
+  marginBottomTiny: {
+    marginBottom: globalMarginTiny,
+  },
+  marginRight: {
+    marginRight: globalMargin,
+  },
+  marginRightTiny: {
+    marginRight: globalMarginTiny,
+  },
+  marginLeftTiny: {
+    marginLeft: globalMarginTiny,
+  },
+  marginHorizontal: {
+    marginHorizontal: globalMargin,
+  },
   lineHeight: {
     paddingBottom: globalPaddingTiny / 2,
+  },
+  textUnderline: {
+    textDecorationLine: 'underline',
+  },
+  borderBottomRadius: {
+    borderBottomRightRadius: 6,
+    borderBottomLeftRadius: 6,
   },
 
   // FLEX HELPER STYLES
@@ -385,17 +483,32 @@ const SharedStyles = {
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
+  flexRowFlexStartCenter: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
   flexRowSpaceBetween: {
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   flexRowCenter: {
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
   },
   flexColumnCenter: {
     flexDirection: 'column',
     justifyContent: 'center',
+  },
+  flexColumnFlexStart: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  flexColumnSpaceBetween: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
 
   // ROWS COLS
@@ -411,6 +524,15 @@ const SharedStyles = {
   },
   cols4: {
     width: fullWidth / 4,
+  },
+  flex1: {
+    flex: 1,
+  },
+  flex2: {
+    flex: 2,
+  },
+  flex3: {
+    flex: 3,
   },
 }
 

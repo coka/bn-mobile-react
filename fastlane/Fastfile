@@ -1,0 +1,26 @@
+lane :setup_env do
+  setup_travis
+
+  match(
+    type: appstore,
+    app_identifier: com.revelrylabs.bigneon,
+    readonly: true,
+    team_id: M2C9MHL336
+  )
+end
+
+lane :beta do
+  pilot(
+    ipa: "app.ipa",
+    skip_waiting_for_build_processing: true
+  )
+end
+
+lane :deploy do
+  deliver(
+    verbose: true,
+    ipa: "app.ipa",
+    skip_screenshots: true,
+    skip_metadata: true
+  )
+end

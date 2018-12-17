@@ -2,11 +2,15 @@
 *.ipa
 *.apk
 
+.DS_Store
+
 # expo
 .expo/
 
 # dependencies
 /node_modules
+/.vscode
+/.idea
 
 # misc
 .env.local
@@ -17,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Deployment stuff
+.creds/*

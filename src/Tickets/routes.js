@@ -1,9 +1,19 @@
 import MyTickets from './index'
-import EventTickets from './showEventTickets'
+import ShowEventTickets from './showEventTickets'
+import TransferTickets from './transferTickets'
 
-const ROUTES = {
-  MyTickets,
-  EventTickets,
+export const MAIN_ROUTES = {
+  MyTicketList: MyTickets,
 }
 
-export default ROUTES
+const TicketShowRoute = {
+  screen: ShowEventTickets,
+  navigationOptions: ({navigation}) => ({
+    eventId: navigation.state.params.eventId,
+  }),
+}
+
+export const MODAL_ROUTES = {
+  EventTickets: TicketShowRoute,
+  TransferTickets,
+}

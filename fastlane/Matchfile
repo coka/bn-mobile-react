@@ -1,0 +1,4 @@
+git_url("https://#{ENV['APPLE_USERNAME']}:#{ENV['CI_USER_PASSWORD']}@github.com/revelrylabs/bn-mobile-react-match-creds")
+type "appstore"
+app_identifier "com.revelrylabs.bigneon"
+username ENV['APPLE_ID']

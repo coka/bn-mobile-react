@@ -2,9 +2,11 @@ import {
   primaryColor,
   white,
   borderColor,
+  textColor,
   globalPadding,
   globalPaddingSmall,
   iconFontSize,
+  globalFontRegular,
 } from '../shared/sharedStyles'
 import {StyleSheet, Dimensions, Platform} from 'react-native'
 const fullHeight = Dimensions.get('window').height
@@ -43,6 +45,17 @@ const BillingStyles = {
     color: primaryColor,
     fontSize: iconFontSize,
     paddingRight: globalPaddingSmall,
+  },
+
+  // INPUT STYLES
+  billingInput: {
+    color: textColor,
+    fontFamily: globalFontRegular,
+    fontSize: iconFontSize,
+    paddingRight: globalPadding,
+  },
+  billingInputLast: {
+    width: fullWidth,
   },
 }
 

@@ -32,23 +32,28 @@ export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
 export const bodyFontSizeSmall = 14
 export const closeModalHeaderSize = 21
 
-const TicketShowStyles = {
+const TicketWalletStyles = {
   // CONTAINER STYLES
   modalContainer: {
     flexDirection: 'column',
     height: fullHeight,
     justifyContent: 'center',
-    paddingHorizontal: globalPadding,
   },
   closeModalContainer: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: globalPaddingLarge,
+    paddingHorizontal: globalPadding,
   },
   slideWrapper: {
     flexDirection: 'column',
     justifyContent: 'center',
+    paddingHorizontal: globalPadding,
+  },
+  ticketContainerBottom: {
+    backgroundColor: white,
+    marginTop: -10,
+    width: fullWidth - 43,
   },
   detailsContainerBottom: {
     flexDirection: 'row',
@@ -57,7 +62,19 @@ const TicketShowStyles = {
     paddingVertical: globalPaddingSmall,
   },
 
-  // IMAGE BKGD STYLES
+  // IMAGE STYLES
+  eventImageWrapper: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    overflow: 'hidden',
+    position: 'absolute',
+  },
+  eventImage: {
+    height: 180,
+    width: fullWidth - 43,
+  },
   modalBkgdImage: {
     height: fullHeight,
     width: fullWidth,
@@ -84,7 +101,7 @@ const TicketShowStyles = {
     paddingRight: globalPaddingSmall,
   },
   avatar: {
-    borderColor: white,
+    borderColor: 'transparent',
     borderRadius: 45/2,
     borderWidth: 1,
     height: 45,
@@ -108,6 +125,8 @@ const TicketShowStyles = {
   // QR CODE STYLES
   qrCodeContainer: {
     backgroundColor: containerDarkColor,
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     padding: globalPadding,
@@ -146,7 +165,7 @@ const TicketShowStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...TicketShowStyles, ...overrides})
+  return StyleSheet.create({...TicketWalletStyles, ...overrides})
 }
 
 export default {

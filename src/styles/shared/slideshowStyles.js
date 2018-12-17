@@ -1,5 +1,6 @@
 import {
   white,
+  bodyFontSize,
   globalFontSemiBold,
   globalFontRegular,
   globalPaddingJumbo,
@@ -7,6 +8,7 @@ import {
   globalPadding,
   globalPaddingSmall,
   globalPaddingTiny,
+  globalMargin,
 } from '../shared/sharedStyles'
 import {StyleSheet, Dimensions, Platform} from 'react-native'
 const fullHeight = Dimensions.get('window').height
@@ -14,19 +16,19 @@ const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(225, 225, 225, 0.8)'
 
-export const headerFontSize = 32
-export const bodyFontSize = 18
+export const headerFontSize = 30
 export const slideShowArrowFontSize = 32
 
 const SlideShowStyles = {
   // CONTAINER STYLES
   slideshowContainer: {
-    padding: globalPadding,
+    marginBottom: globalMargin,
   },
   detailsContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
     height: 300,
+    padding: globalPadding,
   },
   sectionTop: {
     flexDirection: 'row',
@@ -36,9 +38,6 @@ const SlideShowStyles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: globalPaddingJumbo,
-  },
-  sectionBottom: {
-    paddingVertical: globalPaddingLarge,
   },
 
   // TEXT STYLES

@@ -4,13 +4,14 @@
     "name": "Big Neon",
     "icon": "./assets/appIcon.png",
     "version": "1.0.9",
-    "slug": "revelrylabs-big-neon",
+    "slug": "big-neon-mobile",
+    "orientation": "portrait",
     "ios": {
-      "bundleIdentifier": "com.revelrylabs.bigneon"
+      "bundleIdentifier": "com.bigneon.mobile"
     },
     "android": {
-      "package": "com.revelrylabs.bigneon",
-      "versionCode": 7
+      "package": "com.bigneon.mobile",
+      "versionCode": 9
     }
   }
 }
