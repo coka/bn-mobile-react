@@ -152,3 +152,13 @@ The deploy script will work deploying to Test Flight, and the Alpha or Beta chan
 It requires several certificates and ENV keys set, many of which aren't shareable.
 
 We're using [Expo Build releasing through Fastlane](https://blog.expo.io/automating-standalone-expo-app-builds-and-deployments-with-fastlane-exp-and-exptool-9b2f5ad0a2cd) if you want to try to set up your own deploy.
+
+#### Deploy Steps
+1) Get creds folder from Colin or Brad and place in `./creds` folder inside bn-mobile-react. This file is gitignored so it will not get pushed with any code.
+2) run `expo build:android --clear-credentials` and choose "I want to upload my own keystore" (passwords etc will be shared via the creds folder)
+3) Once step 2 succeeds run `expo build:ios --clear-credentials`  again choose to use your own credentials.
+4) Update `app.json` version numbers before running deploy. increment "version" and "versionCode" respectively.
+5) To deploy and use the Beta endpoint for testers run `./deploy_staging`, for the production API endpoint use `./deploy_production`.
+6) Apple may want you to make an App Specific password during the deploy. The instructions are ion the script and you will enter the pw you created without exiting the deploy process.
+7) To prepare for Google Play store in the alpha track, go to manage release, and you can add release notes.
+8) To prepare for App Store connect go to test flight, and go to iOS Builds. Find the newest version, and it’ll say “Missing Compliance”. click on the yellow triangle icon and then “provide export compliance information”, and then choose “Yes” for both questions. The build should show up in `Test Flight -> App Store Connect Users -> Builds` as “Testing” after a few minutes.

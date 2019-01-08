@@ -1,5 +1,5 @@
 import Big from 'big.js'
 
-export function toDollars(item, fixed = 0) {
-  return new Big(item).div(100).toFixed(fixed)
+export function toDollars(item, decimalPlaces = 2) {
+  return new Big(item).div(100).round(decimalPlaces).toFixed(decimalPlaces)
 }

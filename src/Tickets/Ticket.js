@@ -94,7 +94,7 @@ export default class Ticket extends Component {
             </View>
             <View>
               <Text style={ticketStyles.header}>{ticket.name}</Text>
-              <Text style={ticketWalletStyles.details}>{ticket.date} &bull; {ticket.formattedDate} {ticket.formattedStart}  &bull;  {ticket.venue}</Text>
+              <Text style={ticketWalletStyles.details}>{ticket.date} &bull; {ticket.starts} &bull; {ticket.venue}</Text>
               <TouchableHighlight onPress={this.openVenueDirections}>
                 <View style={styles.iconLinkContainer}>
                     <Text style={ticketWalletStyles.iconLinkText}>GET DIRECTIONS</Text>

@@ -4,7 +4,7 @@ import {Text, View, Image, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import EventCardStyles from '../styles/shared/eventCardStyles'
-import {DateTime} from 'luxon'
+import {eventDateTimes} from '../time'
 import {toDollars} from '../constants/money'
 
 const styles = SharedStyles.createStyles()
@@ -22,12 +22,7 @@ export default class EventsIndex extends Component {
   }
 
   get scheduleText() {
-    const {event} = this.props
-
-    // @TODO: toISOString might not be required... a string might be returned, not a real js date
-    const time = event.event_start instanceof Date ? event.event_start.toISOString() : event.event_start
-
-    return DateTime.fromISO(time).toFormat('EEE, MMMM d')
+    return eventDateTimes(this.props.event).event_start.toFormat('EEE, MMMM d')
   }
 
   get priceTag() {
@@ -36,7 +31,7 @@ export default class EventsIndex extends Component {
     if (min_ticket_price) {
       return (
         <View style={styles.priceTagContainer}>
-          <Text style={styles.priceTag}>{`$${toDollars(min_ticket_price)}`}</Text>
+          <Text style={styles.priceTag}>{`$${toDollars(min_ticket_price, 0)}`}</Text>
         </View>
       )
     } else {

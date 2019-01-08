@@ -1,5 +1,5 @@
 import {Container} from 'unstated'
-import {server, apiErrorAlert} from '../constants/Server'
+import {server, apiErrorAlert, defaultEventSort} from '../constants/Server'
 import {baseURL} from '../constants/config'
 import {DateTime} from 'luxon'
 
@@ -20,12 +20,26 @@ class EventsContainer extends Container {
 
     this.state = {
       events: [],
+      eventsById: {},
+      ticketTypesById: {},
       paging: {},
       lastUpdate: null,
       locations: [],
       selectedLocationId: null,
       selectedEvent: {},
     };
+  }
+
+  get eventsById() {
+    return this.state.eventsById
+  }
+
+  get ticketTypesById() {
+    return this.state.ticketTypesById
+  }
+
+  get selectedEvent() {
+    return this.state.selectedEvent
   }
 
   locationsPromise = null
@@ -63,17 +77,25 @@ class EventsContainer extends Container {
 
   getEvents = async (_location = null) => {
     try {
-      const [{data}, ..._rest] = await Promise.all([server.events.index(), this.fetchLocations()])
+      const [{data}, ..._rest] = await Promise.all([
+        server.events.index(defaultEventSort),
+        this.fetchLocations(),
+      ])
+      const eventsById = {}
+      const ticketTypesById = {}
 
       data.data.forEach((event) => {
         if (!event.promo_image_url) {
           event.promo_image_url = `${baseURL}/images/event-placeholder.png`
         }
+        eventsById[event.id] = event
       })
 
       this.setState({
         lastUpdate: DateTime.local(),
         events: data.data,
+        eventsById,
+        ticketTypesById,
         paging: data.paging,
       })
     } catch (error) {

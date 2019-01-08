@@ -1,5 +1,5 @@
 import {Container} from 'unstated'
-import {server, apiErrorAlert} from '../constants/Server'
+import {server, apiErrorAlert, defaultEventSort} from '../constants/Server'
 import * as vibe from '../vibe'
 
 const SCAN_MESSAGE_TIMEOUT = 3000;
@@ -29,7 +29,7 @@ export class EventManagerContainer extends Container {
   getEvents = async () => {
     try {
 
-      const {data} = await server.events.index()
+      const {data} = await server.events.index(defaultEventSort)
 
       this.setState({
         // lastUpdate: DateTime.local(),

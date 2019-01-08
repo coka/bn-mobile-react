@@ -3,7 +3,7 @@
     "sdkVersion": "27.0.0",
     "name": "Big Neon",
     "icon": "./assets/appIcon.png",
-    "version": "1.0.9",
+    "version": "1.0.14",
     "slug": "big-neon-mobile",
     "orientation": "portrait",
     "ios": {
@@ -11,7 +11,7 @@
     },
     "android": {
       "package": "com.bigneon.mobile",
-      "versionCode": 9
+      "versionCode": 14
     }
   }
 }

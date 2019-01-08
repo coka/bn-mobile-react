@@ -99,8 +99,6 @@ export default class EventsTicket extends Component {
       screenProps: {store: {redeemTicketInfo}},
     } = this.props
 
-    console.log(this.props)
-
     return <Ticket qrEnabled={qrEnabled} ticket={item} navigate={navigate} redeemTicketInfo={redeemTicketInfo} />
   }
 

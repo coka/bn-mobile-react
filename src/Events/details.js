@@ -4,7 +4,7 @@ import {Text, Platform, View, Linking, TouchableHighlight} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
-import {DateTime} from 'luxon'
+import {eventDateTimes} from '../time'
 import {map} from 'lodash'
 import {shareEvent} from '../sharing'
 
@@ -227,8 +227,7 @@ export default class Details extends Component {
   render() {
     const {event} = this.props
     const {venue} = event
-    const eventStart = DateTime.fromISO(event.event_start)
-    const doorTime = DateTime.fromISO(event.door_time)
+    const {event_start: eventStart, door_time: doorTime} = eventDateTimes(event)
     const interestedStyles = interestedStylesForEvent(event.user_is_interested)
 
     return (
@@ -279,7 +278,7 @@ export default class Details extends Component {
               {eventStart.toFormat('DDDD')}
             </Text>
             <Text style={eventDetailsStyles.bodyText}>
-              Doors {doorTime.toFormat('t ZZZZ')} - Show {eventStart.toFormat('t ZZZZ')}
+              Doors {doorTime.toFormat('t')} - Show {eventStart.toFormat('t')}
             </Text>
 
             <View style={eventDetailsStyles.eventDescriptionHeaderWrapper}>

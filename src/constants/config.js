@@ -6,7 +6,7 @@ const WEB_PRODUCTION = 'https://prod-1-mobile-www.bigneon.com'
 const API_PRODUCTION = 'https://api.bigneon.com'
 
 const defaultConfig = {
-  timeout: 3000,
+  timeout: 10000,
 }
 
 const dev = {
@@ -14,7 +14,6 @@ const dev = {
   baseURL: WEB_STAGING,
   stripeFormURL: WEB_STAGING,
   apiURL: `${WEB_STAGING}/api`,
-  timeout: 3000,
 }
 
 const staging = {
@@ -26,7 +25,6 @@ const production = {
   baseURL: WEB_PRODUCTION,
   stripeFormURL: WEB_PRODUCTION,
   apiURL: API_PRODUCTION,
-  timeout: 10000,
 }
 
 module.exports = {dev, staging, production}[RELEASE_CHANNEL]
