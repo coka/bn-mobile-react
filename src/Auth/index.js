@@ -1,11 +1,9 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, Button, Image, ScrollView, TouchableHighlight} from 'react-native'
+import {Text, View, Image, TouchableHighlight} from 'react-native'
 import {LinearGradient} from 'expo'
-import SharedStyles from '../styles/shared/sharedStyles'
 import LoginStyles from '../styles/login/loginStyles'
 
-const styles = SharedStyles.createStyles()
 const loginStyles = LoginStyles.createStyles()
 
 export default class AuthIndex extends Component {

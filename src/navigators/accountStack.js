@@ -24,7 +24,7 @@ export default class accountsStackWithStore extends Component {
     let tabBarVisible = true;
     const curRoute = last(navigation.state.routes)
 
-    if (curRoute.routeName === 'EventScanner') {
+    if (curRoute.routeName === 'EventScanner' || curRoute.routeName === 'GuestList') {
       tabBarVisible = false;
     }
 

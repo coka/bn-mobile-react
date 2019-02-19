@@ -9,6 +9,10 @@ import {Subscribe} from 'unstated'
 import {AuthContainer} from '../state/authStateProvider'
 import {retrieveTokens} from '../constants/Server'
 
+function shouldDoNextSignUpStep({first_name: first, last_name: last}) {
+  return !(first || last)
+}
+
 class AuthStore extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
@@ -26,13 +30,14 @@ class AuthStore extends Component {
     const {userToken, refreshToken} = await retrieveTokens()
 
     if (userToken && refreshToken) {
-      const {state: {currentUser}} = auth
-
-      if (Object.keys(currentUser).length === 0) {
+      if (!auth.state.currentUser.user) {
         await auth.getCurrentUser(navigate, userToken, refreshToken)
       }
-
-      navigate('App')
+      if (!shouldDoNextSignUpStep(auth.state.currentUser.user)) {
+        navigate('App')
+      } else {
+        navigate('SignUpNext')
+      }
     } else {
       navigate('Auth')
     }

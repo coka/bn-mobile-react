@@ -56,16 +56,15 @@ export default class LogIn extends Component {
           </Text>
           <TextInput
             keyboardType="email-address"
+            autoCapitalize="none"
             style={formStyles.input}
             placeholder="Email Address"
-            searchIcon={{size: 24}}
             underlineColorAndroid="transparent"
             onChangeText={autotrim((email) => this.setState({email}))}
           />
           <TextInput
             style={formStyles.input}
             placeholder="Password"
-            searchIcon={{size: 24}}
             underlineColorAndroid="transparent"
             secureTextEntry
             onChangeText={(password) => this.setState({password})}

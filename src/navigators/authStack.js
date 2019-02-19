@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {createStackNavigator} from 'react-navigation';
 import LogInScreen from '../Auth/LogIn'
 import SignUpScreen from '../Auth/SignUp'
+import SignUpNext from '../Auth/SignUpNext'
 import IndexScreen from '../Auth/index'
 import {Subscribe} from 'unstated'
 import {AuthContainer} from '../state/authStateProvider'
@@ -12,6 +13,7 @@ const AuthStack = createStackNavigator(
   {
     AuthRoot: IndexScreen,
     SignUp: SignUpScreen,
+    SignUpNext,
     LogIn: LogInScreen,
     PasswordReset,
   },

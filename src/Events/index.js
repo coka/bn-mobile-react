@@ -137,6 +137,7 @@ export default class EventsIndex extends Component {
   get allEvents() {
     const {navigation: {navigate}, screenProps: {store: {toggleInterest}}} = this.props
     const events = this.events
+
     if(events.length == 0){
       return <EmptyEvents locationName={this.currentLocationDisplayName} />
     }

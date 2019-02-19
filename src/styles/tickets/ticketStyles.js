@@ -63,10 +63,11 @@ const TicketStyles = {
 
   // TEXT STYLES
   header: {
+    color: white,
     fontFamily: globalFontRegular,
     fontSize: headerFontSize,
-    color: white,
     marginBottom: globalPaddingTiny,
+    paddingRight: globalPaddingSmall,
   },
   detailsBottomHeader: {
     color: sectionHeaderColor,

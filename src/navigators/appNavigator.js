@@ -8,24 +8,6 @@ import AccountsStack from './accountStack'
 
 const navigationStyles = NavigationStyles.createStyles()
 
-const tabBarOptions = {
-  tabBarOptions: {
-    activeTintColor: '#FF20B1',
-    inactiveTintColor: 'black',
-    labelStyle: {
-      fontFamily: 'tt_commons_regular',
-      fontSize: 13,
-    },
-    style: {
-      backgroundColor: 'white',
-      borderWidth: 0,
-      borderTopColor: '#DCDCDC',
-      height: 50,
-      paddingVertical: 4,
-    },
-  },
-}
-
 /* eslint-disable react/display-name, react/prop-types */
 export default createBottomTabNavigator(
   {
@@ -63,5 +45,21 @@ export default createBottomTabNavigator(
       },
     },
   },
-  tabBarOptions: {},
+  {
+    tabBarOptions: {
+      activeTintColor: '#FF20B1',
+      inactiveTintColor: 'black',
+      labelStyle: {
+        fontFamily: 'tt_commons_regular',
+        fontSize: 13,
+      },
+      style: {
+        backgroundColor: 'white',
+        borderWidth: 0,
+        borderTopColor: '#DCDCDC',
+        height: 50,
+        paddingVertical: 4,
+      },
+    },
+  },
 )

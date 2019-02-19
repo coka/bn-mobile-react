@@ -227,7 +227,7 @@ export default class Details extends Component {
   render() {
     const {event} = this.props
     const {venue} = event
-    const {event_start: eventStart, door_time: doorTime} = eventDateTimes(event)
+    const {event_start: eventStart, door_time: doorTime} = eventDateTimes(event.localized_times)
     const interestedStyles = interestedStylesForEvent(event.user_is_interested)
 
     return (

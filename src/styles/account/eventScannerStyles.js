@@ -23,6 +23,7 @@ import {StyleSheet, Dimensions, Platform} from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
+export const pillHeaderFontSize = 18
 export const iconFontSize = 32
 export const statusMessageTextFontSize = 36
 export const statusMessageIconFontSize = 60
@@ -62,13 +63,13 @@ const EventScannerStyles = {
     borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingHorizontal: globalPadding,
+    paddingHorizontal: globalPaddingSmall,
     paddingVertical: globalPaddingSmall,
   },
   pillTextWhite: {
     color: white,
     fontFamily: globalFontSemiBold,
-    fontSize: bodyFontSize,
+    fontSize: pillHeaderFontSize,
   },
   pillTextPrimary: {
     color: primaryColor,

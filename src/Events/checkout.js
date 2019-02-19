@@ -6,7 +6,6 @@ import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import CheckoutStyles from '../styles/event_details/checkoutStyles'
 import {eventDateTimes} from '../time'
-import {isEmpty, includes} from 'lodash'
 import {toDollars} from '../constants/money'
 
 const styles = SharedStyles.createStyles()
@@ -76,9 +75,32 @@ export default class Checkout extends Component {
     }
   }
 
+  get promoDetails() {
+    const {cart} = this.props
+
+    if (cart.usedPromo) {
+      const promoTickets = cart.promoTickets
+
+      return promoTickets.map((promoTicket) => (
+        <View style={checkoutStyles.rowContainer} key={promoTicket.id}>
+          <View style={checkoutStyles.row}>
+            <View>
+              <Text style={[checkoutStyles.ticketHeader, styles.marginBottomTiny]}>Promotional Code</Text>
+              <Text style={checkoutStyles.ticketSubHeader}>{promoTicket.description}</Text>
+              <Text style={checkoutStyles.ticketSubHeader}>Code: {promoTicket.redemption_code}</Text>
+            </View>
+          </View>
+        </View>
+      ))
+    }
+
+    return null
+  }
+
   render() {
     const {event, cart} = this.props
-    const eventTime = eventDateTimes(event).event_start
+    const {ticketsCents, feesCents, totalCents} = cart
+    const eventTime = eventDateTimes(event.localized_times).event_start
 
     return (
       <View style={[checkoutStyles.mainBody, checkoutStyles.checkoutMainBody]}>
@@ -87,6 +109,8 @@ export default class Checkout extends Component {
           <View style={checkoutStyles.headerWrapper}>
             <Text style={checkoutStyles.header}>Checkout</Text>
           </View>
+
+          {this.promoDetails}
 
           <View style={checkoutStyles.rowContainer}>
             <View style={checkoutStyles.row}>
@@ -111,17 +135,28 @@ export default class Checkout extends Component {
             </View>
           </View>
 
-          <TouchableHighlight onPress={() => this.props.changeScreen('payment')}>
+          {totalCents ? (
+            <TouchableHighlight onPress={() => this.props.changeScreen('payment')}>
+              <View style={checkoutStyles.rowContainer}>
+                <View style={checkoutStyles.row}>
+                  <View>
+                    <Text style={[checkoutStyles.ticketHeader, styles.marginBottomTiny]}>Payment</Text>
+                    {this.paymentSelected}
+                  </View>
+                </View>
+                <Icon style={accountStyles.accountArrow} name="keyboard-arrow-right" />
+              </View>
+            </TouchableHighlight>
+          ) : (
             <View style={checkoutStyles.rowContainer}>
               <View style={checkoutStyles.row}>
                 <View>
                   <Text style={[checkoutStyles.ticketHeader, styles.marginBottomTiny]}>Payment</Text>
-                  {this.paymentSelected}
+                  <Text>No payment necessary! Your tickets are free!</Text>
                 </View>
               </View>
-              <Icon style={accountStyles.accountArrow} name="keyboard-arrow-right" />
             </View>
-          </TouchableHighlight>
+          )}
 
           <View style={checkoutStyles.rowContainer}>
             <View style={checkoutStyles.row}>
@@ -132,8 +167,8 @@ export default class Checkout extends Component {
             </View>
             <View style={checkoutStyles.row}>
               <View>
-                <Text style={[checkoutStyles.ticketSubHeader, styles.marginBottomSmall]}>${toDollars(cart.ticketsCents)} USD</Text>
-                <Text style={checkoutStyles.ticketSubHeader}>${toDollars(cart.feesCents)} USD</Text>
+                <Text style={[checkoutStyles.ticketSubHeader, styles.marginBottomSmall]}>${toDollars(ticketsCents)} USD</Text>
+                <Text style={checkoutStyles.ticketSubHeader}>${toDollars(feesCents)} USD</Text>
               </View>
             </View>
           </View>
@@ -146,7 +181,7 @@ export default class Checkout extends Component {
             </View>
             <View style={checkoutStyles.row}>
               <View>
-                <Text style={checkoutStyles.ticketHeader}>${toDollars(cart.totalCents)} USD</Text>
+                <Text style={checkoutStyles.ticketHeader}>${toDollars(totalCents)} USD</Text>
               </View>
             </View>
           </View>

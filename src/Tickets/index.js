@@ -9,6 +9,7 @@ import emptyState from '../../assets/icon-empty-state.png'
 import imageOverlay from '../../assets/event-img-overlay.png'
 import {some} from 'lodash'
 import {NavigationEvents} from 'react-navigation'
+import {optimizeCloudinaryImage} from '../cloudinary'
 
 const styles = SharedStyles.createStyles()
 const slideshowStyles = SlideShowStyles.createStyles()
@@ -26,9 +27,9 @@ function EmptyTickets({text}) {
   )
 }
 
-const AnimatedTicket = ({navigate, ticket, springValue}) => (
+const AnimatedTicket = ({navigate, ticket, springValue, activeTab, setPurchasedTicket}) => (
   <Animated.View style={{transform: [{scale: springValue}]}}>
-    <Ticket navigate={navigate} ticket={ticket} />
+    <Ticket navigate={navigate} ticket={ticket} activeTab={activeTab} setPurchasedTicket={setPurchasedTicket} />
   </Animated.View>
 )
 
@@ -38,16 +39,22 @@ AnimatedTicket.propTypes = {
   springValue: PropTypes.object.isRequired,
 }
 
-const Ticket = ({navigate, ticket, qrEnabled}) => {
+const Ticket = ({navigate, ticket, activeTab, setPurchasedTicket}) => {
   const {event, tickets} = ticket
 
   return (
     <View>
-      <TouchableHighlight underlayColor="#F5F6F7" onPress={() => navigate('EventTickets', {eventId: event.id, qrEnabled})}>
+      <TouchableHighlight 
+        underlayColor="#F5F6F7" 
+        onPress={() => {
+          setPurchasedTicket(null)
+          navigate('EventTickets', {eventId: event.id, activeTab})
+        }}
+      >
         <View style={ticketStyles.ticketContainer}>
           <Image
             style={ticketStyles.eventImage}
-            source={{uri: event.promo_image_url}}
+            source={{uri: optimizeCloudinaryImage(event.promo_image_url)}}
           />
           <Image
             style={ticketStyles.eventImageOverlay}
@@ -80,7 +87,7 @@ const Ticket = ({navigate, ticket, qrEnabled}) => {
           </View>
           <View>
             <Text style={[ticketStyles.detailsBottomHeader, ticketStyles.detailsLast]}>SHOW</Text>
-            <Text style={[ticketStyles.detailsBottomText, ticketStyles.detailsLast]}>{event.formattedShow}</Text>
+            <Text style={[ticketStyles.detailsBottomText, ticketStyles.detailsLast]}>{event.formattedStart}</Text>
           </View>
         </View>
       </View>
@@ -93,7 +100,7 @@ Ticket.propTypes = {
   ticket: PropTypes.object.isRequired,
 }
 
-const TicketsView = ({qrEnabled, emptyText, tickets, navigate, springValue, purchasedTicket}) => {
+const TicketsView = ({activeTab, emptyText, tickets, navigate, springValue, purchasedTicket, setPurchasedTicket}) => {
   if (!tickets.length) {
     return <EmptyTickets text={emptyText} />
   }
@@ -101,12 +108,20 @@ const TicketsView = ({qrEnabled, emptyText, tickets, navigate, springValue, purc
   return tickets.map((ticket) => (
     some(ticket.tickets, ({order_id}) => order_id === purchasedTicket) ?
       <AnimatedTicket
-        key={ticket.event.name}
+        key={ticket.event.id}
         navigate={navigate}
         ticket={ticket}
+        activeTab={activeTab}
         springValue={springValue}
+        setPurchasedTicket={setPurchasedTicket}
       /> :
-      <Ticket {...{navigate, qrEnabled}} key={ticket.event.name} ticket={ticket} />
+      <Ticket
+        navigate={navigate}
+        activeTab={activeTab}
+        key={ticket.event.id}
+        ticket={ticket}
+        setPurchasedTicket={setPurchasedTicket}
+      />
   ))
 }
 
@@ -116,7 +131,7 @@ TicketsView.propTypes = {
   springValue: PropTypes.object.isRequired,
 }
 
-const EMPTY_TEXT_FOR_ACTIVE_TAB = { 
+const EMPTY_TEXT_FOR_ACTIVE_TAB = {
   upcoming: 'Looks like you don’t have any upcoming events! Why not tap Explore and have a look?',
   past: 'Looks like you haven’t attended any events yet! Why not tap Explore and find your first?',
   transfer: 'Looks like you haven’t transfered any tickets yet. Know anyone that wants to go?',
@@ -126,12 +141,16 @@ export default class MyTickets extends Component {
 
   constructor(props) {
     super(props)
-
+    this.props.screenProps.auth.identify()
     this.springValue = new Animated.Value(0.3)
+  }
 
-    this.state = {
-      activeTab: 'upcoming',
-    }
+  get activeTab() {
+    return this.props.navigation.getParam('activeTab', 'upcoming')
+  }
+
+  set activeTab(activeTab) {
+    this.props.navigation.setParams({activeTab})
   }
 
   spring() {
@@ -147,24 +166,29 @@ export default class MyTickets extends Component {
   }
 
   tabStyle(viewType) {
-    return viewType === this.state.activeTab ? styles.subnavHeaderActive : styles.subnavHeader
+    return viewType === this.activeTab ? styles.subnavHeaderActive : styles.subnavHeader
   }
 
   tabWrapperStyle(viewType) {
-    return viewType === this.state.activeTab ? styles.activeWrapper : null
+    return viewType === this.activeTab ? styles.activeWrapper : null
   }
 
   get ticketsForActiveView() {
-    return this.props.screenProps.store.state.tickets[this.state.activeTab] || []
+    return this.props.screenProps.store.state.tickets[this.activeTab] || []
   }
 
   get emptyText() {
-    return EMPTY_TEXT_FOR_ACTIVE_TAB[this.state.activeTab]
+    return EMPTY_TEXT_FOR_ACTIVE_TAB[this.activeTab]
   }
 
   refreshTickets = async () => {
     await this.props.screenProps.store.userTickets()
     this.spring()
+  }
+
+  changeTab = (tab) => {
+    this.props.screenProps.store.setPurchasedTicket(null)
+    this.activeTab = tab
   }
 
   render() {
@@ -188,13 +212,13 @@ export default class MyTickets extends Component {
         </View>
         <View style={styles.subnavContainer}>
           <View style={this.tabWrapperStyle('upcoming')}>
-            <Text style={this.tabStyle('upcoming')} onPress={() => this.setState({activeTab: 'upcoming'})}>UPCOMING</Text>
+            <Text style={this.tabStyle('upcoming')} onPress={() => this.changeTab('upcoming')}>UPCOMING</Text>
           </View>
           <View style={this.tabWrapperStyle('past')}>
-            <Text style={this.tabStyle('past')} onPress={() => this.setState({activeTab: 'past'})}>PAST</Text>
+            <Text style={this.tabStyle('past')} onPress={() => this.changeTab('past')}>PAST</Text>
           </View>
           <View style={this.tabWrapperStyle('transfer')}>
-            <Text style={this.tabStyle('transfer')} onPress={() => this.setState({activeTab: 'transfer'})}>TRANSFERS</Text>
+            <Text style={this.tabStyle('transfer')} onPress={() => this.changeTab('transfer')}>TRANSFERS</Text>
           </View>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -205,7 +229,8 @@ export default class MyTickets extends Component {
               tickets={this.ticketsForActiveView}
               springValue={this.springValue}
               purchasedTicket={purchasedTicket}
-              qrEnabled={this.state.activeTab === 'upcoming'}
+              activeTab={this.activeTab}
+              setPurchasedTicket={setPurchasedTicket}
             />
           </View>
 

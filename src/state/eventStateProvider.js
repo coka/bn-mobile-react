@@ -2,6 +2,7 @@ import {Container} from 'unstated'
 import {server, apiErrorAlert, defaultEventSort} from '../constants/Server'
 import {baseURL} from '../constants/config'
 import {DateTime} from 'luxon'
+import {map} from 'lodash'
 
 const LOCATIONS_FETCH_MIN_MINUTES = 15
 
@@ -13,6 +14,29 @@ const _SAMPLE_AVATARS = [
 
 /* eslint-disable complexity,space-before-function-paren,camelcase */
 
+function ticketFilter({status, ticket_pricing}) {
+  switch (status) {
+  case 'SoldOut':
+    return true
+  case 'Published':
+    return !!ticket_pricing
+  default:
+    return false
+  }
+}
+
+function ticketComparator({ticket_pricing: a}, {ticket_pricing: b}) {
+  if (a === null && b === null) {
+    return 0
+  }
+  if (a === null) {
+    return 1
+  }
+  if (b === null) {
+    return -1
+  }
+  return b - a
+}
 class EventsContainer extends Container {
 
   constructor(props = {}) {
@@ -38,8 +62,21 @@ class EventsContainer extends Container {
     return this.state.ticketTypesById
   }
 
+  get ticketTypeIds() {
+    return map(this.ticketTypesById, (_ticket, id) => id)
+  }
+
   get selectedEvent() {
     return this.state.selectedEvent
+  }
+
+  get ticketsToDisplay() {
+    const {ticketTypesById} = this.state
+
+    ticketTypes = map(ticketTypesById, (ticket, _id) => ticket)
+
+
+    return ticketTypes ? ticketTypes.filter(ticketFilter).sort(ticketComparator) : []
   }
 
   locationsPromise = null
@@ -82,7 +119,6 @@ class EventsContainer extends Container {
         this.fetchLocations(),
       ])
       const eventsById = {}
-      const ticketTypesById = {}
 
       data.data.forEach((event) => {
         if (!event.promo_image_url) {
@@ -95,7 +131,6 @@ class EventsContainer extends Container {
         lastUpdate: DateTime.local(),
         events: data.data,
         eventsById,
-        ticketTypesById,
         paging: data.paging,
       })
     } catch (error) {
@@ -110,13 +145,19 @@ class EventsContainer extends Container {
   getEvent = async (id) => {
     try {
       const {data} = await server.events.read({id})
+      const ticketTypesById = {}
 
       if (!data.promo_image_url) {
         data.promo_image_url = `${baseURL}/images/event-placeholder.png`
       }
 
+      data.ticket_types.forEach((ttype) => {
+        ticketTypesById[ttype.id] = ttype
+      })
+
       this.setState({
         selectedEvent: {...data},
+        ticketTypesById,
       })
     } catch (error) {
       apiErrorAlert(error)
@@ -145,6 +186,14 @@ class EventsContainer extends Container {
       }
     }
   }
+
+  async replaceTicketType(ticket_type) {
+    const {ticketTypesById} = this.state
+
+    ticketTypesById[ticket_type.id] = ticket_type
+    await this.setState({ticketTypesById})
+  }
+
 }
 
 export {

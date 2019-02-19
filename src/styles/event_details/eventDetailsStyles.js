@@ -36,7 +36,7 @@ export const backArrowFontSize = 25
 const EventDetailsStyles = {
   // VIDEO BKGD STYLES
   videoBkgd: {
-    height: 300,
+    height: fullWidth/2,
     position: 'absolute',
     top: 0,
     width: fullWidth,
@@ -72,7 +72,7 @@ const EventDetailsStyles = {
     backgroundColor: 'transparent',
     paddingBottom: globalPaddingLarge,
     paddingHorizontal: 0,
-    marginTop: 240,
+    marginTop: fullWidth/2 - 50,
   },
   mainBodyContent: {
     backgroundColor: 'white',

@@ -2,12 +2,15 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {View, KeyboardAvoidingView, ScrollView, Text, TextInput, TouchableHighlight} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import {Feather} from '@expo/vector-icons'
 import {LinearGradient} from 'expo'
 import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
 import LoginStyles from '../styles/login/loginStyles'
 import { Constants, WebBrowser } from 'expo';
 import { autotrim } from '../string';
+import {accessCameraRoll, selectCameraRollImage} from '../image'
+import {uploadImageToCloudinary} from '../cloudinary'
 
 const styles = SharedStyles.createStyles()
 const formStyles = FormStyles.createStyles()
@@ -39,17 +42,15 @@ export default class SignUp extends Component {
     this.state = {
       email: '',
       password: '',
-      first_name: '',
-      last_name: '',
     }
   }
 
   signUp = async () => {
     const {screenProps: {auth}, navigation: {navigate}} = this.props
-    const {email, password, first_name, last_name} = this.state
+    const {email, password} = this.state
 
     // Should register & login on success
-    await auth.signUp({email, password, first_name, last_name}, navigate)
+    await auth.signUp({email, password}, navigate)
   }
 
   render() {
@@ -57,23 +58,15 @@ export default class SignUp extends Component {
       <KeyboardAvoidingView style={loginStyles.container} behavior="padding" enabled>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View>
+            <Text style={loginStyles.smallText}>
+              Secure your experiences
+            </Text>
             <Text style={[styles.headerSecondary, styles.textCenter, styles.paddingBottomJumbo]}>
               Create your account
             </Text>
             <TextInput
-              style={formStyles.input}
-              placeholder="First Name"
-              underlineColorAndroid="transparent"
-              onChangeText={autotrim((first_name) => this.setState({first_name}))}
-            />
-            <TextInput
-              style={formStyles.input}
-              placeholder="Last Name"
-              underlineColorAndroid="transparent"
-              onChangeText={autotrim((last_name) => this.setState({last_name}))}
-            />
-            <TextInput
               keyboardType="email-address"
+              autoCapitalize="none"
               style={formStyles.input}
               placeholder="Email Address"
               underlineColorAndroid="transparent"
@@ -86,6 +79,7 @@ export default class SignUp extends Component {
               underlineColorAndroid="transparent"
               onChangeText={(password) => this.setState({password})}
             />
+
             <TouchableHighlight style={loginStyles.buttonContainer} onPress={this.signUp}>
               <LinearGradient
                 start={{x: 0, y: 0}}
@@ -98,27 +92,23 @@ export default class SignUp extends Component {
             </TouchableHighlight>
           </View>
 
-          <View>
+          <View style={loginStyles.disclaimerWrapper}>
             <Text style={[loginStyles.mutedText, styles.textCenter]}>By signing up you agree to our</Text>
-            <View 
-              style={{flexDirection: 'row',justifyContent: 'center'}}
-            >
-            <TouchableHighlight 
-              style={{flexDirection:'column'}}
-              onPress={ () => {
-                WebBrowser.openBrowserAsync('https://www.bigneon.com/terms.html')
-              }}>
-              <Text style={[loginStyles.mutedText, styles.textCenter, styles.textUnderline]}>Terms of Service</Text>
-            </TouchableHighlight>
-            <Text style={{flexDirection:'column'}}> &amp; </Text>
-            <TouchableHighlight
-              style={{flexDirection:'column'}}
-              onPress={ () => {
-                WebBrowser.openBrowserAsync('https://www.bigneon.com/privacy.html')
-              }}
-            >
-              <Text style={[loginStyles.mutedText, styles.textCenter, styles.textUnderline]}>Privacy Policy</Text>
-            </TouchableHighlight>
+            <View style={{flexDirection: 'row',justifyContent: 'center'}}>
+              <TouchableHighlight
+                onPress={ () => {
+                  WebBrowser.openBrowserAsync('https://www.bigneon.com/terms.html')
+                }}>
+                <Text style={[loginStyles.mutedText, styles.textCenter, styles.textUnderline]}>Terms of Service</Text>
+              </TouchableHighlight>
+              <Text style={loginStyles.mutedText}> &amp; </Text>
+              <TouchableHighlight
+                onPress={ () => {
+                  WebBrowser.openBrowserAsync('https://www.bigneon.com/privacy.html')
+                }}
+              >
+                <Text style={[loginStyles.mutedText, styles.textCenter, styles.textUnderline]}>Privacy Policy</Text>
+              </TouchableHighlight>
             </View>
           </View>
         </ScrollView>

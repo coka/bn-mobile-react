@@ -91,6 +91,7 @@ const TicketWalletStyles = {
     fontFamily: globalFontRegular,
     fontSize: bodyFontSize,
     color: white,
+    paddingRight: globalPaddingSmall,
     paddingVertical: globalPaddingTiny,
   },
 
@@ -125,8 +126,6 @@ const TicketWalletStyles = {
   // QR CODE STYLES
   qrCodeContainer: {
     backgroundColor: containerDarkColor,
-    borderBottomRightRadius: 10,
-    borderBottomLeftRadius: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     padding: globalPadding,

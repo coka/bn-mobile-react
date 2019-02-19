@@ -23,8 +23,10 @@ class CartContainer extends Container {
       isReady: false,
       isChangingQuantity: false,
       ticketTypeId: null,
+      ticketPromo: null,
       response: null,
       payment: null,
+      items: [],
     }
   }
 
@@ -53,6 +55,10 @@ class CartContainer extends Container {
     return this.event.ticket_types.find(({id}) => id === this.ticketTypeId)
   }
 
+  get ticketPromo() {
+    return this.state.ticketPromo
+  }
+
   get ticketTypeId() {
     return this.state.ticketTypeId
   }
@@ -78,7 +84,7 @@ class CartContainer extends Container {
   }
 
   get fees() {
-    return this.items.filter(x => !itemIsTicket(x))
+    return this.items.filter((item) => !itemIsTicket(item))
   }
 
   get selectedTicket() {
@@ -93,14 +99,17 @@ class CartContainer extends Container {
     return this.quantity + this.maxAdditionalQuantity
   }
 
-  canAddQuantity(x) {
-    const newQuantity = this.requestedQuantity + x
+  canAddQuantity(qty) {
+    const newQuantity = this.requestedQuantity + qty
 
     return newQuantity > 0 && newQuantity <= this.maxCommittableQuantity
   }
 
-  async addQuantity(x) {
-    return await this.setQuantity(this.requestedQuantity + x)
+  async clearCart() {
+    await this._resetState()
+  }
+  async addQuantity(qty) {
+    return await this.setQuantity(this.requestedQuantity + qty)
   }
 
   get ticketsCents() {
@@ -115,6 +124,21 @@ class CartContainer extends Container {
     return this.data.total_in_cents
   }
 
+  get usedPromo() {
+    // Return true if any ticket's redemption_code is truthy
+    return !!this.tickets.find(({redemption_code: code}) => code === this.ticketPromo)
+  }
+
+  get promoTickets() {
+    return this.tickets.filter((ticket) => !!ticket.redemption_code)
+  }
+
+  get replaceParams() {
+    return {
+      items: [{ticket_type_id: this.ticketTypeId, redemption_code: this.ticketPromo, quantity: this.state.requestedQuantity}],
+    }
+  }
+
   async _delete() {
     if (this.ticketTypeId && this.isReady) {
       await server.cart.delete(this.ticketTypeId)
@@ -125,6 +149,7 @@ class CartContainer extends Container {
   setQuantity(quantity) {
     this.setState({requestedQuantity: quantity, isChangingQuantity: true})
     const quantityDebounceKey = this._quantityDebounceKey = new Date().getTime()
+
     setTimeout(() => {
       if (quantityDebounceKey === this._quantityDebounceKey) {
         this._commitQuantity()
@@ -132,30 +157,33 @@ class CartContainer extends Container {
     }, 100)
   }
 
-  async _commitQuantity() {
-    const params = {items: [{ticket_type_id: this.ticketTypeId, quantity: this.state.requestedQuantity}]}
 
+  async _commitQuantity() {
     try {
-      const response = await server.cart.replace(params)
+      const response = await server.cart.replace(this.replaceParams)
+
       // set these first so we can calculate actual quantity
       await this.setState({response, isReady: true})
+    } catch (error) {
+      apiErrorAlert(error)
+
+      if (this.isReady) {
+        await this.setState({requestedQuantity: this.quantity})
+        return this.response
+      } else {
+        throw error
+      }
+    } finally {
       // if the actual quantity and the requested quantity match, we're probably done updating
       // if they don't match, most likely there's another cart update in progress
       if (this.quantity === this.requestedQuantity) {
         await this.setState({isChangingQuantity: false})
       }
-      return response
-    } catch (error) {
-      apiErrorAlert(error)
-      if (this.isReady) {
-        await this.setState({requestedQuantity: this.quantity})
-        return this.response
-      }
     }
   }
 
-  async setTicketType(ticketTypeId) {
-    await this.setState({ticketTypeId, requestedQuantity: 1})
+  async setTicketType(ticketTypeId, ticketPromo) {
+    await this.setState({ticketTypeId, ticketPromo, requestedQuantity: 1})
     return await this._commitQuantity()
   }
 
@@ -174,20 +202,26 @@ class CartContainer extends Container {
 
   // can't place an order until there's payment info and quantity isn't changing anymore
   get canPlaceOrder() {
-    return this.payment && !this.isChangingQuantity
+    return !this.isChangingQuantity && !this.totalCents || this.payment
   }
 
   async placeOrder() {
-    await server.cart.checkout({
-      amount: this.totalCents,
-      method: {
-        type: 'Card',
-        provider: 'stripe',
-        token: this.payment.id,
-        save_payment_method: false,
-        set_default: false,
-      },
-    })
+    const {totalCents: amount} = this
+    const method = amount ? {
+      type: 'Card',
+      provider: 'Stripe',
+      token: this.payment.id,
+      save_payment_method: false,
+      set_default: false,
+    } : {
+      type: 'Free',
+    }
+
+    try {
+      await server.cart.checkout({amount, method})
+    } catch(error) {
+      apiErrorAlert(error)
+    }
   }
 }
 

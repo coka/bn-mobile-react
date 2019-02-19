@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import EventManagerStyles from '../styles/account/eventManagerStyles'
+import {optimizeCloudinaryImage} from '../cloudinary'
 
 const styles = SharedStyles.createStyles()
 const accountStyles = AccountStyles.createStyles()
@@ -39,12 +40,13 @@ export default class EventManager extends Component {
           <View style={eventManagerStyles.cardImageWrapper}>
             <Image
               style={eventManagerStyles.cardImage}
-              source={{uri: event.promo_image_url}}
+              source={{uri: optimizeCloudinaryImage(event.promo_image_url)}}
             />
           </View>
           <View style={eventManagerStyles.textWrapper}>
             <Text numberOfLines={1} style={styles.headerSecondary}>{event.name}</Text>
-            <Text numberOfLines={1} style={eventManagerStyles.cardSubHeader}>{event.venue.name} &bull; {event.scheduleText}</Text>
+            {/* TODO: API endpoint does not contain venue info or localized times */}
+            {/* <Text numberOfLines={1} style={eventManagerStyles.cardSubHeader}>{event.venue.name} &bull; {event.scheduleText}</Text> */}
           </View>
           <Icon style={[accountStyles.accountArrow, styles.paddingTop]} name="keyboard-arrow-right" />
         </View>

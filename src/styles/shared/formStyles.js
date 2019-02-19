@@ -91,7 +91,7 @@ const FormStyles = {
     backgroundColor: disabledColor,
     borderColor: 'transparent',
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize, 
+    fontSize: bodyFontSize,
     height: 50,
     marginBottom: globalPaddingMedium,
     paddingHorizontal: globalPadding,

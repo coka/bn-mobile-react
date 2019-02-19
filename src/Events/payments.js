@@ -89,12 +89,17 @@ export default class PaymentTypes extends Component {
 
   parseMessage = (event) => {
     const {nativeEvent: {data}} = event
-    const payment = JSON.parse(data)
 
-    if (payment.error) {
-      alert(`There was an error.\n\n${payment.error}`);
-    } else {
-      this.props.selectPayment(payment)
+    try {
+      const payment = JSON.parse(data)
+
+      if (payment.error) {
+        alert(`There was an error.\n\n${payment.error}`);
+      } else {
+        this.props.selectPayment(payment)
+      }
+    } catch (error) {
+      return
     }
   }
 

@@ -5,3 +5,6 @@ cd $(pwd)/$(dirname $0)/..
 asdf plugin-add nodejs
 asdf install
 npm install
+
+echo 'You must be logged into the expo CLI and mobile app in order to test notifications...'
+npm run expo -- login

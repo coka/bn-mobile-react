@@ -6,6 +6,7 @@ import SharedStyles from '../styles/shared/sharedStyles'
 import EventCardStyles from '../styles/shared/eventCardStyles'
 import {eventDateTimes} from '../time'
 import {toDollars} from '../constants/money'
+import {optimizeCloudinaryImage} from '../cloudinary'
 
 const styles = SharedStyles.createStyles()
 const eventCardStyles = EventCardStyles.createStyles()
@@ -22,7 +23,7 @@ export default class EventsIndex extends Component {
   }
 
   get scheduleText() {
-    return eventDateTimes(this.props.event).event_start.toFormat('EEE, MMMM d')
+    return eventDateTimes(this.props.event.localized_times).event_start.toFormat('EEE, MMMM d')
   }
 
   get priceTag() {
@@ -39,6 +40,12 @@ export default class EventsIndex extends Component {
     }
   }
 
+  get location() {
+    const {event: {venue: {city, state}}} = this.props
+
+    return state ? `${city}, ${state}` : city
+  }
+
   render() {
     const {onPress, event} = this.props
 
@@ -49,7 +56,7 @@ export default class EventsIndex extends Component {
           <View style={eventCardStyles.eventContainer}>
             <Image
               style={eventCardStyles.eventImage}
-              source={{uri: event.promo_image_url}}
+              source={{uri: optimizeCloudinaryImage(event.promo_image_url)}}
             />
             <View style={eventCardStyles.detailsContainer}>
               <View style={eventCardStyles.sectionTop}>
@@ -71,6 +78,7 @@ export default class EventsIndex extends Component {
           <View style={eventCardStyles.detailsContainerBottom}>
             <Text style={eventCardStyles.header}>{event.name}</Text>
             <Text style={eventCardStyles.details}>{this.scheduleText}</Text>
+            <Text style={eventCardStyles.details}>{this.location}</Text>
           </View>
 
         </View>

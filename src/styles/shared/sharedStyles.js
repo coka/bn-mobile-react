@@ -419,6 +419,9 @@ const SharedStyles = {
   paddingTopSmall: {
     paddingTop: globalPaddingSmall,
   },
+  paddingBottom: {
+    paddingBottom: globalPadding,
+  },
   paddingBottomLarge: {
     paddingBottom: globalPaddingLarge,
   },

@@ -69,12 +69,15 @@ const LoginStyles = {
     paddingVertical: globalPaddingLarge,
     width: fullWidth,
   },
+  disclaimerWrapper: {
+    paddingTop: globalPaddingLarge,
+  },
 
   // BUTTONS
   buttonContainer: {
     flexDirection: 'row',
     marginBottom: globalMargin,
-    width: fullWidth - globalPaddingMedium,
+    width: '100%',
   },
   button: {
     backgroundColor: primaryColor,
@@ -106,6 +109,25 @@ const LoginStyles = {
     fontSize: sectionHeaderFontSize,
     textAlign: 'center',
   },
+  buttonTertiary: {
+    backgroundColor: 'transparent',
+    borderColor: disabledHeaderColor,
+    borderRadius: 4,
+    borderWidth: 1,
+    flex: 1,
+    height: 60,
+    justifyContent: 'center',
+  },
+  buttonTertiaryIcon: {
+    fontSize: sectionHeaderFontSize,
+    paddingRight: globalPaddingSmall,
+  },
+  buttonTertiaryText: {
+    color: textColor,
+    fontFamily: globalFontRegular,
+    fontSize: sectionHeaderFontSize,
+    textAlign: 'center',
+  },
 
   // TEXT STYLES
   linkTextBlue: {
@@ -117,7 +139,14 @@ const LoginStyles = {
   mutedText: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: bodyFontSize - 2,
+  },
+  smallText: {
+    backgroundColor: 'transparent',
+    fontFamily: globalFontMedium,
+    fontSize: bodyFontSize - 2,
+    paddingBottom: globalPaddingTiny,
+    textAlign: 'center',
   },
 
   // ICON STYLES
@@ -144,6 +173,19 @@ const LoginStyles = {
     marginTop: globalPaddingJumbo,
     width: 135,
   },
+
+  // PROFILE IMAGE STYLES
+  profileImageWrapper: {
+    paddingTop: globalPaddingLarge,
+  },
+  profileImage: {
+    height: 55,
+    borderColor: 'transparent',
+    borderWidth: 1,
+    borderRadius: 55/2,
+    marginRight: globalMargin,
+    width: 55,
+  }
 }
 
 function createStyles(overrides = {}) {

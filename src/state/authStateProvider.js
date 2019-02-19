@@ -1,8 +1,18 @@
 import {Container} from 'unstated'
 import {AsyncStorage} from 'react-native'
+
 import {server, refreshWithToken, apiErrorAlert} from '../constants/Server'
+import {registerPushTokenIfPermitted} from '../notifications'
+import {identify, track} from '../constants/analytics'
 
 /* eslint-disable camelcase,space-before-function-paren */
+
+function shouldDoAdditionalSignUpStep(currentUser) {
+  const {first_name: first, last_name: last} = currentUser
+
+  return !(first && last)
+}
+
 class AuthContainer extends Container {
   constructor(props = {}) {
     super(props);
@@ -23,8 +33,13 @@ class AuthContainer extends Container {
     const {data: {access_token, refresh_token}} = resp
 
     await AsyncStorage.multiSet([['userToken', access_token], ['refreshToken', refresh_token]])
-    await this.getCurrentUser(navigate, access_token, refresh_token, refresh)
-    navigate('AuthLoading')
+    const currentUser = await this.getCurrentUser(navigate, access_token, refresh_token, refresh)
+
+    if (shouldDoAdditionalSignUpStep(currentUser)) {
+      navigate('SignUpNext')
+    } else {
+      navigate('AuthLoading')
+    }
   }
 
   logOut = async (navigate) => { // eslint-disable-line space-before-function-paren
@@ -41,9 +56,11 @@ class AuthContainer extends Container {
       if (setToken) {
         await refreshWithToken(refresh_token)
       }
-      const myUserResponse = await server.users.current()
+      const {data: currentUser} = await server.users.current()
 
-      await this.setState({currentUser: myUserResponse.data, access_token, refresh_token})
+      await this.setState({currentUser, access_token, refresh_token})
+      registerPushTokenIfPermitted()
+      return currentUser.user
     } catch (error) {
       apiErrorAlert(error, 'There was a problem logging you in.')
 
@@ -59,7 +76,17 @@ class AuthContainer extends Container {
       await this.setState({currentUser: data})
       return data
     } catch (error) {
-      return error.response.data
+      apiErrorAlert(error, 'There was an error updating your profile.')
+    }
+  }
+
+  identify = async (action = '') => {
+    const {currentUser: {user: {id, first_name, last_name, email}}} = this.state
+
+    await identify({id, firstName: first_name, lastName: last_name, email})
+
+    if (action !== '') {
+      track(action)
     }
   }
 
@@ -73,7 +100,8 @@ class AuthContainer extends Container {
         phone: '',
       })
 
-      this.setLoginData(response, navigate, true)
+      await this.setLoginData(response, navigate, true)
+      this.identify('Signed Up')
     } catch (error) {
       apiErrorAlert(error, 'There was an error creating your account.')
     }
@@ -83,7 +111,8 @@ class AuthContainer extends Container {
     try {
       const resp = await server.auth.authenticate(formData)
 
-      this.setLoginData(resp, navigate)
+      await this.setLoginData(resp, navigate)
+      this.identify('Signed In')
     } catch (error) {
       apiErrorAlert(error, 'There was a problem logging in.')
 

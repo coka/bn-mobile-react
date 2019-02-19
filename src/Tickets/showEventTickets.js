@@ -7,6 +7,7 @@ import Ticket from './Ticket'
 import SharedStyles from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
 import {Brightness} from 'expo'
+import {optimizeCloudinaryImage} from '../cloudinary'
 
 const styles = SharedStyles.createStyles()
 
@@ -18,7 +19,7 @@ async function getBrightness() {
 
 /**
  * Turned off because of https://github.com/revelrylabs/bn-mobile-react/issues/398
- * 
+ *
  * Android doesn't return to initial brightness.
  * `setSystemBrightness`, which might be the solution,
  * is still experimental in Expo as of the time this comment was written.
@@ -60,10 +61,10 @@ export default class EventsTicket extends Component {
   get eventAndTickets() {
     const {
       screenProps: {store: {ticketsForEvent}},
-      navigation: {state: {params: {eventId}}},
+      navigation: {state: {params: {activeTab, eventId}}},
     } = this.props
 
-    return ticketsForEvent(eventId)
+    return ticketsForEvent(activeTab, eventId)
   }
 
   get event() {
@@ -78,7 +79,7 @@ export default class EventsTicket extends Component {
     const event = this.event || {}
 
     return this.tickets.map((ticket) => ({
-      image: event.promo_image_url,
+      image: optimizeCloudinaryImage(event.promo_image_url),
       name: event.name,
       venue: event.venue.name,
       location: `${event.venue.city}, ${event.venue.state}`,
@@ -90,16 +91,24 @@ export default class EventsTicket extends Component {
       ticketType: ticket.ticket_type_name,
       eventId: event.id,
       ticketId: ticket.id,
+      status: ticket.status,
     }))
   }
 
   _renderItem = ({item, _index}) => {
     const {
-      navigation: {navigate, state: {params: {qrEnabled}}},
+      navigation: {navigate, state: {params: {activeTab}}},
       screenProps: {store: {redeemTicketInfo}},
     } = this.props
 
-    return <Ticket qrEnabled={qrEnabled} ticket={item} navigate={navigate} redeemTicketInfo={redeemTicketInfo} />
+    return (
+      <Ticket
+        activeTab={activeTab}
+        ticket={item}
+        navigate={navigate}
+        redeemTicketInfo={redeemTicketInfo}
+      />
+    )
   }
 
   render() {

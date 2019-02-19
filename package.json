@@ -3,34 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "expo-cli": "^2.2.6",
-    "jest-expo": "~27.0.0",
-    "react-native-scripts": "1.14.0",
+    "expo-cli": "^2.6.14",
+    "jest-expo": "~31.0.0",
     "react-test-renderer": "16.3.1"
   },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "main": "./node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "react-native-scripts start",
-    "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
+    "expo": "expo",
+    "start": "expo start -c",
+    "eject": "expo eject",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "test": "jest",
     "debug": "open \"rndebugger://set-debugger-loc?host=localhost&port=19001\""
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+    }
   },
   "dependencies": {
     "big.js": "^5.2.2",
-    "bn-api-node": "^0.3.25",
-    "expo": "^27.0.1",
+    "bn-api-node": "^1.0.3",
+    "expo": "^31.0.6",
     "get-own-property-symbols": "^0.9.2",
     "lodash": "^4.17.11",
     "luxon": "^1.9.0",
     "prop-types": "^15.6.2",
     "proxy-polyfill": "^0.3.0",
-    "react": "16.3.1",
-    "react-native": "~0.55.2",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz",
     "react-native-circle-checkbox": "^0.1.6",
     "react-native-loading-spinner-overlay": "^1.0.1",
     "react-native-modal-dropdown": "^0.6.2",

@@ -36,7 +36,7 @@ const CheckoutStyles = {
     paddingRight: 0,
     paddingHorizontal: 0,
     minHeight: '100%',
-    marginTop: 240,
+    marginTop: fullWidth/2 - 50
   },
   checkoutMainBody: {
     marginTop: 100,
@@ -124,7 +124,7 @@ const CheckoutStyles = {
   },
   ticketSubHeaderPink: {
     color: primaryColor,
-    fontFamily: globalFontRegular,
+    fontFamily: globalFontSemiBold,
     fontSize: bodyFontSize,
   },
 
@@ -177,6 +177,15 @@ const CheckoutStyles = {
     justifyContent: 'center',
     marginHorizontal: globalMargin,
     marginBottom: globalPaddingLarge,
+  },
+  buttonSecondary: {
+    backgroundColor: 'transparent',
+    borderColor: primaryColor,
+    borderRadius: 4,
+    borderWidth: 1,
+    flex: 1,
+    height: 40,
+    justifyContent: 'center',
   },
 }
 

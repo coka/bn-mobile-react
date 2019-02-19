@@ -22,6 +22,10 @@ const TicketTransferStyles = {
     shadowRadius: 3,
     width: fullWidth - 90,
   },
+  qrCodeSmall: {
+    height: 45,
+    width: 45,
+  },
 }
 
 function createStyles(overrides = {}) {
