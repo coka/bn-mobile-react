@@ -1,17 +1,5 @@
 import React, {Component} from 'react'
-import {
-  ScrollView,
-  View,
-  Text,
-  TouchableHighlight,
-  TextInput,
-  Image,
-  FlatList,
-  StyleSheet,
-  Dimensions,
-  Animated,
-  Alert,
-} from 'react-native'
+import {View, Text, TouchableHighlight, TextInput, Image, Dimensions, BackHandler} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {price, username, usernameLastFirst} from '../string'
 import SharedStyles from '../styles/shared/sharedStyles'
@@ -235,7 +223,21 @@ export default class ManualCheckin extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
     this.searchGuestList()
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    const {selectedGuest} = this.state;
+    if(selectedGuest) {
+      this.unselectGuest();
+      return true;
+    }
+    return false;
   }
 
   searchGuestList = (query) => {
