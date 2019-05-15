@@ -3,14 +3,9 @@ import {server, apiErrorAlert, defaultEventSort} from '../constants/Server'
 import {baseURL} from '../constants/config'
 import {DateTime} from 'luxon'
 import {map} from 'lodash'
-
+import {Image} from 'react-native'
+import {optimizeCloudinaryImage} from '../cloudinary'
 const LOCATIONS_FETCH_MIN_MINUTES = 15
-
-const _SAMPLE_AVATARS = [
-  require('../../assets/avatar-female.png'),
-  require('../../assets/avatar-male.png'),
-  require('../../assets/avatar-female.png'),
-]
 
 /* eslint-disable complexity,space-before-function-paren,camelcase */
 
@@ -37,12 +32,18 @@ function ticketComparator({ticket_pricing: a}, {ticket_pricing: b}) {
   }
   return b - a
 }
-class EventsContainer extends Container {
 
+class EventsContainer extends Container {
   constructor(props = {}) {
-    super(props);
+    super(props)
 
     this.state = {
+      total: null,
+      page: 0,
+      limit: 10,
+      loading: false,
+      query: '',
+      suggestedNames: [],
       events: [],
       eventsById: {},
       ticketTypesById: {},
@@ -51,7 +52,7 @@ class EventsContainer extends Container {
       locations: [],
       selectedLocationId: null,
       selectedEvent: {},
-    };
+    }
   }
 
   get eventsById() {
@@ -66,6 +67,10 @@ class EventsContainer extends Container {
     return map(this.ticketTypesById, (_ticket, id) => id)
   }
 
+  get eventTickets() {
+    return map(this.ticketTypesById, (ticket, _id) => ticket)
+  }
+
   get selectedEvent() {
     return this.state.selectedEvent
   }
@@ -75,8 +80,23 @@ class EventsContainer extends Container {
 
     ticketTypes = map(ticketTypesById, (ticket, _id) => ticket)
 
+    return ticketTypes ?
+      ticketTypes.filter(ticketFilter).sort(ticketComparator) :
+      []
+  }
 
-    return ticketTypes ? ticketTypes.filter(ticketFilter).sort(ticketComparator) : []
+  get hasNextPage() {
+    const {total, page, limit} = this.state
+
+    if (total && total > 0) {
+      return total - (page + 1) * limit > 0
+    }
+
+    return false
+  }
+
+  setQuery = async (query) => {
+    this.setState({query})
   }
 
   locationsPromise = null
@@ -88,7 +108,11 @@ class EventsContainer extends Container {
       return await this.locationsPromise
     }
     // Don't fetch more often than is sane.
-    if (this.locationsLastFetched && this.locationsLastFetched.plus({minutes: LOCATIONS_FETCH_MIN_MINUTES}) < DateTime.local()) {
+    if (
+      this.locationsLastFetched &&
+      this.locationsLastFetched.plus({minutes: LOCATIONS_FETCH_MIN_MINUTES}) <
+        DateTime.local()
+    ) {
       return
     }
     try {
@@ -103,8 +127,9 @@ class EventsContainer extends Container {
 
   _fetchLocations = async () => {
     try {
-
-      const {data: {data: locations}} = await server.regions.index()
+      const {
+        data: {data: locations},
+      } = await server.regions.index()
 
       await this.setState({locations})
     } catch (error) {
@@ -112,30 +137,111 @@ class EventsContainer extends Container {
     }
   }
 
-  getEvents = async (_location = null) => {
-    try {
-      const [{data}, ..._rest] = await Promise.all([
-        server.events.index(defaultEventSort),
-        this.fetchLocations(),
-      ])
-      const eventsById = {}
+  _cacheResourcesAsync = async (eventImagePrefetch) => {
+    Promise.all(eventImagePrefetch)
+  }
 
+  _fetchEvents = async (options) => {
+    return Promise.all([server.events.index(options), this.fetchLocations()])
+  }
+
+  buildFetchEventsOptions(incomingOptions) {
+    const {limit} = this.state
+
+    const options = {...defaultEventSort, limit, page: incomingOptions.page}
+
+    if (incomingOptions.query && incomingOptions.query.length >= 3) {
+      options.query = incomingOptions.query
+      options.status = 'Published'
+    }
+
+    if (incomingOptions.selectedLocationId) {
+      options.region_id = incomingOptions.selectedLocationId
+    }
+
+    return options
+  }
+
+  getEvents = async (options = {}) => {
+    const {events, eventsById} = this.state
+
+    let query = this.state.query
+
+    if ('query' in options) {
+      query = options.query
+    }
+
+    let selectedLocationId = this.state.selectedLocationId
+
+    if ('selectedLocationId' in options) {
+      selectedLocationId = options.selectedLocationId
+    }
+
+    let page = this.state.page
+
+    if ('page' in options) {
+      page = options.page
+    }
+
+    const queryOptions = this.buildFetchEventsOptions({
+      query,
+      selectedLocationId,
+      page,
+    })
+
+    try {
+      this.setState({loading: true})
+
+      const [{data}, ..._rest] = await this._fetchEvents(queryOptions)
+      const imagePrefetch = []
+      const eventsByIdObj = options.replaceEvents ? {} : eventsById
+
+      // process event images
       data.data.forEach((event) => {
         if (!event.promo_image_url) {
           event.promo_image_url = `${baseURL}/images/event-placeholder.png`
         }
-        eventsById[event.id] = event
+        // Add images to the cache
+        imagePrefetch.push(
+          Image.prefetch(optimizeCloudinaryImage(event.promo_image_url))
+        )
+
+        eventsByIdObj[event.id] = event
       })
+      this._cacheResourcesAsync(imagePrefetch)
 
       this.setState({
         lastUpdate: DateTime.local(),
-        events: data.data,
-        eventsById,
+        events: options.replaceEvents ? data.data : events.concat(data.data),
+        eventsById: eventsByIdObj,
         paging: data.paging,
+        total: data.paging.total,
+        limit: data.paging.limit,
+        page: data.paging.page,
+        selectedLocationId,
+        query,
       })
     } catch (error) {
-      apiErrorAlert(error)
+      setTimeout(() => {
+        apiErrorAlert(error)
+      }, 600)
+    } finally {
+      this.setState({loading: false})
     }
+  }
+
+  refreshEvents = async (onFinish) => {
+    await this.setState({page: 0})
+    await this.getEvents({replaceEvents: true})
+    onFinish()
+  }
+
+  fetchNextPage = async () => {
+    await this.setState((state) => {
+      return {page: state.page + 1}
+    })
+
+    this.getEvents()
   }
 
   clearEvent = () => {
@@ -193,9 +299,6 @@ class EventsContainer extends Container {
     ticketTypesById[ticket_type.id] = ticket_type
     await this.setState({ticketTypesById})
   }
-
 }
 
-export {
-  EventsContainer,
-}
+export {EventsContainer}

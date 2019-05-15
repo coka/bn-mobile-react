@@ -3,10 +3,10 @@ import {
   white,
   borderColor,
   textColor,
+  globalFontSize,
+  globalFontRegular,
   globalPadding,
   globalPaddingSmall,
-  iconFontSize,
-  globalFontRegular,
 } from '../shared/sharedStyles'
 import {StyleSheet, Dimensions, Platform} from 'react-native'
 const fullHeight = Dimensions.get('window').height
@@ -43,7 +43,7 @@ const BillingStyles = {
   },
   billingButtonIcon: {
     color: primaryColor,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
     paddingRight: globalPaddingSmall,
   },
 
@@ -51,7 +51,7 @@ const BillingStyles = {
   billingInput: {
     color: textColor,
     fontFamily: globalFontRegular,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
     paddingRight: globalPadding,
   },
   billingInputLast: {

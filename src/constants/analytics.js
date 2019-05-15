@@ -1,6 +1,6 @@
 import {Segment} from 'expo'
 import {Platform} from 'react-native'
-import {iosWriteKey, androidWriteKey} from './config';
+import {iosWriteKey, androidWriteKey} from './config'
 
 export function analyticsInit() {
   Segment.initialize({androidWriteKey, iosWriteKey})
@@ -15,4 +15,3 @@ export async function identify(params) {
 export function track(action) {
   Segment.track(action)
 }
-

@@ -9,13 +9,20 @@ export function autotrim(fn) {
 }
 
 export function pluralize(count, singular, plural = null) {
-  const noun = count === 1 ? singular : (plural || `${singular}s`)
+  const noun = count === 1 ? singular : plural || `${singular}s`
 
   return `${count} ${noun}`
 }
 
 function buildName(parts, joiner, email) {
-  return parts.filter(x => x).join(joiner).trim() || email || NAME_MISSING
+  return (
+    parts
+      .filter((x) => x)
+      .join(joiner)
+      .trim() ||
+    email ||
+    NAME_MISSING
+  )
 }
 
 export function username({first_name: first, last_name: last, email}) {

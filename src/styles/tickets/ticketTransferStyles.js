@@ -17,7 +17,7 @@ const TicketTransferStyles = {
     marginBottom: globalMargin,
     padding: globalPaddingMedium,
     shadowColor: boxShadowColor,
-    shadowOffset: { width: 2, height: 2 },
+    shadowOffset: {width: 2, height: 2},
     shadowOpacity: 0.7,
     shadowRadius: 3,
     width: fullWidth - 90,

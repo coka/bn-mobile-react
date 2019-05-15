@@ -5,11 +5,12 @@ import {
   containerDarkColor,
   borderColor,
   textColor,
-  bodyFontSize,
-  sectionHeaderFontSize,
   globalFontRegular,
   globalFontMedium,
   globalFontSemiBold,
+  globalFontSizeSmall,
+  globalFontSizeLarger,
+  globalFontSizeLargest,
   globalPaddingLarge,
   globalPaddingSmall,
   globalPaddingTiny,
@@ -22,29 +23,24 @@ const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
-
-export const headerFontSize = 30
-export const ticketPriceFontSize = 32
-export const quantityIconFontSize = 26
-
+export const ticketPriceFontSize = globalFontSizeSmall * 2
 
 const CheckoutStyles = {
   // MAIN BODY STYLES
   mainBody: {
     backgroundColor: 'transparent',
-    paddingLeft: 0,
-    paddingRight: 0,
+    paddingBottom: globalPaddingLarge + 80,
     paddingHorizontal: 0,
     minHeight: '100%',
-    marginTop: fullWidth/2 - 50
+    marginTop: fullWidth / 2 - 50,
   },
   checkoutMainBody: {
     marginTop: 100,
   },
   mainBodyContent: {
     backgroundColor: 'white',
-    borderTopRightRadius: 30/2,
-    borderTopLeftRadius: 30/2,
+    borderTopRightRadius: 30 / 2,
+    borderTopLeftRadius: 30 / 2,
     height: fullHeight,
     paddingTop: globalPaddingMedium,
     minHeight: '100%',
@@ -69,7 +65,6 @@ const CheckoutStyles = {
     justifyContent: 'space-between',
     paddingHorizontal: globalPadding,
     paddingVertical: globalPadding,
-    width: fullWidth,
   },
   rowContainerActive: {
     alignItems: 'center',
@@ -94,7 +89,7 @@ const CheckoutStyles = {
   header: {
     backgroundColor: 'transparent',
     fontFamily: globalFontSemiBold,
-    fontSize: headerFontSize,
+    fontSize: globalFontSizeLargest,
     color: textColor,
   },
   quantityPrice: {
@@ -111,27 +106,33 @@ const CheckoutStyles = {
     fontSize: ticketPriceFontSize,
     paddingRight: globalPadding,
   },
+  soldOutTicketPrice: {
+    color: primaryColor,
+    fontFamily: globalFontSemiBold,
+    fontSize: globalFontSizeSmall,
+    paddingRight: globalPadding,
+  },
   ticketHeader: {
     color: textColor,
     fontFamily: globalFontSemiBold,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     paddingTop: globalPaddingTiny,
   },
   ticketSubHeader: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
   },
   ticketSubHeaderPink: {
     color: primaryColor,
     fontFamily: globalFontSemiBold,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
   },
 
   // ICON STYLES
   iconPayment: {
     borderColor: 'transparent',
-    borderRadius: 15/2,
+    borderRadius: 15 / 2,
     borderWidth: 1,
     height: 50,
     marginRight: globalMargin,
@@ -139,7 +140,7 @@ const CheckoutStyles = {
   },
   iconPaymentSmall: {
     borderColor: 'transparent',
-    borderRadius: 15/2,
+    borderRadius: 15 / 2,
     borderWidth: 1,
     height: 25,
     marginRight: globalMargin,
@@ -147,30 +148,30 @@ const CheckoutStyles = {
   },
   iconCheck: {
     color: primaryColor,
-    fontSize: quantityIconFontSize,
+    fontSize: globalFontSizeLarger,
   },
   removeIconDisabled: {
     color: borderColor,
-    fontSize: quantityIconFontSize,
+    fontSize: globalFontSizeLarger,
   },
   removeIcon: {
     color: primaryColor,
-    fontSize: quantityIconFontSize,
+    fontSize: globalFontSizeLarger,
   },
   addIconDisabled: {
     color: borderColor,
-    fontSize: quantityIconFontSize,
+    fontSize: globalFontSizeLarger,
   },
   addIcon: {
     color: primaryColor,
-    fontSize: quantityIconFontSize,
+    fontSize: globalFontSizeLarger,
   },
 
   // BUTTON STYLES
   buttonRounded: {
     backgroundColor: white,
     borderColor: primaryColor,
-    borderRadius: 15/2,
+    borderRadius: 15 / 2,
     borderWidth: 2,
     flex: 1,
     height: 45,

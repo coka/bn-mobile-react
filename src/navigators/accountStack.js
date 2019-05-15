@@ -4,42 +4,57 @@ import {createStackNavigator} from 'react-navigation'
 import {Subscribe} from 'unstated'
 import {AuthContainer} from '../state/authStateProvider'
 import {EventManagerContainer} from '../state/eventManagerStateProvider'
+import {NetworkContainer} from '../state/networkStateProvider'
+import {OrderHistoryContainer} from '../state/orderHistoryProvider'
 import AccountRoutes from '../Accounts/routes'
 import {last} from 'lodash'
 
-const AccountsStack = createStackNavigator({
-  ...AccountRoutes,
-}, {
-  initialRouteName: 'Account',
-})
+const AccountsStack = createStackNavigator(
+  {
+    ...AccountRoutes,
+  },
+  {
+    initialRouteName: 'Account',
+  }
+)
 
 export default class accountsStackWithStore extends Component {
-  static router = AccountsStack.router;
+  static router = AccountsStack.router
   static propTypes = {
     navigation: PropTypes.object.isRequired,
   }
 
   // Hide bottom tab bar on any Event page that isnt the index
   static navigationOptions = ({navigation}) => {
-    let tabBarVisible = true;
+    let tabBarVisible = true
     const curRoute = last(navigation.state.routes)
 
-    if (curRoute.routeName === 'EventScanner' || curRoute.routeName === 'GuestList') {
-      tabBarVisible = false;
+    if (
+      curRoute.routeName === 'EventScanner' ||
+      curRoute.routeName === 'GuestList'
+    ) {
+      tabBarVisible = false
     }
 
     return {
       tabBarVisible,
-    };
-  };
+    }
+  }
 
   render() {
     return (
-      <Subscribe to={[AuthContainer, EventManagerContainer]}>
-        {(auth, eventManager) => (
+      <Subscribe
+        to={[
+          AuthContainer,
+          EventManagerContainer,
+          NetworkContainer,
+          OrderHistoryContainer,
+        ]}
+      >
+        {(auth, eventManager, network, orderHistory) => (
           <AccountsStack
             navigation={this.props.navigation}
-            screenProps={{auth, eventManager}}
+            screenProps={{auth, eventManager, network, orderHistory}}
           />
         )}
       </Subscribe>

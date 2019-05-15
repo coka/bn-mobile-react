@@ -1,5 +1,12 @@
-import React from 'react';
-import {Text, View, Image, TextInput, ScrollView, TouchableHighlight} from 'react-native';
+import React from 'react'
+import {
+  Text,
+  View,
+  Image,
+  TextInput,
+  ScrollView,
+  TouchableHighlight,
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
@@ -11,9 +18,11 @@ const billingStyles = BillingStyles.createStyles()
 
 export default function Billing() {
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.containerDark}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.containerDark}
+    >
       <View style={styles.paddingVerticalMedium}>
-
         <Text style={accountStyles.sectionHeader}>Credit Cards</Text>
 
         <View style={accountStyles.inputContainer}>
@@ -27,13 +36,16 @@ export default function Billing() {
             <TextInput
               style={billingStyles.billingInput}
               placeholder="**** **** **** 2386"
-              placeholderTextColor='black'
+              placeholderTextColor="black"
               underlineColorAndroid="transparent"
             />
             <TextInput
-              style={[billingStyles.billingInput, billingStyles.billingInputLast]}
+              style={[
+                billingStyles.billingInput,
+                billingStyles.billingInputLast,
+              ]}
               placeholder="12/24"
-              placeholderTextColor='black'
+              placeholderTextColor="black"
               underlineColorAndroid="transparent"
             />
           </View>
@@ -50,20 +62,25 @@ export default function Billing() {
             <TextInput
               style={billingStyles.billingInput}
               placeholder="**** **** **** 2595"
-              placeholderTextColor='black'
+              placeholderTextColor="black"
               underlineColorAndroid="transparent"
             />
             <TextInput
-              style={[billingStyles.billingInput, billingStyles.billingInputLast]}
+              style={[
+                billingStyles.billingInput,
+                billingStyles.billingInputLast,
+              ]}
               placeholder="04/21"
-              placeholderTextColor='black'
+              placeholderTextColor="black"
               underlineColorAndroid="transparent"
             />
           </View>
         </View>
 
         <View>
-          <Text style={[accountStyles.sectionHeader, styles.marginTop]}>Other</Text>
+          <Text style={[accountStyles.sectionHeader, styles.marginTop]}>
+            Other
+          </Text>
           <View style={accountStyles.inputContainer}>
             <View style={billingStyles.row}>
               <View style={billingStyles.imageWrapper}>
@@ -75,7 +92,7 @@ export default function Billing() {
               <TextInput
                 style={accountStyles.accountInputHeader}
                 placeholder="kookster9000@hottopic.com"
-                placeholderTextColor='black'
+                placeholderTextColor="black"
                 underlineColorAndroid="transparent"
               />
             </View>
@@ -83,17 +100,17 @@ export default function Billing() {
         </View>
 
         <View style={[styles.buttonContainer, styles.marginTop]}>
-          <TouchableHighlight
-            style={styles.buttonSecondary}
-          >
+          <TouchableHighlight style={styles.buttonSecondary}>
             <View style={styles.buttonIconContainer}>
-              <Icon style={billingStyles.billingButtonIcon} name="credit-card" />
+              <Icon
+                style={billingStyles.billingButtonIcon}
+                name="credit-card"
+              />
               <Text style={styles.buttonSecondaryText}>Add Payment Method</Text>
             </View>
           </TouchableHighlight>
         </View>
-
       </View>
     </ScrollView>
-  );
+  )
 }

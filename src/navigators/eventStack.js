@@ -7,39 +7,51 @@ import {EventsContainer} from '../state/eventStateProvider'
 import {TicketsContainer} from '../state/ticketStateProvider'
 import {CartContainer} from '../state/cartStateProvider'
 import {AuthContainer} from '../state/authStateProvider'
+import {NetworkContainer} from '../state/networkStateProvider'
 
-const EventsStack = createStackNavigator({
-  ...EventRoutes,
-}, {
-  initialRouteName: 'Home',
-  navigationOptions: {
-    header: null,
+const EventsStack = createStackNavigator(
+  {
+    ...EventRoutes,
   },
-})
+  {
+    initialRouteName: 'Home',
+    navigationOptions: {
+      header: null,
+    },
+  }
+)
 
 export default class eventStackWithStore extends Component {
-  static router = EventsStack.router;
+  static router = EventsStack.router
   static propTypes = {
     navigation: PropTypes.object.isRequired,
   }
 
   // Hide bottom tab bar on any Event page that isnt the index
   static navigationOptions = ({navigation}) => {
-    let tabBarVisible = true;
+    let tabBarVisible = true
 
     if (navigation.state.index > 0) {
-      tabBarVisible = false;
+      tabBarVisible = false
     }
 
     return {
       tabBarVisible,
-    };
-  };
+    }
+  }
 
   render() {
     return (
-      <Subscribe to={[EventsContainer, TicketsContainer, CartContainer, AuthContainer]}>
-        {(eventStore, ticketStore, cartStore, authStore) => (
+      <Subscribe
+        to={[
+          EventsContainer,
+          TicketsContainer,
+          CartContainer,
+          AuthContainer,
+          NetworkContainer,
+        ]}
+      >
+        {(eventStore, ticketStore, cartStore, authStore, network) => (
           <EventsStack
             navigation={this.props.navigation}
             screenProps={{
@@ -47,9 +59,11 @@ export default class eventStackWithStore extends Component {
               cart: cartStore,
               setPurchasedTicket: ticketStore.setPurchasedTicket,
               user: authStore.state,
+              network,
             }}
           />
         )}
-      </Subscribe>)
+      </Subscribe>
+    )
   }
 }

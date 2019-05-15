@@ -1,13 +1,17 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, Image} from 'react-native';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {Text, View, Image} from 'react-native'
+import Carousel, {Pagination} from 'react-native-snap-carousel'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Ticket from './Ticket'
 import SharedStyles from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
 import {Brightness} from 'expo'
 import {optimizeCloudinaryImage} from '../cloudinary'
+
+// In case we cannot get a value for the brightness from
+// Brightness.getBrightnessAsync()
+const DEFAULT_BRIGHTNESS = 0.5
 
 const styles = SharedStyles.createStyles()
 
@@ -18,14 +22,14 @@ async function getBrightness() {
 }
 
 /**
- * Turned off because of https://github.com/revelrylabs/bn-mobile-react/issues/398
  *
  * Android doesn't return to initial brightness.
  * `setSystemBrightness`, which might be the solution,
  * is still experimental in Expo as of the time this comment was written.
+ * https://github.com/revelrylabs/bn-mobile-react/issues/398
+ * is still a problem, but included a default brightness value
  */
 async function setBrightness(zeroToOne) {
-  return
   await Brightness.setBrightnessAsync(zeroToOne)
 }
 
@@ -46,7 +50,8 @@ export default class EventsTicket extends Component {
   }
 
   async doBrightness() {
-    this._prevBrightness = await getBrightness()
+    this._prevBrightness = (await getBrightness()) || DEFAULT_BRIGHTNESS
+
     await setBrightness(1)
   }
 
@@ -60,8 +65,14 @@ export default class EventsTicket extends Component {
 
   get eventAndTickets() {
     const {
-      screenProps: {store: {ticketsForEvent}},
-      navigation: {state: {params: {activeTab, eventId}}},
+      screenProps: {
+        store: {ticketsForEvent},
+      },
+      navigation: {
+        state: {
+          params: {activeTab, eventId},
+        },
+      },
     } = this.props
 
     return ticketsForEvent(activeTab, eventId)
@@ -87,7 +98,7 @@ export default class EventsTicket extends Component {
       date: event.formattedDate,
       starts: event.formattedStart,
       doors: event.formattedDoors,
-      user: "Test Name",
+      user: 'Test Name',
       ticketType: ticket.ticket_type_name,
       eventId: event.id,
       ticketId: ticket.id,
@@ -97,8 +108,15 @@ export default class EventsTicket extends Component {
 
   _renderItem = ({item, _index}) => {
     const {
-      navigation: {navigate, state: {params: {activeTab}}},
-      screenProps: {store: {redeemTicketInfo}},
+      navigation: {
+        navigate,
+        state: {
+          params: {activeTab},
+        },
+      },
+      screenProps: {
+        store: {redeemTicketInfo},
+      },
     } = this.props
 
     return (
@@ -121,10 +139,12 @@ export default class EventsTicket extends Component {
       <View style={ticketWalletStyles.modalContainer}>
         <Image
           style={ticketWalletStyles.modalBkgdImage}
-          source={require('../../assets/modal-bkgd.jpg')}
+          source={require('../../assets/account-placeholder-bkgd.png')}
         />
         <View>
-          <View style={[ticketWalletStyles.closeModalContainer, styles.paddingTop]}>
+          <View
+            style={[ticketWalletStyles.closeModalContainer, styles.paddingTop]}
+          >
             <Icon
               style={styles.iconLinkCircle}
               name="close"
@@ -132,7 +152,9 @@ export default class EventsTicket extends Component {
                 navigation.goBack()
               }}
             />
-            <Text style={ticketWalletStyles.closeModalHeader}>Ticket {activeSlide + 1} of {tickets.length}</Text>
+            <Text style={ticketWalletStyles.closeModalHeader}>
+              Ticket {activeSlide + 1} of {tickets.length}
+            </Text>
             <Text>&nbsp; &nbsp;</Text>
           </View>
           <Carousel

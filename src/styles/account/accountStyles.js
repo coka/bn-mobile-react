@@ -7,8 +7,11 @@ import {
   containerDarkColor,
   disabledHeaderColor,
   disabledColor,
-  bodyFontSize,
-  iconFontSize,
+  globalFontSizeSmaller,
+  globalFontSizeSmall,
+  globalFontSize,
+  globalFontSizeLarge,
+  globalFontSizeLargest,
   globalFontRegular,
   globalFontMedium,
   globalPaddingLarge,
@@ -23,10 +26,6 @@ const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
-
-export const sectionHeaderFontSize = 24
-export const bodyFontSizeSmall = 14
-export const avatarIconFontSize = 28
 
 const AccountStyles = {
   // ACCOUNT COVER PHOTO STYLES
@@ -52,7 +51,7 @@ const AccountStyles = {
   },
   accountPhotoText: {
     color: whiteTransparent,
-    fontSize: bodyFontSizeSmall,
+    fontSize: globalFontSizeSmaller,
   },
 
   // AVATAR STYLES
@@ -60,7 +59,7 @@ const AccountStyles = {
     backgroundColor: sectionHeaderColor,
     borderColor: white,
     borderWidth: 1,
-    borderRadius: 100/2,
+    borderRadius: 100 / 2,
     height: 55,
     marginTop: -50,
     padding: globalPaddingSmall,
@@ -71,7 +70,7 @@ const AccountStyles = {
   },
   avatarIcon: {
     color: white,
-    fontSize: avatarIconFontSize,
+    fontSize: globalFontSizeLargest,
   },
 
   // ACCOUNT INFO STYLES
@@ -84,7 +83,7 @@ const AccountStyles = {
   accountEmailHeader: {
     color: textColor,
     fontFamily: globalFontMedium,
-    fontSize: sectionHeaderFontSize,
+    fontSize: globalFontSizeLarge,
   },
   emailWrapper: {
     flexDirection: 'row',
@@ -93,13 +92,13 @@ const AccountStyles = {
   },
   emailIcon: {
     color: sectionHeaderColor,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     paddingRight: globalPaddingTiny,
   },
   accountEmail: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSizeSmall,
+    fontSize: globalFontSizeSmaller,
   },
   qrCodeSmall: {
     height: 45,
@@ -110,7 +109,7 @@ const AccountStyles = {
   sectionHeader: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     marginBottom: globalMarginSmall,
     paddingHorizontal: globalPadding,
   },
@@ -135,22 +134,22 @@ const AccountStyles = {
   // ACCOUNT SUBNAV STYLES
   accountIcon: {
     color: sectionHeaderColor,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     paddingRight: globalPaddingSmall,
   },
   accountIconActive: {
     color: primaryColor,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     paddingRight: globalPaddingSmall,
   },
   accountHeader: {
     color: textColor,
     fontFamily: globalFontRegular,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
   },
   accountArrow: {
     color: sectionHeaderColor,
-    fontSize: avatarIconFontSize,
+    fontSize: globalFontSizeLargest,
   },
 
   // INPUT STYLES
@@ -168,13 +167,13 @@ const AccountStyles = {
   accountInputHeader: {
     color: textColor,
     fontFamily: globalFontRegular,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
     width: fullWidth,
   },
   accountInputHeaderDisabled: {
     color: disabledHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
     width: 120,
   },
 }

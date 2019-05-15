@@ -8,12 +8,20 @@ export async function accessCameraRoll() {
 }
 
 export async function selectCameraRollImage() {
-  const {base64, cancelled, type, uri, ...rest} = await ImagePicker.launchImageLibraryAsync({
+  const {
+    base64,
+    cancelled,
+    type,
+    uri,
+    ...rest
+  } = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
     base64: true,
   })
 
-  return cancelled ? null : `data:${type}/${uri.match(/^.*(\.[^\.]+)$/)[1]};base64,${base64}`
+  return cancelled ?
+    null :
+    `data:${type}/${uri.match(/^.*(\.[^\.]+)$/)[1]};base64,${base64}`
 }
 
 export function imageSourceUrl(uri, quality) {

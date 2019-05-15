@@ -2,10 +2,10 @@ import {
   white,
   primaryColor,
   textColor,
-  bodyFontSize,
-  iconFontSize,
   globalFontRegular,
   globalFontSemiBold,
+  globalFontSizeSmall,
+  globalFontSize,
   globalPadding,
   globalPaddingSmall,
   globalPaddingTiny,
@@ -15,9 +15,6 @@ const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.3)'
-
-export const headerFontSize = 38
-export const sectionHeaderFontSize = 18
 
 const EventCardStyles = {
   // CONTAINER STYLES
@@ -38,13 +35,13 @@ const EventCardStyles = {
   // TEXT STYLES
   header: {
     fontFamily: globalFontSemiBold,
-    fontSize: sectionHeaderFontSize,
+    fontSize: globalFontSize,
     color: textColor,
     paddingTop: globalPaddingSmall,
   },
   details: {
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     color: textColor,
     paddingTop: 2,
   },
@@ -52,25 +49,25 @@ const EventCardStyles = {
   // ICON STYLES
   iconLinkCircleContainerSmall: {
     backgroundColor: whiteTransparent,
-    borderRadius: 100/2,
+    borderRadius: 100 / 2,
     height: 28,
     padding: globalPaddingTiny,
     width: 28,
   },
   iconLinkCircleSmall: {
     color: white,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
   },
   iconLinkCircleContainerSmallActive: {
     backgroundColor: white,
-    borderRadius: 100/2,
+    borderRadius: 100 / 2,
     height: 28,
     padding: globalPaddingTiny,
     width: 28,
   },
   iconLinkCircleSmallActive: {
     color: primaryColor,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
   },
 
   // IMAGE BKGD STYLES

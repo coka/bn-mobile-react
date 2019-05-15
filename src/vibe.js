@@ -4,7 +4,7 @@ const VIBE_ON = 500 // iOS ignores this param and always chooses ~500ms, so that
 const VIBE_OFF = 100
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export async function pulse(count) {

@@ -8,7 +8,7 @@ import {
   disabledColor,
   globalFontRegular,
   globalFontSemiBold,
-  iconFontSize,
+  globalFontSize,
   globalPaddingMedium,
   globalPadding,
   globalPaddingSmall,
@@ -20,11 +20,7 @@ import {StyleSheet, Dimensions, Platform} from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
-export const bodyFontSize = 18
-export const searchIconFontSize = 21
-
 const FormStyles = {
-
   // CONTAINER STYLES
   inputContainer: {
     paddingBottom: globalPadding,
@@ -35,7 +31,7 @@ const FormStyles = {
     borderWidth: 1,
     borderStyle: 'solid',
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSize,
     height: 50,
     marginBottom: globalPaddingSmall + 5,
     paddingHorizontal: globalPadding,
@@ -63,7 +59,8 @@ const FormStyles = {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: globalMarginSmall,
+    marginBottom: globalMargin,
+    marginTop: globalMarginSmall,
     paddingLeft: globalPaddingSmall,
   },
 
@@ -74,13 +71,13 @@ const FormStyles = {
     textAlignVertical: 'top',
     color: textColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSize,
   },
   textAreaInput: {
     color: textColor,
     backgroundColor: disabledColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSize,
     flex: 1,
   },
 
@@ -91,7 +88,7 @@ const FormStyles = {
     backgroundColor: disabledColor,
     borderColor: 'transparent',
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSize,
     height: 50,
     marginBottom: globalPaddingMedium,
     paddingHorizontal: globalPadding,
@@ -101,7 +98,7 @@ const FormStyles = {
     backgroundColor: 'transparent',
     color: textColor,
     fontFamily: globalFontSemiBold,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSize,
     fontWeight: '500',
     paddingBottom: globalPaddingTiny,
   },
@@ -125,7 +122,7 @@ const FormStyles = {
     color: textColor,
     flex: 1,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSize,
     height: 40,
     marginTop: globalPaddingTiny,
     width: '100%',
@@ -158,7 +155,7 @@ const FormStyles = {
   checkBoxHelpText: {
     color: inputBackgroundColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSize,
     paddingBottom: globalPaddingTiny,
   },
 }

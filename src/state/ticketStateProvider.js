@@ -6,7 +6,7 @@ import {eventDateTimes, eventIsInPast} from '../time'
 
 class TicketsContainer extends Container {
   constructor(props = {}) {
-    super(props);
+    super(props)
 
     this.state = {
       tickets: [],
@@ -34,13 +34,15 @@ class TicketsContainer extends Container {
         event.formattedStart = event_start.toFormat('t')
 
         const categories = {
-          'upcoming': [],
-          'past': [],
-          'transfer': [],
+          upcoming: [],
+          past: [],
+          transfer: [],
         }
 
         tix.forEach((ticket) => {
-          categories[ticket.pending_transfer ? 'transfer' : untransferredCategory].push(ticket)
+          categories[
+            ticket.pending_transfer ? 'transfer' : untransferredCategory
+          ].push(ticket)
         })
 
         Object.keys(categories).forEach((key) => {
@@ -51,6 +53,9 @@ class TicketsContainer extends Container {
           }
         })
       })
+
+      // sort past events in reverse order
+      tabData.past = tabData.past.reverse()
 
       this.setState({tickets: tabData})
     } catch (error) {
@@ -63,15 +68,17 @@ class TicketsContainer extends Container {
   }
 
   ticketsForEvent = (activeTab, eventId) => {
-    return this.state.tickets[activeTab || 'upcoming'].find(({event: {id}}) => id === eventId)
+    return this.state.tickets[activeTab || 'upcoming'].find(
+      ({event: {id}}) => id === eventId
+    )
   }
 
-  redeemTicketInfo = async (ticket_id) => { // eslint-disable-line complexity
+  redeemTicketInfo = async (ticket_id) => {
+    // eslint-disable-line complexity
     try {
-
       const response = await server.tickets.redeem.read({ticket_id})
 
-      return response.data;
+      return response.data
     } catch (error) {
       apiErrorAlert(error, 'Creating QR code failed failed.')
     }
@@ -89,6 +96,4 @@ class TicketsContainer extends Container {
   }
 }
 
-export {
-  TicketsContainer,
-}
+export {TicketsContainer}

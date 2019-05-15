@@ -1,10 +1,6 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {
-  ActivityIndicator,
-  StatusBar,
-  View,
-} from 'react-native';
+import {ActivityIndicator, StatusBar, View} from 'react-native'
 import {Subscribe} from 'unstated'
 import {AuthContainer} from '../state/authStateProvider'
 import {retrieveTokens} from '../constants/Server'
@@ -19,14 +15,18 @@ class AuthStore extends Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
-    this._bootstrapAsync();
+    this._bootstrapAsync()
   }
 
   // Fetch the token from storage then navigate to our appropriate place
-  _bootstrapAsync = async () => { // eslint-disable-line complexity,space-before-function-paren
-    const {navigation: {navigate}, auth} = this.props
+  _bootstrapAsync = async() => {
+    // eslint-disable-line complexity,space-before-function-paren
+    const {
+      navigation: {navigate},
+      auth,
+    } = this.props
     const {userToken, refreshToken} = await retrieveTokens()
 
     if (userToken && refreshToken) {
@@ -41,7 +41,7 @@ class AuthStore extends Component {
     } else {
       navigate('Auth')
     }
-  };
+  }
 
   render() {
     return (
@@ -49,7 +49,7 @@ class AuthStore extends Component {
         <ActivityIndicator />
         <StatusBar barStyle="default" />
       </View>
-    );
+    )
   }
 }
 
@@ -64,6 +64,6 @@ export default class AuthLoadingScreen extends Component {
       <Subscribe to={[AuthContainer]}>
         {(auth) => <AuthStore auth={auth} navigation={this.props.navigation} />}
       </Subscribe>
-    );
+    )
   }
 }
