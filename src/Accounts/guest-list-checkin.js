@@ -218,38 +218,17 @@ function SearchBox({textInput}) {
 }
 
 export default class ManualCheckin extends Component {
-  state = {
-    selectedGuest: null,
-  }
-
+  
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
     this.searchGuestList()
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress)
-  }
-
-  handleBackPress = () => {
-    const {selectedGuest} = this.state;
-    if(selectedGuest) {
-      this.unselectGuest();
-      return true;
-    }
-    return false;
   }
 
   searchGuestList = (query) => {
     this.props.searchGuestList(query)
   }
 
-  selectGuest = (selectedGuest) => {
-    this.setState({selectedGuest})
-  }
-
   unselectGuest = () => {
-    this.selectGuest(null)
+    this.props.selectGuest(null)
   }
 
   checkInGuest = async(guest) => {
@@ -275,8 +254,7 @@ export default class ManualCheckin extends Component {
   }
 
   render() {
-    const {selectedGuest} = this.state
-    const {guests, guestListQuery} = this.props
+    const {guests, guestListQuery, selectedGuest} = this.props
 
     if (selectedGuest !== null) {
       return (
@@ -315,7 +293,7 @@ export default class ManualCheckin extends Component {
             <GuestList
               style={{flex: 1}}
               guests={guests}
-              onSelect={this.selectGuest}
+              onSelect={this.props.selectGuest}
               onCheckIn={this.checkInGuest}
             />
             <View style={doormanStyles.spacer} />
