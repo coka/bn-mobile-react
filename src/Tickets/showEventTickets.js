@@ -89,7 +89,7 @@ export default class EventsTicket extends Component {
   get ticketData() {
     const event = this.event || {}
 
-    return this.tickets.map((ticket) => ({
+    const tickets = this.tickets.map((ticket) => ({
       image: optimizeCloudinaryImage(event.promo_image_url),
       name: event.name,
       venue: event.venue.name,
@@ -104,6 +104,13 @@ export default class EventsTicket extends Component {
       ticketId: ticket.id,
       status: ticket.status,
     }))
+
+    const statusCriteria = 'Redeemed'
+    tickets.sort(function(a,b){
+      return a.status === statusCriteria && b.status !== statusCriteria ? -1 : a.status !== statusCriteria && b.status === statusCriteria ? 1 : 0
+    });
+
+    return tickets;
   }
 
   _renderItem = ({item, _index}) => {
