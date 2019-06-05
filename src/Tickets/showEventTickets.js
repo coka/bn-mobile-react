@@ -107,7 +107,7 @@ export default class EventsTicket extends Component {
 
     const statusCriteria = 'Redeemed'
     tickets.sort(function(a,b){
-      return a.status === statusCriteria && b.status !== statusCriteria ? -1 : a.status !== statusCriteria && b.status === statusCriteria ? 1 : 0
+      return a.status === statusCriteria && b.status !== statusCriteria ? 1 : a.status !== statusCriteria && b.status === statusCriteria ? -1 : 0
     });
 
     return tickets;
