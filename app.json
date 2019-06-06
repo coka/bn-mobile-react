@@ -3,15 +3,54 @@
     "sdkVersion": "31.0.0",
     "name": "Big Neon",
     "icon": "./assets/appIcon.png",
-    "version": "1.0.24",
+    "version": "1.0.120",
     "slug": "big-neon-mobile",
     "orientation": "portrait",
+    "facebookScheme": "fb1737006886375028",
+    "facebookAppId": "1737006886375028",
+    "facebookDisplayName": "Big Neon",
     "ios": {
-      "bundleIdentifier": "com.bigneon.mobile"
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Big Neon allows you to select a photo from your library to use for your profile picture",
+        "LSApplicationQueriesSchemes": [
+          "fbapi",
+          "fb-messenger-share-api",
+          "fbauth2",
+          "fbshareextension"
+        ]
+      },
+      "bundleIdentifier": "com.bigneon.mobile",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover"
     },
     "android": {
       "package": "com.bigneon.mobile",
-      "versionCode": 24
+      "versionCode": 120,
+      "permissions": [
+        "CAMERA",
+        "CAMERA_ROLL",
+        "NOTIFICATIONS",
+        "LOCATION",
+        "ACCESS_NETWORK_STATE",
+        "VIBRATE"
+      ]
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "big-neon-5x",
+            "project": "react-native-mobile-apps",
+            "authToken": "__SECRET_SENTRY_AUTH_TOKEN__"
+          }
+        }
+      ]
     }
   }
 }

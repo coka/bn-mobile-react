@@ -3,8 +3,10 @@ import {
   white,
   containerDarkColor,
   sectionHeaderColor,
-  bodyFontSize,
-  iconFontSize,
+  globalFontSizeSmaller,
+  globalFontSizeSmall,
+  globalFontSize,
+  globalFontSizeMedium,
   globalFontMedium,
   globalFontRegular,
   globalPaddingLarge,
@@ -13,24 +15,21 @@ import {
   globalPaddingTiny,
 } from '../shared/sharedStyles'
 import {StyleSheet, Dimensions, Platform} from 'react-native'
+import {scale, verticalScale, moderateScale} from 'react-native-size-matters'
 const fullHeight = Dimensions.get('window').height
+
 export const fullWidth = Dimensions.get('window').width
 
-function wp (percentage) {
-  const value = (percentage * fullWidth) / 100;
+function wp(percentage) {
+  const value = (percentage * fullWidth) / 100
 
-  return Math.round(value);
+  return Math.round(value)
 }
+const slideWidth = wp(100)
+const itemHorizontalMargin = wp(2)
 
-const slideWidth = wp(100);
-const itemHorizontalMargin = wp(2);
-
-export const itemWidth = slideWidth + itemHorizontalMargin * 2;
-
+export const itemWidth = slideWidth + itemHorizontalMargin * 2
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
-
-export const bodyFontSizeSmall = 14
-export const closeModalHeaderSize = 21
 
 const TicketWalletStyles = {
   // CONTAINER STYLES
@@ -85,11 +84,11 @@ const TicketWalletStyles = {
   closeModalHeader: {
     color: white,
     fontFamily: globalFontMedium,
-    fontSize: closeModalHeaderSize,
+    fontSize: globalFontSizeMedium,
   },
   details: {
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     color: white,
     paddingRight: globalPaddingSmall,
     paddingVertical: globalPaddingTiny,
@@ -103,7 +102,7 @@ const TicketWalletStyles = {
   },
   avatar: {
     borderColor: 'transparent',
-    borderRadius: 45/2,
+    borderRadius: 45 / 2,
     borderWidth: 1,
     height: 45,
     width: 45,
@@ -113,13 +112,13 @@ const TicketWalletStyles = {
   iconLink: {
     backgroundColor: 'transparent',
     color: whiteTransparent,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     paddingRight: globalPaddingTiny,
   },
   iconLinkText: {
     color: whiteTransparent,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSizeSmall,
+    fontSize: globalFontSizeSmaller,
     paddingRight: globalPaddingTiny,
   },
 
@@ -136,11 +135,23 @@ const TicketWalletStyles = {
     width: 200,
   },
 
+  // PLACEHOLDER STYLES
+  placeholderCard: {
+    backgroundColor: white,
+    borderRadius: 6,
+    padding: globalPadding,
+    width: 280,
+  },
+  placeholderText: {
+    fontFamily: globalFontMedium,
+    fontSize: globalFontSizeSmall,
+  },
+
   // BOTTOM NAV STYLES
   bottomNav: {
     backgroundColor: white,
-    borderBottomRightRadius: 20/2,
-    borderBottomLeftRadius: 20/2,
+    borderBottomRightRadius: 20 / 2,
+    borderBottomLeftRadius: 20 / 2,
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: fullWidth - 43,
@@ -154,12 +165,15 @@ const TicketWalletStyles = {
   },
   bottomNavIcon: {
     color: primaryColor,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
     paddingHorizontal: globalPaddingTiny,
   },
   bottomNavLinkText: {
     color: sectionHeaderColor,
     fontFamily: globalFontMedium,
+  },
+  paddingTop: {
+    paddingTop: verticalScale(40),
   },
 }
 

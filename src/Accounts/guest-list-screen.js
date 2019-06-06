@@ -4,11 +4,19 @@ import GuestList from './guest-list-checkin'
 
 export default class GuestListScreen extends Component {
   render() {
-    const {state: managerState, searchGuestList} = this.props.screenProps.eventManager
+    const {
+      state: managerState,
+      searchGuestList,
+      updateGuestStatus,
+    } = this.props.screenProps.eventManager
 
     return (
       <View>
-      <GuestList {...managerState} searchGuestList={searchGuestList} />
+        <GuestList
+          {...managerState}
+          searchGuestList={searchGuestList}
+          updateGuestStatus={updateGuestStatus}
+        />
       </View>
     )
   }

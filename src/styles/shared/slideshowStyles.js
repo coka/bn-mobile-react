@@ -1,8 +1,9 @@
 import {
   white,
-  bodyFontSize,
   globalFontSemiBold,
   globalFontRegular,
+  globalFontSizeSmall,
+  globalFontSizeLargest,
   globalPaddingJumbo,
   globalPaddingLarge,
   globalPadding,
@@ -16,8 +17,7 @@ const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(225, 225, 225, 0.8)'
 
-export const headerFontSize = 30
-export const slideShowArrowFontSize = 32
+export const slideShowArrowFontSize = globalFontSizeSmall * 2
 
 const SlideShowStyles = {
   // CONTAINER STYLES
@@ -43,13 +43,13 @@ const SlideShowStyles = {
   // TEXT STYLES
   header: {
     fontFamily: globalFontSemiBold,
-    fontSize: headerFontSize,
+    fontSize: globalFontSizeLargest,
     color: white,
     marginTop: globalPaddingTiny,
   },
   details: {
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     color: whiteTransparent,
   },
 

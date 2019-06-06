@@ -7,8 +7,7 @@ import {
   disabledHeaderColor,
   globalFontRegular,
   globalFontMedium,
-  bodyFontSize,
-  iconFontSize,
+  globalFontSizeSmall,
   globalPaddingLarge,
   globalPaddingMedium,
   globalPadding,
@@ -21,12 +20,6 @@ const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
-
-export const headerFontSize = 28
-export const sectionHeaderFontSize = 24
-export const bodyFontSizeSmall = 14
-export const avatarIconFontSize = 28
-export const iconLargeFontSize = 56
 
 const NotificationStyles = {
   notificationHeaderRow: {
@@ -48,7 +41,7 @@ const NotificationStyles = {
   sectionHeader: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     marginBottom: globalMarginSmall,
   },
 }

@@ -4,10 +4,12 @@ import {Text, View, TouchableHighlight} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import AccountStyles from '../styles/account/accountStyles'
 import CheckoutStyles from '../styles/event_details/checkoutStyles'
+import TicketStyles from '../styles/tickets/ticketStyles'
 import {toDollars} from '../constants/money'
 
 const accountStyles = AccountStyles.createStyles()
 const checkoutStyles = CheckoutStyles.createStyles()
+const ticketStyles = TicketStyles.createStyles()
 
 /* eslint-disable camelcase */
 
@@ -17,52 +19,84 @@ export class Ticket extends Component {
     onTicketSelection: PropTypes.func.isRequired,
   }
 
-  getOnPressHandler() {
+  getOnPressHandler(isSoldOut) {
+    if (isSoldOut) {
+      return () => {}
+    }
+
     const {ticket, onTicketSelection} = this.props
 
     return ticket.ticket_pricing && (() => onTicketSelection(ticket))
   }
 
   get priceContent() {
-    const {ticket_pricing} = this.props.ticket
-
-    return ticket_pricing ? `$${toDollars(ticket_pricing.price_in_cents - ticket_pricing.discount_in_cents)}` : 'N/A'
+    const {status, ticket_pricing} = this.props.ticket
+    switch (status) {
+    case 'SoldOut':
+      return 'SOLD OUT'
+    default:
+      return ticket_pricing ?
+        `$${toDollars(
+          ticket_pricing.price_in_cents - ticket_pricing.discount_in_cents,
+          0
+        )}` :
+        'N/A'
+    }
   }
 
   get subHeaderContent() {
-    const {status, ticket_pricing} = this.props.ticket
+    const {description, status, ticket_pricing} = this.props.ticket
 
     switch (status) {
     case 'SoldOut':
       return 'SOLD OUT'
     case 'Published':
-      return ticket_pricing.name
+      return description ? description : ticket_pricing.name
     default:
       return null
     }
   }
 
   get icon() {
-    return this.props.ticket.ticket_pricing && (
-      <Icon style={accountStyles.accountArrow} name="keyboard-arrow-right" />
+    return (
+      this.props.ticket.ticket_pricing && (
+        <Icon style={accountStyles.accountArrow} name="keyboard-arrow-right" />
+      )
     )
   }
 
   render() {
+    const price = this.priceContent
+    const isSoldOut = price === 'SOLD OUT'
+
     return (
-      <TouchableHighlight key={this.props.ticket.id} onPress={this.getOnPressHandler()}>
+      <TouchableHighlight
+        key={this.props.ticket.id}
+        onPress={this.getOnPressHandler(isSoldOut)}
+      >
         <View style={checkoutStyles.rowContainer}>
-          <View style={checkoutStyles.row}>
-            <Text style={checkoutStyles.ticketPrice}>{this.priceContent}</Text>
-            <View>
-              <Text style={checkoutStyles.ticketHeader}>{this.props.ticket.name}</Text>
-              <Text style={checkoutStyles.ticketSubHeader}>{this.subHeaderContent}</Text>
+          <View style={[checkoutStyles.row, ticketStyles.ticketHolderWrapper]}>
+            <Text
+              style={
+                isSoldOut ?
+                  checkoutStyles.soldOutTicketPrice :
+                  checkoutStyles.ticketPrice
+              }
+            >
+              {price}
+            </Text>
+            <View style={[ticketStyles.ticketHolderWrapper]}>
+              <Text style={checkoutStyles.ticketHeader}>
+                {this.props.ticket.name}
+              </Text>
+              <Text style={checkoutStyles.ticketSubHeader}>
+                {this.subHeaderContent}
+              </Text>
             </View>
           </View>
-          {this.icon}
+          {isSoldOut ? null : this.icon}
         </View>
       </TouchableHighlight>
     )
   }
 }
-

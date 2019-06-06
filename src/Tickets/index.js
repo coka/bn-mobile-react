@@ -1,6 +1,13 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {PropTypes} from 'prop-types'
-import {ScrollView, Text, View, Image, Animated, TouchableHighlight} from 'react-native';
+import {
+  Text,
+  View,
+  Animated,
+  TouchableHighlight,
+  FlatList,
+  Image,
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import SlideShowStyles from '../styles/shared/slideshowStyles'
@@ -10,33 +17,48 @@ import imageOverlay from '../../assets/event-img-overlay.png'
 import {some} from 'lodash'
 import {NavigationEvents} from 'react-navigation'
 import {optimizeCloudinaryImage} from '../cloudinary'
+import {Image as CachedImage} from 'react-native-expo-image-cache'
 
 const styles = SharedStyles.createStyles()
 const slideshowStyles = SlideShowStyles.createStyles()
 const ticketStyles = TicketStyles.createStyles()
 
+// The height of one ticket. Used for determining scroll position
+const TICKET_HEIGHT = 265
+
 function EmptyTickets({text}) {
   return (
     <View style={ticketStyles.emptyStateContainer}>
-      <Image
-        style={ticketStyles.emptyStateIcon}
-        source={emptyState}
-      />
+      <Image style={ticketStyles.emptyStateIcon} source={emptyState} />
       <Text style={ticketStyles.emptyStateText}>{text}</Text>
     </View>
   )
 }
 
-const AnimatedTicket = ({navigate, ticket, springValue, activeTab, setPurchasedTicket}) => (
-  <Animated.View style={{transform: [{scale: springValue}]}}>
-    <Ticket navigate={navigate} ticket={ticket} activeTab={activeTab} setPurchasedTicket={setPurchasedTicket} />
-  </Animated.View>
-)
+class AnimatedTicket extends React.Component {
+  componentDidMount() {
+    this.props.requestScrollToTicket(this.props.index)
+  }
+
+  render() {
+    return (
+      <Animated.View style={{transform: [{scale: this.props.springValue}]}}>
+        <Ticket
+          navigate={this.props.navigate}
+          ticket={this.props.ticket}
+          activeTab={this.props.activeTab}
+          setPurchasedTicket={this.props.setPurchasedTicket}
+        />
+      </Animated.View>
+    )
+  }
+}
 
 AnimatedTicket.propTypes = {
   navigate: PropTypes.func.isRequired,
   ticket: PropTypes.object.isRequired,
   springValue: PropTypes.object.isRequired,
+  requestScrollToTicket: PropTypes.func.isRequired,
 }
 
 const Ticket = ({navigate, ticket, activeTab, setPurchasedTicket}) => {
@@ -44,50 +66,70 @@ const Ticket = ({navigate, ticket, activeTab, setPurchasedTicket}) => {
 
   return (
     <View>
-      <TouchableHighlight 
-        underlayColor="#F5F6F7" 
+      <TouchableHighlight
+        underlayColor="#F5F6F7"
         onPress={() => {
           setPurchasedTicket(null)
           navigate('EventTickets', {eventId: event.id, activeTab})
         }}
       >
         <View style={ticketStyles.ticketContainer}>
-          <Image
+          <CachedImage
             style={ticketStyles.eventImage}
-            source={{uri: optimizeCloudinaryImage(event.promo_image_url)}}
+            uri={optimizeCloudinaryImage(event.promo_image_url)}
           />
-          <Image
-            style={ticketStyles.eventImageOverlay}
-            source={imageOverlay}
-          />
+          <Image style={ticketStyles.eventImageOverlay} source={imageOverlay} />
           <View style={ticketStyles.detailsContainer}>
             <View>
               <View style={styles.iconLinkContainer}>
                 <Icon style={ticketStyles.iconTicket} name="local-activity" />
-                <Text style={ticketStyles.iconTicketText}>x {tickets.length}</Text>
+                <Text style={ticketStyles.iconTicketText}>
+                  x {tickets.length}
+                </Text>
               </View>
             </View>
             <View>
-              <Text numberOfLines={1} style={ticketStyles.header}>{event.name}</Text>
-              <Text numberOfLines={1} style={slideshowStyles.details}>{event.venue.name} | {event.venue.city}, {event.venue.state}</Text>
+              <Text numberOfLines={1} style={ticketStyles.header}>
+                {event.name}
+              </Text>
+              <Text numberOfLines={1} style={slideshowStyles.details}>
+                {event.venue.name} | {event.venue.city}, {event.venue.state}
+              </Text>
             </View>
           </View>
         </View>
       </TouchableHighlight>
 
-      <View style={[ticketStyles.ticketContainerBottom, styles.borderBottomRadius]}>
+      <View
+        style={[ticketStyles.ticketContainerBottom, styles.borderBottomRadius]}
+      >
         <View style={ticketStyles.detailsContainerBottom}>
           <View>
             <Text style={ticketStyles.detailsBottomHeader}>DATE</Text>
-            <Text style={ticketStyles.detailsBottomText}>{event.formattedDate}</Text>
+            <Text style={ticketStyles.detailsBottomText}>
+              {event.formattedDate}
+            </Text>
           </View>
           <View>
             <Text style={ticketStyles.detailsBottomHeader}>DOORS</Text>
-            <Text style={ticketStyles.detailsBottomText}>{event.formattedDoors}</Text>
+            <Text style={ticketStyles.detailsBottomText}>
+              {event.formattedDoors}
+            </Text>
           </View>
           <View>
-            <Text style={[ticketStyles.detailsBottomHeader, ticketStyles.detailsLast]}>SHOW</Text>
-            <Text style={[ticketStyles.detailsBottomText, ticketStyles.detailsLast]}>{event.formattedStart}</Text>
+            <Text
+              style={[
+                ticketStyles.detailsBottomHeader,
+                ticketStyles.detailsLast,
+              ]}
+            >
+              SHOW
+            </Text>
+            <Text
+              style={[ticketStyles.detailsBottomText, ticketStyles.detailsLast]}
+            >
+              {event.formattedStart}
+            </Text>
           </View>
         </View>
       </View>
@@ -100,29 +142,87 @@ Ticket.propTypes = {
   ticket: PropTypes.object.isRequired,
 }
 
-const TicketsView = ({activeTab, emptyText, tickets, navigate, springValue, purchasedTicket, setPurchasedTicket}) => {
-  if (!tickets.length) {
-    return <EmptyTickets text={emptyText} />
+class TicketsView extends React.Component {
+  componentDidMount() {
+    // Capturing if we scrolled to a ticket
+    this.animatedTicketIndex = null
+    this.scrolled = false
   }
 
-  return tickets.map((ticket) => (
-    some(ticket.tickets, ({order_id}) => order_id === purchasedTicket) ?
-      <AnimatedTicket
-        key={ticket.event.id}
-        navigate={navigate}
-        ticket={ticket}
-        activeTab={activeTab}
-        springValue={springValue}
-        setPurchasedTicket={setPurchasedTicket}
-      /> :
-      <Ticket
-        navigate={navigate}
-        activeTab={activeTab}
-        key={ticket.event.id}
-        ticket={ticket}
-        setPurchasedTicket={setPurchasedTicket}
+  requestScrollToTicket = (index) => {
+    this.animatedTicketIndex = index
+    this.scrolled = false
+  }
+
+  maybeScrollToTicket(ref) {
+    if (
+      ref != null &&
+      this.scrolled === false &&
+      this.animatedTicketIndex !== null
+    ) {
+      ref.scrollToIndex({
+        animated: true,
+        index: this.animatedTicketIndex,
+      })
+
+      this.scrolled = true
+    }
+  }
+
+  render() {
+    const {
+      activeTab,
+      emptyText,
+      tickets,
+      navigate,
+      springValue,
+      purchasedTicket,
+      setPurchasedTicket,
+    } = this.props
+
+    if (!tickets.length) {
+      return <EmptyTickets text={emptyText} />
+    }
+
+    return (
+      <FlatList
+        {...this.props}
+        ref={(ref) => {
+          this.maybeScrollToTicket(ref)
+        }}
+        keyExtractor={(item, _) => item.event.id}
+        getItemLayout={(_data, index) => ({
+          length: TICKET_HEIGHT,
+          offset: TICKET_HEIGHT * index,
+          index,
+        })}
+        data={tickets}
+        renderItem={({item, index}) => {
+          return some(
+            item.tickets,
+            ({order_id}) => order_id === purchasedTicket
+          ) ? (
+              <AnimatedTicket
+                navigate={navigate}
+                ticket={item}
+                activeTab={activeTab}
+                springValue={springValue}
+                setPurchasedTicket={setPurchasedTicket}
+                requestScrollToTicket={this.requestScrollToTicket}
+                index={index}
+              />
+            ) : (
+              <Ticket
+                navigate={navigate}
+                activeTab={activeTab}
+                ticket={item}
+                setPurchasedTicket={setPurchasedTicket}
+              />
+            )
+        }}
       />
-  ))
+    )
+  }
 }
 
 TicketsView.propTypes = {
@@ -132,13 +232,15 @@ TicketsView.propTypes = {
 }
 
 const EMPTY_TEXT_FOR_ACTIVE_TAB = {
-  upcoming: 'Looks like you don’t have any upcoming events! Why not tap Explore and have a look?',
-  past: 'Looks like you haven’t attended any events yet! Why not tap Explore and find your first?',
-  transfer: 'Looks like you haven’t transfered any tickets yet. Know anyone that wants to go?',
+  upcoming:
+    'Looks like you don’t have any upcoming events! Why not tap Explore and have a look?',
+  past:
+    'Looks like you haven’t attended any events yet! Why not tap Explore and find your first?',
+  transfer:
+    'Looks like you haven’t transfered any tickets yet. Know anyone that wants to go?',
 }
 
 export default class MyTickets extends Component {
-
   constructor(props) {
     super(props)
     this.props.screenProps.auth.identify()
@@ -155,18 +257,17 @@ export default class MyTickets extends Component {
 
   spring() {
     this.springValue.setValue(0.3)
-    Animated.spring(
-      this.springValue,
-      {
-        toValue: 1,
-        friction: 1,
-        tension: 1,
-      }
-    ).start()
+    Animated.spring(this.springValue, {
+      toValue: 1,
+      friction: 1,
+      tension: 1,
+    }).start()
   }
 
   tabStyle(viewType) {
-    return viewType === this.activeTab ? styles.subnavHeaderActive : styles.subnavHeader
+    return viewType === this.activeTab ?
+      styles.subnavHeaderActive :
+      styles.subnavHeader
   }
 
   tabWrapperStyle(viewType) {
@@ -181,7 +282,7 @@ export default class MyTickets extends Component {
     return EMPTY_TEXT_FOR_ACTIVE_TAB[this.activeTab]
   }
 
-  refreshTickets = async () => {
+  refreshTickets = async() => {
     await this.props.screenProps.store.userTickets()
     this.spring()
   }
@@ -195,13 +296,19 @@ export default class MyTickets extends Component {
     const {
       navigation: {navigate},
       screenProps: {
-        store: {setPurchasedTicket, state: {purchasedTicket}},
-      }
+        store: {
+          setPurchasedTicket,
+          state: {purchasedTicket},
+        },
+      },
     } = this.props
 
     return (
       <View style={styles.containerDark}>
-        <NavigationEvents onWillFocus={this.refreshTickets} onDidBlur={() => setPurchasedTicket(null)} />
+        <NavigationEvents
+          onWillFocus={this.refreshTickets}
+          onDidBlur={() => setPurchasedTicket(null)}
+        />
         <View style={styles.headerContainer}>
           <View style={[styles.sectionHeaderContainer, styles.flexRowCenter]}>
             <Image
@@ -212,31 +319,41 @@ export default class MyTickets extends Component {
         </View>
         <View style={styles.subnavContainer}>
           <View style={this.tabWrapperStyle('upcoming')}>
-            <Text style={this.tabStyle('upcoming')} onPress={() => this.changeTab('upcoming')}>UPCOMING</Text>
+            <Text
+              style={this.tabStyle('upcoming')}
+              onPress={() => this.changeTab('upcoming')}
+            >
+              UPCOMING
+            </Text>
           </View>
           <View style={this.tabWrapperStyle('past')}>
-            <Text style={this.tabStyle('past')} onPress={() => this.changeTab('past')}>PAST</Text>
+            <Text
+              style={this.tabStyle('past')}
+              onPress={() => this.changeTab('past')}
+            >
+              PAST
+            </Text>
           </View>
           <View style={this.tabWrapperStyle('transfer')}>
-            <Text style={this.tabStyle('transfer')} onPress={() => this.changeTab('transfer')}>TRANSFERS</Text>
+            <Text
+              style={this.tabStyle('transfer')}
+              onPress={() => this.changeTab('transfer')}
+            >
+              TRANSFERS
+            </Text>
           </View>
         </View>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.paddingHorizontal}>
-            <TicketsView
-              emptyText={this.emptyText}
-              navigate={navigate}
-              tickets={this.ticketsForActiveView}
-              springValue={this.springValue}
-              purchasedTicket={purchasedTicket}
-              activeTab={this.activeTab}
-              setPurchasedTicket={setPurchasedTicket}
-            />
-          </View>
-
-          <View style={styles.spacer} />
-
-        </ScrollView>
+        <TicketsView
+          style={styles.paddingHorizontal}
+          showsVerticalScrollIndicator={false}
+          emptyText={this.emptyText}
+          navigate={navigate}
+          tickets={this.ticketsForActiveView}
+          springValue={this.springValue}
+          purchasedTicket={purchasedTicket}
+          activeTab={this.activeTab}
+          setPurchasedTicket={setPurchasedTicket}
+        />
       </View>
     )
   }

@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 import {createBottomTabNavigator} from 'react-navigation'
-import {Image} from 'react-native';
+import {Image} from 'react-native'
 import NavigationStyles from '../styles/shared/navigationStyles'
 import EventStack from './eventStack'
 import TicketStack from './ticketStack'
@@ -15,9 +15,16 @@ export default createBottomTabNavigator(
       screen: EventStack,
       navigationOptions: ({_navigation}) => ({
         tabBarIcon: ({focused}) => {
-          const imageName = focused ? require('../../assets/icon-explore-active.png') : require('../../assets/icon-explore.png')
+          const imageName = focused ?
+            require('../../assets/icon-explore-active.png') :
+            require('../../assets/icon-explore.png')
 
-          return <Image style={navigationStyles.tabBarIconExplore} source={imageName} />
+          return (
+            <Image
+              style={navigationStyles.tabBarIconExplore}
+              source={imageName}
+            />
+          )
         },
         showIcon: true,
       }),
@@ -26,9 +33,16 @@ export default createBottomTabNavigator(
       screen: TicketStack,
       navigationOptions: {
         tabBarIcon: ({focused}) => {
-          const imageName = focused ? require('../../assets/icon-ticket-active.png') : require('../../assets/icon-ticket.png')
+          const imageName = focused ?
+            require('../../assets/icon-ticket-active.png') :
+            require('../../assets/icon-ticket.png')
 
-          return <Image style={navigationStyles.tabBarIconTicket} source={imageName} />
+          return (
+            <Image
+              style={navigationStyles.tabBarIconTicket}
+              source={imageName}
+            />
+          )
         },
         showIcon: true,
       },
@@ -37,9 +51,16 @@ export default createBottomTabNavigator(
       screen: AccountsStack,
       navigationOptions: {
         tabBarIcon: ({focused}) => {
-          const imageName = focused ? require('../../assets/icon-account-active.png') : require('../../assets/icon-account.png')
+          const imageName = focused ?
+            require('../../assets/icon-account-active.png') :
+            require('../../assets/icon-account.png')
 
-          return <Image style={navigationStyles.tabBarIconAccount} source={imageName} />
+          return (
+            <Image
+              style={navigationStyles.tabBarIconAccount}
+              source={imageName}
+            />
+          )
         },
         showIcon: true,
       },
@@ -61,5 +82,5 @@ export default createBottomTabNavigator(
         paddingVertical: 4,
       },
     },
-  },
+  }
 )

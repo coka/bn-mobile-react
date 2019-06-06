@@ -4,11 +4,12 @@ import {
   white,
   borderColor,
   disabledColor,
-  bodyFontSize,
-  subnavFontSize,
   globalFontRegular,
   globalFontMedium,
   globalFontSemiBold,
+  globalFontSizeSmaller,
+  globalFontSizeSmall,
+  globalFontSizeLarge,
   globalPaddingMedium,
   globalPadding,
   globalPaddingSmall,
@@ -25,33 +26,21 @@ export const badgePrimary = '#1E1E1E'
 export const badgeSuccess = '#47C68A'
 export const badgeAlarm = '#FE1313'
 
-
-export const sectionHeaderFontSize = 24
-export const bodyFontSizeSmall = 15
-
 const DoormanStyles = {
   // MAIN BODY STYLES
   mainBody: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
     paddingLeft: 0,
     paddingRight: 0,
     paddingHorizontal: 0,
-    minHeight: '100%',
-    marginTop: 240,
-  },
-  checkoutMainBody: {
-    marginTop: 100,
   },
   mainBodyContent: {
     backgroundColor: 'white',
-    borderTopRightRadius: 30/2,
-    borderTopLeftRadius: 30/2,
-    height: fullHeight,
-    paddingTop: globalPaddingSmall,
     minHeight: '100%',
+    paddingTop: globalPaddingSmall,
   },
   spacer: {
-    height: 200,
+    height: 20,
   },
 
   // SEARCH STYLES
@@ -68,7 +57,7 @@ const DoormanStyles = {
     backgroundColor: disabledColor,
     color: textColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     marginTop: globalPaddingTiny,
     width: '100%',
   },
@@ -78,12 +67,12 @@ const DoormanStyles = {
     backgroundColor: 'transparent',
     color: sectionHeaderColor,
     fontFamily: globalFontSemiBold,
-    fontSize: sectionHeaderFontSize,
+    fontSize: globalFontSizeLarge,
   },
   bodyText: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSizeSmall,
+    fontSize: globalFontSizeSmaller,
     paddingTop: globalPaddingTiny,
   },
 
@@ -94,12 +83,17 @@ const DoormanStyles = {
     borderBottomWidth: 1,
     paddingHorizontal: globalPadding,
     paddingVertical: globalPaddingSmall,
-    width: fullWidth,
   },
   row: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  flexRowGuestList: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: fullWidth / 1.8,
   },
 
   // BADGE STYLES
@@ -118,7 +112,7 @@ const DoormanStyles = {
   ticketStatusBadge: {
     color: white,
     fontFamily: globalFontMedium,
-    fontSize: subnavFontSize,
+    fontSize: globalFontSizeSmaller,
     letterSpacing: 0.5,
     padding: globalPaddingTiny - 2,
     textTransform: 'uppercase',

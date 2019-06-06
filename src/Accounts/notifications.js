@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Text, View, ScrollView, TouchableHighlight} from 'react-native';
+import React, {Component} from 'react'
+import {Text, View, ScrollView, TouchableHighlight} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
@@ -34,7 +34,6 @@ const notificationTypes = [
     phone: true,
     email: true,
   },
-
 ]
 
 const NotificationType = ({value, text, state, onToggle}) => (
@@ -42,11 +41,31 @@ const NotificationType = ({value, text, state, onToggle}) => (
     <View style={styles.cols2}>
       <Text style={accountStyles.accountHeader}>{text}</Text>
     </View>
-    <TouchableHighlight underlayColor="rgba(0, 0, 0, 0)" onPress={() => onToggle(value, 'phone', !state.phone)}>
-      <Icon style={state.phone ? accountStyles.accountIconActive : accountStyles.accountIcon} name="phone-iphone" />
+    <TouchableHighlight
+      underlayColor="rgba(0, 0, 0, 0)"
+      onPress={() => onToggle(value, 'phone', !state.phone)}
+    >
+      <Icon
+        style={
+          state.phone ?
+            accountStyles.accountIconActive :
+            accountStyles.accountIcon
+        }
+        name="phone-iphone"
+      />
     </TouchableHighlight>
-    <TouchableHighlight underlayColor="rgba(0, 0, 0, 0)" onPress={() => onToggle(value, 'email', !state.email)}>
-      <Icon style={state.email ? accountStyles.accountIconActive : accountStyles.accountIcon} name="mail-outline" />
+    <TouchableHighlight
+      underlayColor="rgba(0, 0, 0, 0)"
+      onPress={() => onToggle(value, 'email', !state.email)}
+    >
+      <Icon
+        style={
+          state.email ?
+            accountStyles.accountIconActive :
+            accountStyles.accountIcon
+        }
+        name="mail-outline"
+      />
     </TouchableHighlight>
   </View>
 )
@@ -81,7 +100,7 @@ export default class Notifications extends Component {
   }
 
   get notificationSettings() {
-    return notificationTypes.map((notification, index) =>
+    return notificationTypes.map((notification, index) => (
       <NotificationType
         key={index}
         value={notification.value}
@@ -89,17 +108,21 @@ export default class Notifications extends Component {
         state={this.state[notification.value]}
         onToggle={this.changeNotification}
       />
-    )
+    ))
   }
 
   render() {
     return (
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.containerDark}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.containerDark}
+      >
         <View style={styles.paddingVerticalMedium}>
-
           <View style={notificationStyles.notificationHeaderRow}>
             <View style={styles.cols2}>
-              <Text style={notificationStyles.sectionHeader}>Notification Type</Text>
+              <Text style={notificationStyles.sectionHeader}>
+                Notification Type
+              </Text>
             </View>
             <Text style={notificationStyles.sectionHeader}>Phone</Text>
             <Text style={notificationStyles.sectionHeader}>Email</Text>

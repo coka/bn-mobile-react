@@ -1,8 +1,20 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {ScrollView, Text, View, Image, Modal, ActivityIndicator, TouchableHighlight, KeyboardAvoidingView} from 'react-native'
-import {WebBrowser} from 'expo';
-import {NavigationActions, StackActions, NavigationEvents} from 'react-navigation'
+import {
+  ScrollView,
+  Text,
+  View,
+  Image,
+  TouchableHighlight,
+  KeyboardAvoidingView,
+  Alert,
+} from 'react-native'
+import {WebBrowser} from 'expo'
+import {
+  NavigationActions,
+  StackActions,
+  NavigationEvents,
+} from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
@@ -10,15 +22,13 @@ import Details from './details'
 import GetTickets from './tickets'
 import PaymentTypes from './payments'
 import Checkout from './checkout'
-import ModalStyles from '../styles/shared/modalStyles'
 import {toDollars} from '../constants/money'
-import {server, apiErrorAlert} from '../constants/Server'
+import {LoadingScreen, SuccessScreen} from '../constants/modals'
 import {min, max, isEmpty, uniq} from 'lodash'
 import {optimizeCloudinaryImage} from '../cloudinary'
 
 const styles = SharedStyles.createStyles()
 const eventDetailsStyles = EventDetailsStyles.createStyles()
-const modalStyles = ModalStyles.createStyles()
 
 /* eslint-disable camelcase, space-before-function-paren */
 function priceRangeString(ticket_types) {
@@ -35,57 +45,9 @@ function priceRangeString(ticket_types) {
     return null
   }
 
-  return uniq([min(prices), max(prices)]).map((cents) => `$${toDollars(cents, 0)}`).join(' - ')
-}
-
-
-const LoadingScreen = ({toggleModal, modalVisible}) => (
-  <Modal
-    onRequestClose={() => {
-      toggleModal(!modalVisible)
-    }}
-    visible={modalVisible}
-    transparent
-  >
-    <View style={modalStyles.modalContainer}>
-      <View style={styles.flexRowCenter}>
-        <View style={modalStyles.activityIndicator}>
-          <ActivityIndicator size="large" color="#FF20B1" />
-        </View>
-      </View>
-    </View>
-  </Modal>
-)
-
-LoadingScreen.propTypes = {
-  toggleModal: PropTypes.func.isRequired,
-  modalVisible: PropTypes.bool.isRequired,
-}
-
-const SuccessScreen = ({toggleModal, modalVisible}) => (
-  <Modal
-    onRequestClose={() => {
-      toggleModal(!modalVisible)
-    }}
-    visible={modalVisible}
-    transparent
-  >
-    <View style={modalStyles.modalContainer}>
-      <View style={styles.flexRowCenter}>
-        <View style={modalStyles.activityIndicator}>
-          <Image
-            style={modalStyles.emojiActivityIndicator}
-            source={require('../../assets/emoji-loader.png')}
-          />
-        </View>
-      </View>
-    </View>
-  </Modal>
-)
-
-SuccessScreen.propTypes = {
-  toggleModal: PropTypes.func.isRequired,
-  modalVisible: PropTypes.bool.isRequired,
+  return uniq([min(prices), max(prices)])
+    .map((cents) => `$${toDollars(cents, 0)}`)
+    .join(' - ')
 }
 
 function CheckoutButton({onCheckout, disabled, busy}) {
@@ -95,7 +57,9 @@ function CheckoutButton({onCheckout, disabled, busy}) {
         style={disabled ? styles.buttonDisabled : styles.button}
         onPress={disabled ? null : onCheckout}
       >
-        <Text style={styles.buttonText}>{busy ? 'Updating...' : ' Purchase Ticket'}</Text>
+        <Text style={styles.buttonText}>
+          {busy ? 'Updating...' : ' Purchase Ticket(s)'}
+        </Text>
       </TouchableHighlight>
     </View>
   )
@@ -117,21 +81,26 @@ export default class EventShow extends Component {
     super(props)
 
     this.state = {
-      event: false,
+      event: props.navigation.getParam('event', false),
       eventId: props.navigation.getParam('eventId', false),
       favorite: false,
       currentScreen: 'details',
       showLoadingModal: false,
       showSuccessModal: false,
+      success: null,
     }
-    this.loadEvent()
   }
 
   componentWillReceiveProps(newProps) {
-    const {screenProps: {store: {state: {selectedEvent}}}} = newProps
+    const {
+      screenProps: {
+        store: {
+          state: {selectedEvent},
+        },
+      },
+    } = newProps
 
-    // Do we want to check if the event id different, or just always update?
-    if (selectedEvent) {
+    if (selectedEvent.id && selectedEvent.id === this.state.eventId) {
       this.setState({event: selectedEvent})
     }
   }
@@ -146,14 +115,18 @@ export default class EventShow extends Component {
     this.scrollView.scrollTo({y: 10, x: 0, animated: true})
   }
 
-  clearEvent() {
-    const {screenProps: {store}} = this.props
+  async clearEvent() {
+    const {
+      screenProps: {store},
+    } = this.props
 
-    store.clearEvent() // @TODO: Test this more - old events still in pop up.
+    store.clearEvent()
   }
 
   async loadEvent() {
-    const {screenProps: {store, cart}} = this.props
+    const {
+      screenProps: {store, cart},
+    } = this.props
     const {eventId} = this.state
 
     // Clear any pre-existing cart data from earlier transactions
@@ -169,7 +142,6 @@ export default class EventShow extends Component {
   }
 
   toggleFavorite = (favorite) => {
-
     this.setState({favorite})
   }
 
@@ -182,14 +154,6 @@ export default class EventShow extends Component {
     this.changeScreen('checkout')
   }
 
-  toggleLoadingModal = ({showLoadingModal}) => {
-    this.setState({showLoadingModal})
-  }
-
-  toggleSuccessModal = ({showSuccessModal}) => {
-    this.setState({showSuccessModal})
-  }
-
   get ticketRange() {
     const str = priceRangeString(this.state.event.ticket_types)
 
@@ -199,38 +163,17 @@ export default class EventShow extends Component {
 
     return (
       <View style={eventDetailsStyles.priceHeaderWrapper}>
-        <Text style={eventDetailsStyles.priceHeader}>
-          {str}
-        </Text>
+        <Text style={eventDetailsStyles.priceHeader}>{str}</Text>
       </View>
     )
   }
 
-  onPromoApply = async (code = '') => {
-    if (code === '') {
-      alert('You must enter a promotional code.')
-      return
-    }
-
-    try {
-      const response = await server.redemptionCodes.read({code})
-      const {data: {ticket_type}} = response
-
-      if (!this.store.ticketTypeIds.includes(ticket_type.id)) {
-        alert ('This Promo Code is not valid for this event')
-        return
-      }
-
-      this.store.replaceTicketType(ticket_type)
-    } catch (error) {
-      apiErrorAlert(error, 'There was a problem applying this promotional code.')
-    }
-
-  }
-
   onTicketSelection = async (ticketType) => {
     try {
-      await this.props.screenProps.cart.setTicketType(ticketType.id, ticketType.redemption_code)
+      await this.props.screenProps.cart.setTicketType(
+        ticketType.id,
+        ticketType.redemption_code
+      )
       this.changeScreen('checkout')
     } catch (_error) {
       // something went wrong. error alert should have shown.
@@ -242,7 +185,7 @@ export default class EventShow extends Component {
     const {event, currentScreen} = this.state
     const {
       screenProps: {
-        store: {toggleInterest, ticketsToDisplay},
+        store: {toggleInterest, ticketsToDisplay, eventTickets},
         cart: {payment},
         user: {access_token, refresh_token},
       },
@@ -253,7 +196,6 @@ export default class EventShow extends Component {
     }
 
     // @TODO: Add a ScrollTo initial position
-
     switch (currentScreen) {
     case 'details':
       return <Details event={event} onInterested={toggleInterest} />
@@ -261,10 +203,10 @@ export default class EventShow extends Component {
       return (
         <GetTickets
           event={event}
+          store={this.store}
           ticketsToDisplay={ticketsToDisplay}
           onTicketSelection={this.onTicketSelection}
           changeScreen={this.changeScreen}
-          onPromoApply={this.onPromoApply}
         />
       )
     case 'checkout':
@@ -272,6 +214,7 @@ export default class EventShow extends Component {
         <Checkout
           cart={this.props.screenProps.cart}
           event={event}
+          eventTickets={eventTickets}
           changeScreen={this.changeScreen}
         />
       )
@@ -290,22 +233,42 @@ export default class EventShow extends Component {
     }
   }
 
-  get getDetailPageButtonCta() { // eslint-disable-line complexity
+  get getDetailPageButtonCta() {
+    // eslint-disable-line complexity
     const {event} = this.state
 
     switch (event.override_status) {
     case 'PurchaseTickets':
-      return {ctaText: (!event.is_external ? 'Purchase Tickets' : 'Get Tickets via Web'), enabled: true}
+      return {
+        ctaText: !event.is_external ?
+          'Purchase Tickets' :
+          'Get Tickets via Web',
+        enabled: true,
+      }
     case 'SoldOut':
-      return {ctaText: 'Sold Out', enabled: (event.is_external ? false : true)}
+      return {ctaText: 'Sold Out', enabled: !event.is_external}
     case 'OnSaleSoon':
-      return {ctaText: 'On Sale Soon', enabled: (event.is_external ? false : true)}
+      return {
+        ctaText: 'On Sale Soon',
+        enabled: !event.is_external,
+      }
     case 'TicketsAtTheDoor':
-      return {ctaText: 'Tickets At The Door', enabled: (event.is_external ? false : true)}
+      return {
+        ctaText: 'Tickets At The Door',
+        enabled: !event.is_external,
+      }
     case 'UseAccessCode':
-      return {ctaText: (!event.is_external ? 'Use Access Code' : 'Get Tickets via Web'), enabled: true}
+      return {
+        ctaText: !event.is_external ?
+          'Use Access Code' :
+          'Get Tickets via Web',
+        enabled: true,
+      }
     case 'Free':
-      return {ctaText: (!event.is_external ? 'Free' : 'Free via Web'), enabled: true}
+      return {
+        ctaText: !event.is_external ? 'Free' : 'Free via Web',
+        enabled: true,
+      }
     case 'Rescheduled':
       return {ctaText: 'Rescheduled', enabled: false}
     case 'Cancelled':
@@ -315,17 +278,25 @@ export default class EventShow extends Component {
     case 'Ended':
       return {ctaText: 'Sale Ended', enabled: false}
     default:
-      return {ctaText: (!event.is_external ? 'Purchase Tickets' : 'Get Tickets via Web'), enabled: true}
+      return {
+        ctaText: !event.is_external ?
+          'Purchase Tickets' :
+          'Get Tickets via Web',
+        enabled: true,
+      }
     }
   }
 
   onShowTicket = (event) => {
-    return event.is_external ? () => {
-      WebBrowser.openBrowserAsync(event.external_url)
-    } : () => this.changeScreen('tickets')
+    return event.is_external ?
+      () => {
+        WebBrowser.openBrowserAsync(event.external_url)
+      } :
+      () => this.changeScreen('tickets')
   }
 
-  get getTickets() { // eslint-disable-line complexity
+  get getTickets() {
+    // eslint-disable-line complexity
     const {event, currentScreen} = this.state
     const {ctaText, enabled} = this.getDetailPageButtonCta
 
@@ -363,17 +334,28 @@ export default class EventShow extends Component {
   }
 
   purchaseTicket = async () => {
-    const {screenProps: {cart, setPurchasedTicket}, navigation: {navigate}} = this.props
+    const {
+      screenProps: {cart, setPurchasedTicket},
+      navigation: {navigate},
+    } = this.props
+    const onSuccess = () => this.setState({success: true})
+    const onError = () =>
+      this.setState({showLoadingModal: false, success: false})
 
     if (cart.totalCents && !cart.payment) {
-      alert('Please enter your payment details');
+      Alert.alert('Error', 'Please enter your payment details')
       return false
     }
 
     this.setState({showLoadingModal: true})
     try {
-      await cart.placeOrder()
-      setPurchasedTicket(cart.id)
+      await cart.placeOrder(onSuccess, onError)
+
+      if (!this.state.success) {
+        return false
+      } else {
+        setPurchasedTicket(cart.id)
+      }
 
       await this.setState({
         showLoadingModal: false,
@@ -383,9 +365,7 @@ export default class EventShow extends Component {
       const resetAction = StackActions.reset({
         index: 0,
         key: 'Explore',
-        actions: [
-          NavigationActions.navigate({routeName: 'Home'}),
-        ],
+        actions: [NavigationActions.navigate({routeName: 'Home'})],
       })
 
       setTimeout(() => {
@@ -398,7 +378,6 @@ export default class EventShow extends Component {
       this.setState({showLoadingModal: false})
     }
   }
-
 
   /* eslint-disable-next-line complexity */
   get prevScreen() {
@@ -424,12 +403,13 @@ export default class EventShow extends Component {
     const icon = currentScreen === 'details' ? 'close' : 'arrow-back'
 
     return (
-      <TouchableHighlight style={eventDetailsStyles.linkContainer} underlayColor="rgba(0, 0, 0, 0)" onPress={() => this.prevScreen}>
+      <TouchableHighlight
+        style={eventDetailsStyles.linkContainer}
+        underlayColor="rgba(0, 0, 0, 0)"
+        onPress={() => this.prevScreen}
+      >
         <View style={eventDetailsStyles.backArrowCircleContainer}>
-          <Icon
-            style={eventDetailsStyles.backArrow}
-            name={icon}
-          />
+          <Icon style={eventDetailsStyles.backArrow} name={icon} />
         </View>
       </TouchableHighlight>
     )
@@ -445,17 +425,21 @@ export default class EventShow extends Component {
     return (
       <View style={{backgroundColor: 'white'}}>
         <NavigationEvents
-          onWillFocus={() => this.loadEvent()}
-          onDidBlur={() => this.clearEvent()}
+          onDidFocus={() => this.loadEvent()}
+          onWillBlur={() => this.clearEvent()}
         />
-        <LoadingScreen toggleModal={this.toggleLoadingModal} modalVisible={showLoadingModal} />
-        <SuccessScreen toggleModal={this.toggleSuccessModal} modalVisible={showSuccessModal} />
+        <LoadingScreen visible={showLoadingModal} />
+        <SuccessScreen visible={showSuccessModal} />
         <Image
           style={eventDetailsStyles.videoBkgd}
           source={{uri: optimizeCloudinaryImage(event.promo_image_url)}}
         />
         <KeyboardAvoidingView behavior="padding" enabled>
-          <ScrollView ref={c => (this.scrollView = c)} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+          <ScrollView
+            ref={(ref) => (this.scrollView = ref)}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
             {this.showScreen}
           </ScrollView>
         </KeyboardAvoidingView>

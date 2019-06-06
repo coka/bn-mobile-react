@@ -1,6 +1,13 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {View, Text, Image, TextInput, TouchableHighlight} from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableHighlight,
+  Alert,
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {LinearGradient} from 'expo'
 import SharedStyles from '../styles/shared/sharedStyles'
@@ -24,30 +31,40 @@ export default class PasswordReset extends Component {
     }
   }
 
-  resetPassword = async () => {
+  resetPassword = async() => {
     const {email} = this.state
 
     if (!email.match(/^[^@]+@[^@]+$/)) {
-      alert('Please enter a valid email address.')
+      Alert.alert('Error', 'Please enter a valid email address.')
       return
     }
 
     try {
-      const {data: {message}} = await doPasswordReset(this.state.email)
+      const {
+        data: {message},
+      } = await doPasswordReset(this.state.email)
 
-      alert(message)
+      Alert.alert(message)
       this.props.navigation.navigate('LogIn')
     } catch (_error) {
-      alert('Something went wrong, and we could not reset your password.')
+      Alert.alert(
+        'Error',
+        'Something went wrong, and we could not reset your password.'
+      )
     }
   }
 
   render() {
     return (
       <View style={loginStyles.container}>
-
         <View>
-          <Text style={[styles.headerSecondary, styles.textCenter, styles.paddingBottomJumbo]}>
+          <Text
+            style={[
+              styles.headerSecondary,
+              styles.textCenter,
+              styles.paddingBottomJumbo,
+            ]}
+          >
             Welcome back!
           </Text>
           <TextInput
@@ -58,9 +75,13 @@ export default class PasswordReset extends Component {
             underlineColorAndroid="transparent"
             defaultValue={this.state.email}
             onChangeText={(email) => this.setState({email})}
+            autoCapitalize="none"
           />
         </View>
-        <TouchableHighlight style={loginStyles.buttonContainer} onPress={this.resetPassword}>
+        <TouchableHighlight
+          style={loginStyles.buttonContainer}
+          onPress={this.resetPassword}
+        >
           <LinearGradient
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}

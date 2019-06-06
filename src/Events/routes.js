@@ -6,7 +6,6 @@ import GetTickets from './tickets'
 import Checkout from './checkout'
 import PaymentTypes from './payments'
 
-
 const EventsIndexRoute = {
   screen: EventsIndex,
   navigationOptions: {
@@ -19,6 +18,7 @@ const EventsShowRoute = {
   screen: EventsShow,
   navigationOptions: ({navigation}) => ({
     eventId: navigation.state.params.eventId,
+    event: navigation.state.params.event,
   }),
 }
 

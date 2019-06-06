@@ -1,6 +1,16 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {View, KeyboardAvoidingView, ScrollView, Text, TextInput, TouchableHighlight, Image} from 'react-native'
+import {
+  View,
+  KeyboardAvoidingView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  Image,
+  ActivityIndicator,
+  Platform,
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {Feather} from '@expo/vector-icons'
 import {LinearGradient} from 'expo'
@@ -11,6 +21,7 @@ import EventScannerStyles from '../styles/account/eventScannerStyles'
 import {autotrim, username} from '../string'
 import {accessCameraRoll, selectCameraRollImage} from '../image'
 import {uploadImageToCloudinary} from '../cloudinary'
+import BusyButton from '../BusyButton'
 
 const styles = SharedStyles.createStyles()
 const formStyles = FormStyles.createStyles()
@@ -20,7 +31,10 @@ const eventScannerStyles = EventScannerStyles.createStyles()
 /* eslint-disable camelcase,space-before-function-paren */
 
 const returnToButton = (navigation) => (
-  <TouchableHighlight onPress={() => navigation.goBack()} underlayColor="rgba(0, 0, 0, 0)">
+  <TouchableHighlight
+    onPress={() => navigation.goBack()}
+    underlayColor="rgba(0, 0, 0, 0)"
+  >
     <Icon style={loginStyles.backButton} name="arrow-back" />
   </TouchableHighlight>
 )
@@ -35,7 +49,7 @@ export default class SignUpNext extends Component {
       headerLeft: returnToButton(navigation),
       headerStyle: loginStyles.navigationContainer,
     }
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -44,6 +58,7 @@ export default class SignUpNext extends Component {
       profile_pic_url: null,
       first_name: null,
       last_name: null,
+      isBusy: false,
     }
   }
 
@@ -63,7 +78,7 @@ export default class SignUpNext extends Component {
     const {profile_pic_url, first_name, last_name} = this.state
     const changes = {
       first_name: first_name || this.currentUser.first_name,
-      last_name: last_name || this.currentUser.last_name
+      last_name: last_name || this.currentUser.last_name,
     }
 
     if (profile_pic_url) {
@@ -71,7 +86,7 @@ export default class SignUpNext extends Component {
         const url = await uploadImageToCloudinary(profile_pic_url)
 
         if (url) {
-          changes['profile_pic_url'] = url
+          changes.profile_pic_url = url
         }
       } catch (error) {
         // TODO: maybe tell them instead of silently dropping it?
@@ -82,11 +97,30 @@ export default class SignUpNext extends Component {
   }
 
   updateProfile = async () => {
-    const {screenProps: {auth}, navigation: {navigate}} = this.props
-    const profileChanges = await this._buildProfileChanges()
+    const {
+      screenProps: {auth},
+      navigation: {navigate},
+    } = this.props
 
-    await auth.updateCurrentUser(profileChanges)
-    navigate('AuthLoading')
+    if (!auth.isFetching()) {
+      this.setState({isBusy: true})
+
+      const profileChanges = await this._buildProfileChanges()
+      const results = await auth.updateCurrentUser(profileChanges, () =>
+        this.setState({isBusy: false})
+      )
+
+      // Don't double-fire the setState
+      if (results) {
+        this.setState({isBusy: false})
+      }
+
+      if (Platform.OS === 'ios') {
+        navigate('SignUpNotifications')
+      } else {
+        navigate('AuthLoading')
+      }
+    }
   }
 
   onPressPictureButton = async () => {
@@ -97,10 +131,23 @@ export default class SignUpNext extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={loginStyles.container} behavior="padding" enabled>
-        <ScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView
+        style={loginStyles.container}
+        behavior="padding"
+        enabled
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={'handled'}
+        >
           <View>
-            <Text style={[styles.headerSecondary, styles.textCenter, styles.paddingBottomJumbo]}>
+            <Text
+              style={[
+                styles.headerSecondary,
+                styles.textCenter,
+                styles.paddingBottomJumbo,
+              ]}
+            >
               Make your tickets... yours.
             </Text>
             <TextInput
@@ -108,7 +155,9 @@ export default class SignUpNext extends Component {
               style={formStyles.input}
               placeholder="First Name"
               underlineColorAndroid="transparent"
-              onChangeText={autotrim((first_name) => this.setState({first_name}))}
+              onChangeText={autotrim((first_name) =>
+                this.setState({first_name})
+              )}
             />
             <TextInput
               defaultValue={this.currentUser.last_name}
@@ -124,40 +173,75 @@ export default class SignUpNext extends Component {
                 onPress={this.onPressPictureButton}
               >
                 <View style={styles.buttonIconContainer}>
-                  <Feather style={loginStyles.buttonTertiaryIcon} name="camera" />
-                  <Text style={loginStyles.buttonTertiaryText}>Add Profile Picture</Text>
+                  <Feather
+                    style={loginStyles.buttonTertiaryIcon}
+                    name="camera"
+                  />
+                  <Text style={loginStyles.buttonTertiaryText}>
+                    Add Profile Picture
+                  </Text>
                 </View>
               </TouchableHighlight>
             </View>
 
-            <TouchableHighlight style={loginStyles.buttonContainer} onPress={this.updateProfile}>
+            <BusyButton
+              style={loginStyles.buttonContainer}
+              onPress={this.updateProfile}
+              isBusy={this.state.isBusy}
+              busyContent={
+                <LinearGradient
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 0}}
+                  colors={['#5491CC', '#9A68B2', '#E53D96']}
+                  style={loginStyles.button}
+                >
+                  <ActivityIndicator color="#FFF" />
+                </LinearGradient>
+              }
+            >
               <LinearGradient
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 0}}
                 colors={['#5491CC', '#9A68B2', '#E53D96']}
                 style={loginStyles.button}
               >
-                <Text style={loginStyles.buttonText}>{"That's me. Let's find some shows."}</Text>
+                <Text style={loginStyles.buttonText}>
+                  {"That's me. Let's find some shows."}
+                </Text>
               </LinearGradient>
-            </TouchableHighlight>
+            </BusyButton>
 
             {this.profilePicUrl && (
               <View style={loginStyles.profileImageWrapper}>
                 <View style={eventScannerStyles.pillContainer}>
                   <View style={styles.flexRowFlexStartCenter}>
-                      <Image source={{uri: this.profilePicUrl}} style={loginStyles.profileImage} />
+                    <Image
+                      source={{uri: this.profilePicUrl}}
+                      style={loginStyles.profileImage}
+                    />
                     <View>
-                      <Text style={[eventScannerStyles.pillTextWhite, styles.marginRightTiny]}>{this.username}</Text>
+                      <Text
+                        style={[
+                          eventScannerStyles.pillTextWhite,
+                          styles.marginRightTiny,
+                        ]}
+                      >
+                        {this.username}
+                      </Text>
                       {false && ( // TODO: enable when API data available
-                        <Text style={eventScannerStyles.pillTextSubheader}>VIP Access</Text>
+                        <Text style={eventScannerStyles.pillTextSubheader}>
+                          VIP Access
+                        </Text>
                       )}
                     </View>
-                    <Feather style={eventScannerStyles.checkIcon} name="check-circle" />
+                    <Feather
+                      style={eventScannerStyles.checkIcon}
+                      name="check-circle"
+                    />
                   </View>
                 </View>
               </View>
             )}
-
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

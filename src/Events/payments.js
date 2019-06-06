@@ -1,17 +1,24 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, Image, TouchableHighlight, WebView} from 'react-native'
+import {
+  Text,
+  View,
+  Image,
+  TouchableHighlight,
+  WebView,
+  Alert,
+} from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import CheckoutStyles from '../styles/event_details/checkoutStyles'
 import {isEmpty} from 'lodash'
-import {stripeFormURL} from '../constants/config';
+import {stripeFormURL} from '../constants/config'
 
 const styles = SharedStyles.createStyles()
 const checkoutStyles = CheckoutStyles.createStyles()
 const cardIcons = {
-  'default': require('../../assets/icon-visa-pay.png'),
+  default: require('../../assets/icon-visa-pay.png'),
 }
 
 /* eslint-disable camelcase */
@@ -19,21 +26,23 @@ const cardIcons = {
 // This function is an iOS hack to fix WebView's onMessage callback
 // https://github.com/facebook/react-native/issues/10865#issuecomment-269847703
 const patchPostMessageFunction = () => {
-  const originalPostMessage = window.postMessage;
+  const originalPostMessage = window.postMessage
 
   const patchedPostMessage = (message, targetOrigin, transfer) => {
-    originalPostMessage(message, targetOrigin, transfer);
-  };
+    originalPostMessage(message, targetOrigin, transfer)
+  }
 
   patchedPostMessage.toString = () => {
-    return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');
-  };
+    return String(Object.hasOwnProperty).replace(
+      'hasOwnProperty',
+      'postMessage'
+    )
+  }
 
-  window.postMessage = patchedPostMessage;
-};
+  window.postMessage = patchedPostMessage
+}
 
 const patchPostMessageJsCode = `(${String(patchPostMessageFunction)})();`
-
 
 export default class PaymentTypes extends Component {
   static propTypes = {
@@ -64,19 +73,27 @@ export default class PaymentTypes extends Component {
       return null
     }
 
-    const icon = cardIcons[selectedPaymentDetails.brand] ? cardIcons[selectedPaymentDetails.brand] : cardIcons.default
+    const icon = cardIcons[selectedPaymentDetails.brand] ?
+      cardIcons[selectedPaymentDetails.brand] :
+      cardIcons.default
 
     return (
-      <TouchableHighlight key={selectedPaymentDetails.id} onPress={() => this.changeScreen('card')}>
+      <TouchableHighlight
+        key={selectedPaymentDetails.id}
+        onPress={() => this.changeScreen('card')}
+      >
         <View style={checkoutStyles.rowContainerActive}>
           <View style={checkoutStyles.row}>
-            <Image
-              style={checkoutStyles.iconPayment}
-              source={icon}
-            />
+            <Image style={checkoutStyles.iconPayment} source={icon} />
             <View>
-              <Text style={checkoutStyles.ticketHeader}>**** **** **** {selectedPaymentDetails.last4}</Text>
-              <Text style={checkoutStyles.ticketSubHeader}>{selectedPaymentDetails.name} . {selectedPaymentDetails.exp_month}/{selectedPaymentDetails.exp_year}</Text>
+              <Text style={checkoutStyles.ticketHeader}>
+                **** **** **** {selectedPaymentDetails.last4}
+              </Text>
+              <Text style={checkoutStyles.ticketSubHeader}>
+                {selectedPaymentDetails.name} .{' '}
+                {selectedPaymentDetails.exp_month}/
+                {selectedPaymentDetails.exp_year}
+              </Text>
             </View>
           </View>
 
@@ -84,17 +101,18 @@ export default class PaymentTypes extends Component {
         </View>
       </TouchableHighlight>
     )
-
   }
 
   parseMessage = (event) => {
-    const {nativeEvent: {data}} = event
+    const {
+      nativeEvent: {data},
+    } = event
 
     try {
       const payment = JSON.parse(data)
 
       if (payment.error) {
-        alert(`There was an error.\n\n${payment.error}`);
+        Alert.alert('Error', `There was an error.\n\n${payment.error}`)
       } else {
         this.props.selectPayment(payment)
       }
@@ -122,7 +140,11 @@ export default class PaymentTypes extends Component {
         <WebView
           style={{flex: 1}}
           injectedJavaScript={patchPostMessageJsCode}
-          source={{uri: `${stripeFormURL}/mobile_stripe_token_auth/${encodeURIComponent(access_token)}/${encodeURIComponent(refresh_token)}`}}
+          source={{
+            uri: `${stripeFormURL}/mobile_stripe_token_auth/${encodeURIComponent(
+              access_token
+            )}/${encodeURIComponent(refresh_token)}`,
+          }}
           onMessage={this.parseMessage}
           onLoadStart={this.setIsLoading(true)}
           onLoad={this.setIsLoading(false)}
@@ -146,7 +168,6 @@ export default class PaymentTypes extends Component {
     return (
       <View style={checkoutStyles.mainBody}>
         <View style={checkoutStyles.mainBodyContent}>
-
           <View style={styles.container}>
             <Text style={checkoutStyles.header}>Payment Details</Text>
           </View>

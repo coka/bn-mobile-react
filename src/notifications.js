@@ -21,16 +21,18 @@ function isGranted({status}) {
 // If we already have access, just return true.
 // Otherwise, ask for access and return whether or not it is granted.
 export async function accessPushNotifications() {
-  return isGranted(await Permissions.getAsync(Permissions.NOTIFICATIONS))
-      || isGranted(await Permissions.askAsync(Permissions.NOTIFICATIONS))
+  return (
+    isGranted(await Permissions.getAsync(Permissions.NOTIFICATIONS)) ||
+    isGranted(await Permissions.askAsync(Permissions.NOTIFICATIONS))
+  )
 }
 
 // Returns the push token if access is granted.
 // Returns null if not.
 export async function getPushToken() {
-  return (await accessPushNotifications())
-      ? (await Notifications.getExpoPushTokenAsync())
-      : null
+  return (await accessPushNotifications()) ?
+    await Notifications.getExpoPushTokenAsync() :
+    null
 }
 
 // TODO: save to API server

@@ -2,8 +2,10 @@ import {
   white,
   sectionHeaderColor,
   globalFontRegular,
-  bodyFontSize,
-  iconFontSize,
+  globalFontSizeTiny,
+  globalFontSizeSmall,
+  globalFontSize,
+  globalFontSizeLargest,
   globalPaddingLarge,
   globalPadding,
   globalPaddingSmall,
@@ -15,9 +17,6 @@ const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
-
-export const headerFontSize = 28
-export const bodyFontSizeSmall = 13
 
 const TicketStyles = {
   // CONTAINER STYLES
@@ -65,38 +64,38 @@ const TicketStyles = {
   header: {
     color: white,
     fontFamily: globalFontRegular,
-    fontSize: headerFontSize,
+    fontSize: globalFontSizeLargest,
     marginBottom: globalPaddingTiny,
     paddingRight: globalPaddingSmall,
   },
   detailsBottomHeader: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSizeSmall,
+    fontSize: globalFontSizeTiny,
     letterSpacing: 0.5,
   },
   detailsBottomText: {
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeTiny,
     paddingTop: globalPaddingTiny,
   },
   detailsLast: {
     textAlign: 'right',
   },
   ticketHolderHeader: {
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     paddingBottom: 2,
   },
   ticketHolderSubheader: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSizeSmall,
+    fontSize: globalFontSizeTiny,
     letterSpacing: 0.5,
   },
 
   // ICON STYLES
   iconTicket: {
     color: white,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
     marginRight: globalPaddingTiny,
   },
   iconTicketText: {
@@ -108,7 +107,7 @@ const TicketStyles = {
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: fullHeight - 250,
+    height: fullHeight - 300,
   },
   emptyStateIcon: {
     height: 150,
@@ -118,9 +117,12 @@ const TicketStyles = {
   emptyStateText: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: iconFontSize,
+    fontSize: globalFontSize,
     paddingHorizontal: globalPaddingLarge,
     textAlign: 'center',
+  },
+  noTicketsPromoContainer: {
+    marginTop: -100,
   },
 }
 

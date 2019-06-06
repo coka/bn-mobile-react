@@ -3,11 +3,12 @@ import {
   white,
   borderColor,
   sectionHeaderColor,
-  iconFontSize,
-  bodyFontSize,
-  subnavFontSize,
   globalFontRegular,
   globalFontMedium,
+  globalFontSemiBold,
+  globalFontSizeSmaller,
+  globalFontSizeSmall,
+  globalFontSize,
   globalPadding,
   globalPaddingSmall,
   globalPaddingTiny,
@@ -53,18 +54,46 @@ const EventManagerStyles = {
     paddingTop: globalPadding,
   },
 
+  redeemedStats: {
+    paddingTop: globalPadding,
+    fontSize: globalFontSize,
+  },
+
   // HEADER STYLES
   sectionHeader: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     marginBottom: globalMarginSmall,
   },
   cardSubHeader: {
     color: sectionHeaderColor,
     fontFamily: globalFontMedium,
-    fontSize: subnavFontSize,
+    fontSize: globalFontSizeSmaller,
     paddingTop: 2,
+  },
+
+  // BUTTONS
+  buttonScanTicket: {
+    alignItems: 'center',
+    backgroundColor: white,
+    borderColor,
+    borderRadius: 5,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
+    height: 60,
+    justifyContent: 'center',
+  },
+  buttonScanTicketText: {
+    color: primaryColor,
+    fontFamily: globalFontSemiBold,
+    fontSize: globalFontSize,
+  },
+  buttonScanIcon: {
+    color: primaryColor,
+    fontSize: globalFontSize,
+    marginRight: globalMarginSmall,
   },
 }
 

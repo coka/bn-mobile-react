@@ -1,15 +1,14 @@
 import {
   globalFontRegular,
   globalFontMedium,
+  globalFontSizeTiny,
+  globalFontSizeSmall,
+  globalFontSize,
   sectionHeaderColor,
   globalPaddingSmall,
   globalPaddingTiny,
 } from '../shared/sharedStyles'
 import {StyleSheet, Dimensions, Platform} from 'react-native'
-
-export const bodyFontSize = 18
-export const bodyFontSizeSmall = 13
-export const iconFontSize = 16
 
 const OrderHistoryStyles = {
   row: {
@@ -20,20 +19,21 @@ const OrderHistoryStyles = {
   dateWrapper: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    flexBasis: 100,
   },
   icon: {
     color: sectionHeaderColor,
-    fontSize: iconFontSize,
+    fontSize: globalFontSizeSmall,
     paddingRight: globalPaddingSmall,
   },
   orderHistoryDate: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: bodyFontSizeSmall,
+    fontSize: globalFontSizeTiny,
   },
   orderHistoryText: {
     fontFamily: globalFontMedium,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSize,
     paddingTop: globalPaddingTiny,
   },
 }

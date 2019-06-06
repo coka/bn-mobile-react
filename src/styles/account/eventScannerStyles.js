@@ -7,10 +7,12 @@ import {
   successColor,
   errorColor,
   errorTextColor,
-  bodyFontSize,
-  subnavFontSize,
-  headerSecondaryFontSize,
-  sectionHeaderFontSize,
+  globalFontSizeSmaller,
+  globalFontSizeSmall,
+  globalFontSize,
+  globalFontSizeLarge,
+  globalFontSizeLargest,
+  globalFontSizeJumbo,
   globalFontSemiBold,
   globalFontRegular,
   globalPaddingTiny,
@@ -23,10 +25,8 @@ import {StyleSheet, Dimensions, Platform} from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
-export const pillHeaderFontSize = 18
-export const iconFontSize = 32
-export const statusMessageTextFontSize = 36
-export const statusMessageIconFontSize = 60
+export const iconFontSize = globalFontSizeSmall * 2
+export const statusMessageIconFontSize = globalFontSizeLargest * 2
 
 const EventScannerStyles = {
   // CONTAINERS
@@ -59,7 +59,7 @@ const EventScannerStyles = {
     alignItems: 'center',
     backgroundColor: pillContainerColor,
     borderColor: 'transparent',
-    borderRadius: 100/2,
+    borderRadius: 100 / 2,
     borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -69,17 +69,17 @@ const EventScannerStyles = {
   pillTextWhite: {
     color: white,
     fontFamily: globalFontSemiBold,
-    fontSize: pillHeaderFontSize,
+    fontSize: globalFontSize,
   },
   pillTextPrimary: {
     color: primaryColor,
     fontFamily: globalFontSemiBold,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
   },
   pillTextSubheader: {
     color: sectionHeaderColor,
     fontFamily: globalFontRegular,
-    fontSize: subnavFontSize,
+    fontSize: globalFontSizeSmaller,
   },
 
   // IMAGES
@@ -97,7 +97,7 @@ const EventScannerStyles = {
   },
   arrowUpIcon: {
     color: sectionHeaderColor,
-    fontSize: bodyFontSize,
+    fontSize: globalFontSizeSmall,
     paddingHorizontal: globalPaddingSmall,
   },
 
@@ -105,7 +105,7 @@ const EventScannerStyles = {
   descriptionHeader: {
     color: textColor,
     fontFamily: globalFontSemiBold,
-    fontSize: headerSecondaryFontSize,
+    fontSize: globalFontSizeLarge,
     width: 275,
   },
 
@@ -113,7 +113,13 @@ const EventScannerStyles = {
   messageText: {
     color: white,
     fontFamily: globalFontSemiBold,
-    fontSize: statusMessageTextFontSize,
+    fontSize: globalFontSizeJumbo,
+    paddingBottom: globalPaddingLarge,
+  },
+  messageFooter: {
+    color: white,
+    fontSize: globalFontSizeSmall,
+    paddingBottom: globalPaddingSmall,
   },
   messageIconError: {
     color: errorColor,

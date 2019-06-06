@@ -8,7 +8,10 @@ function appendForAndroid(message, url) {
 export function shareEvent({id, name, venue}) {
   const url = `${baseURL}/events/${id}`
   const title = `${name} is at ${venue.name}`
-  const message = appendForAndroid(`Check this out, ${title}. Tickets are on Big Neon.`, url)
+  const message = appendForAndroid(
+    `Check this out, ${title}. Tickets are on Big Neon.`,
+    url
+  )
 
   Share.share({
     message,

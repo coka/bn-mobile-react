@@ -5,51 +5,63 @@ import {Subscribe} from 'unstated'
 import {MAIN_ROUTES, MODAL_ROUTES} from '../Tickets/routes'
 import {TicketsContainer} from '../state/ticketStateProvider'
 import {AuthContainer} from '../state/authStateProvider'
+import {NetworkContainer} from '../state/networkStateProvider'
 
-const TicketsStack = createStackNavigator({
-  ...MAIN_ROUTES,
-}, {
-  initialRouteName: 'MyTicketList',
-  navigationOptions: {
-    header: null,
+const TicketsStack = createStackNavigator(
+  {
+    ...MAIN_ROUTES,
   },
-})
+  {
+    initialRouteName: 'MyTicketList',
+    navigationOptions: {
+      header: null,
+    },
+  }
+)
 
-const FullTicketStack = createStackNavigator({
-  Main: {
-    screen: TicketsStack,
+const FullTicketStack = createStackNavigator(
+  {
+    Main: {
+      screen: TicketsStack,
+    },
+    ...MODAL_ROUTES,
   },
-  ...MODAL_ROUTES,
-}, {
-  mode: 'modal',
-  headerMode: 'none',
-  navigationOptions: {
-    header: null,
-  },
-})
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    navigationOptions: {
+      header: null,
+    },
+  }
+)
 
 export default class ticketStackWithStore extends Component {
-  static router = FullTicketStack.router;
+  static router = FullTicketStack.router
   static propTypes = {
     navigation: PropTypes.object.isRequired,
   }
 
   static navigationOptions = ({navigation}) => {
-    let tabBarVisible = true;
+    let tabBarVisible = true
 
     if (navigation.state.index > 0) {
-      tabBarVisible = false;
+      tabBarVisible = false
     }
 
     return {
       tabBarVisible,
-    };
-  };
+    }
+  }
 
   render() {
     return (
-      <Subscribe to={[TicketsContainer, AuthContainer]}>
-        {(ticketStore, authStore) => <FullTicketStack navigation={this.props.navigation} screenProps={{store: ticketStore, auth: authStore}} />}
+      <Subscribe to={[TicketsContainer, AuthContainer, NetworkContainer]}>
+        {(ticketStore, authStore, network) => (
+          <FullTicketStack
+            navigation={this.props.navigation}
+            screenProps={{store: ticketStore, auth: authStore, network}}
+          />
+        )}
       </Subscribe>
     )
   }
