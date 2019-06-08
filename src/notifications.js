@@ -1,4 +1,3 @@
-import {Platform} from 'react-native'
 import {server} from './constants/Server'
 import {Permissions, Notifications} from 'expo'
 
@@ -41,9 +40,13 @@ export async function savePushToken(token) {
 }
 
 export async function registerPushTokenIfPermitted() {
-  const token = await getPushToken()
+  try {
+    const token = await getPushToken()
 
-  if (token) {
-    await savePushToken(token)
+    if (token) {
+      await savePushToken(token)
+    }
+  } catch (error) {
+    console.warn(`Unable to get notification token. Error: ${error.message}`)
   }
 }

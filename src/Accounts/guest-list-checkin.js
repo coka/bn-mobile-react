@@ -57,17 +57,16 @@ function GuestRowContent({guest}) {
         <Text numberOfLines={1} style={styles.headerSecondary}>
           {usernameLastFirst(guest)}
         </Text>
-
       </View>
       <Text style={doormanStyles.bodyText}>
-        {price(guest.price_in_cents)} | {guest.ticket_type} | {guest.id.slice(guest.id.length - 8)}
+        {price(guest.price_in_cents)} | {guest.ticket_type} |{' '}
+        {guest.id.slice(guest.id.length - 8)}
       </Text>
     </View>
   )
 }
 
 function GuestFullNameContent({guest}) {
-
   return (
     <View>
       <View style={doormanStyles.row}>
@@ -76,13 +75,12 @@ function GuestFullNameContent({guest}) {
         </Text>
       </View>
       <Text style={doormanStyles.bodyText}>
-        {price(guest.price_in_cents)} | {guest.ticket_type} | {guest.id.slice(guest.id.length - 8)}
+        {price(guest.price_in_cents)} | {guest.ticket_type} |{' '}
+        {guest.id.slice(guest.id.length - 8)}
       </Text>
     </View>
   )
-
 }
-
 
 function GuestTicketCard({guest, onSelect}) {
   return (
@@ -235,13 +233,18 @@ function GuestToCheckIn({guest, onCancel, onCheckIn}) {
                 Complete Check-In
               </Text>
             </TouchableHighlight>
-          ) : <View
-            style={[
-              eventDetailsStyles.buttonRoundedActive,
-              styles.marginLeftTiny,
-            ]}>
-            <Text style={eventDetailsStyles.buttonRoundedActiveText}>Already Checked-In</Text>
-          </View>}
+          ) : (
+            <View
+              style={[
+                eventDetailsStyles.buttonRoundedActive,
+                styles.marginLeftTiny,
+              ]}
+            >
+              <Text style={eventDetailsStyles.buttonRoundedActiveText}>
+                Already Checked-In
+              </Text>
+            </View>
+          )}
         </View>
         <View style={[styles.flexRowSpaceBetween, styles.paddingTop]}>
           {guest.redeem_key ? null : (
@@ -302,7 +305,13 @@ export default class ManualCheckin extends Component {
 
   render() {
     const {selectedGuest} = this.state
-    const {guests, guestListQuery} = this.props
+    const {guests, guestListQuery, totalNumberOfGuests} = this.props
+
+    let guestText = 'guests'
+
+    if (totalNumberOfGuests === 1) {
+      guestText = 'guest'
+    }
 
     if (selectedGuest !== null) {
       return (
@@ -324,6 +333,9 @@ export default class ManualCheckin extends Component {
           <View style={[doormanStyles.mainBodyContent]}>
             <View style={styles.container}>
               <Text style={doormanStyles.sectionHeader}>Guest List</Text>
+              <Text
+                style={doormanStyles.bodyText}
+              >{`${totalNumberOfGuests} ${guestText}`}</Text>
               <View style={doormanStyles.searchContainer}>
                 <SearchBox
                   textInput={{
