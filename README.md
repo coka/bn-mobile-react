@@ -98,7 +98,7 @@ If you don't know what this means, let us handle it! :)
   2) I want to upload my own keystore!
 ```
 
-You can get the keystore file from Brad (brad@revelry.co), as well as the `keystpre password`, `key alias`, and `key password`, which will all be needed.
+You can get the keystore file from @krakaw or @daybreaker on Big Neon Dev IRC, as well as the `keystpre password`, `key alias`, and `key password`, which will all be needed.
 
 _iOS:_
 
@@ -120,7 +120,7 @@ In the following text, select `I will provide all the credentials and files need
   I will provide all the credentials and files needed, Expo does no validation
 ```
 
-You can get the relevant mobile provision and p12 files listed below from brad (brad@revelry.co), as well as the `Distribution p12 password` and `Push p12 password`
+You can get the relevant mobile provision and p12 files listed below from @krakaw or @daybreaker on Big Neon Dev IRC, as well as the `Distribution p12 password` and `Push p12 password`
 
 ```
 big-neon-mobile.mobileprovision
@@ -136,7 +136,7 @@ To install Fastlane, make sure you have ruby and bundler installed first. Then i
 $> bundle update
 ```
 
-You will also need a `google-deploy-key.json` file to upload to Google. Contact Brad at Revelry or Keith at Big Neon for this file, and save it in the .creds directory. Never commit it to github.
+You will also need a `google-deploy-key.json` file to upload to Google. Contact @krakaw or @daybreaker on Big Neon Dev IRC for this file, and save it in the .creds directory. Never commit it to github.
 
 #### Deploying
 
