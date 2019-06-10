@@ -307,7 +307,7 @@ export default class TransferTickets extends Component {
                         {name}
                       </Text>
                       <Text style={ticketStyles.ticketHolderSubheader}>
-                        {id}
+                        {id.substring(0, 8)}
                       </Text>
                     </View>
                   </View>
