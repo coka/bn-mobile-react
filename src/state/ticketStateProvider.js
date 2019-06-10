@@ -81,6 +81,7 @@ class TicketsContainer extends Container {
       return response.data
     } catch (error) {
       apiErrorAlert(error, 'Creating QR code failed.')
+      return null
     }
   }
 

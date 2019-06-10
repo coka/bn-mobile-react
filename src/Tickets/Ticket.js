@@ -90,16 +90,18 @@ export default class Ticket extends Component {
     const {redeemTicketInfo, ticket} = this.props
     const details = await redeemTicketInfo(ticket.ticketId)
 
-    this.setState(
-      {
-        firstName: details.first_name,
-        lastName: details.last_name,
-        redeem_key: details.redeem_key,
-      },
-      () => {
-        this.buildQRText()
-      }
-    )
+    if (details) {
+      this.setState(
+        {
+          firstName: details.first_name,
+          lastName: details.last_name,
+          redeem_key: details.redeem_key,
+        },
+        () => {
+          this.buildQRText()
+        }
+      )
+    }
   }
 
   openVenueDirections = () => {
