@@ -49,18 +49,28 @@ export default class EventsTicket extends Component {
     this.doBrightness()
   }
 
-  async doBrightness() {
-    this._prevBrightness = (await getBrightness()) || DEFAULT_BRIGHTNESS
+  componentWillUnmount() {
+    this.undoBrightness()
+  }
 
-    await setBrightness(1)
+  async doBrightness() {
+    try {
+      this._prevBrightness = (await getBrightness()) || DEFAULT_BRIGHTNESS
+
+      await setBrightness(1)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(`Unable to set brightness. Error: ${error.message}`)
+    }
   }
 
   async undoBrightness() {
-    await setBrightness(this._prevBrightness)
-  }
-
-  componentWillUnmount() {
-    this.undoBrightness()
+    try {
+      await setBrightness(this._prevBrightness)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(`Unable to set brightness. Error ${error.message}`)
+    }
   }
 
   get eventAndTickets() {

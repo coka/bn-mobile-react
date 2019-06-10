@@ -12,6 +12,7 @@ export class EventManagerContainer extends Container {
       guests: [],
       isFetchingGuests: false,
       guestListQuery: '',
+      totalNumberOfGuests: 0,
     }
   }
 
@@ -40,22 +41,27 @@ export class EventManagerContainer extends Container {
 
   /* eslint-disable-next-line complexity */
   searchGuestList = async (guestListQuery = '') => {
+    const LIMIT = 50
+
     await this.setState({isFetchingGuests: true, guestListQuery})
 
     const {id} = this.state.eventToScan
-    let guests = null
 
     try {
-      guests = (await server.events.guests.index({
+      const response = await server.events.guests.index({
         event_id: id,
         query: guestListQuery,
-      })).data.data
+        limit: LIMIT,
+      })
+
+      // So that we show the total number of guests
+      if (guestListQuery === '') {
+        await this.setState({totalNumberOfGuests: response.data.paging.total})
+      }
+
+      await this.setState({guests: response.data.data})
     } catch (error) {
       apiErrorAlert(error)
-    }
-
-    if (guests) {
-      await this.setState({guests})
     }
 
     await this.setState({isFetchingGuests: false})
