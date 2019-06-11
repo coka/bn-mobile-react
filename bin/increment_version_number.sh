@@ -4,7 +4,7 @@ set -e # exit entire script when command exits with non-zero status
 #If the last commit was a version bump, don't bump again
 
 LAST_COMMIT=`git log -1 --pretty=%B`
-if [[ ${LAST_COMMIT} == *"Travis build:"* ]];
+if [[ ${LAST_COMMIT} == *"Travis build:"* ]]; then
     #The last commit was a build, do not run again, but it is not a failure
     exit 0
 fi
