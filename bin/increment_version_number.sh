@@ -1,12 +1,16 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 set -e # exit entire script when command exits with non-zero status
 
 #If the last commit was a version bump, don't bump again
 
 LAST_COMMIT=`git log -1 --pretty=%B`
+echo "Checking if last commit was a version bump"
 if [[ ${LAST_COMMIT} == *"Travis build:"* ]]; then
     #The last commit was a build, do not run again, but it is not a failure
+    echo "${LAST_COMMIT} was an increment, do not increment again"
     exit 0
+else
+    echo "Changes found, continuing with the version bump"
 fi
 
 
