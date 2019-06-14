@@ -46,3 +46,7 @@ export function price(cents) {
 
   return `$${dollars}`
 }
+
+export function sortArray(data, type) {
+  return data.sort((a,b) => a[type].localeCompare(b[type]))
+}

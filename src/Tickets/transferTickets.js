@@ -1,48 +1,36 @@
-import React, {Component} from 'react'
-import {PropTypes} from 'prop-types'
+import React, { Component } from 'react'
+import { PropTypes } from 'prop-types'
 import {
   Modal,
   ScrollView,
   Text,
   View,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
   TextInput,
   Alert,
   ActivityIndicator,
 } from 'react-native'
-import CircleCheckBox from 'react-native-circle-checkbox'
+import { BarCodeScanner, Permissions, Contacts } from 'expo'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import SharedStyles, {
-  backgroundColor,
-  primaryColor,
-} from '../styles/shared/sharedStyles'
-import TicketStyles from '../styles/tickets/ticketStyles'
+import SharedStyles, { primaryColor } from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
 import TicketTransferStyles from '../styles/tickets/ticketTransferStyles'
 import ModalStyles from '../styles/shared/modalStyles'
 import FormStyles from '../styles/shared/formStyles'
-import {autotrim, pluralize} from '../string'
+import { autotrim, pluralize, sortArray } from '../string'
 import qrCodeIcon from '../../assets/qr-code-small.png'
-import {BarCodeScanner, Permissions} from 'expo'
 import BusyButton from '../BusyButton'
+import ContactList from './contactList';
+import CardItem from './cardItem';
 
 const styles = SharedStyles.createStyles()
-const ticketStyles = TicketStyles.createStyles()
 const ticketWalletStyles = TicketWalletStyles.createStyles()
 const ticketTransferStyles = TicketTransferStyles.createStyles()
 const modalStyles = ModalStyles.createStyles()
 const formStyles = FormStyles.createStyles()
 
-function Card({children}) {
-  return (
-    <View style={styles.flexRowCenter}>
-      <View style={ticketTransferStyles.cardContainer}>{children}</View>
-    </View>
-  )
-}
-
-const QRCodeScanner = ({toggleModal, modalVisible, handleBarCodeScanned}) => (
+const QRCodeScanner = ({ toggleModal, modalVisible, handleBarCodeScanned }) => (
   <Modal
     onRequestClose={() => {
       toggleModal(!modalVisible)
@@ -54,22 +42,22 @@ const QRCodeScanner = ({toggleModal, modalVisible, handleBarCodeScanned}) => (
       <View style={modalStyles.contentWrapper}>
         <BarCodeScanner
           onBarCodeRead={handleBarCodeScanned}
-          style={{height: 250, width: 250}}
+          style={{ height: 250, width: 250 }}
         />
         <Text style={modalStyles.headerSecondary}>
           Scan the recipients barcode found in their Big Neon account tab.
         </Text>
 
-        <View style={[styles.buttonContainer, {borderRadius: 6}]}>
-          <TouchableHighlight
-            style={[styles.button, {borderRadius: 6}]}
+        <View style={[styles.buttonContainer, { borderRadius: 6 }]}>
+          <TouchableOpacity
+            style={[styles.button, { borderRadius: 6 }]}
             name="Cancel"
             onPress={() => {
               toggleModal(false)
             }}
           >
             <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -87,25 +75,30 @@ export default class TransferTickets extends Component {
 
     this.state = {
       isSubmitting: false,
-      checkboxes: {[props.navigation.state.params.ticketId]: true},
+      checkboxes: { [props.navigation.state.params.ticketId]: true },
       emailOrPhone: '',
       showQRModal: false,
       hasCameraPermission: null,
-      scannedEmail: null,
+      hasContactsPermission: null,
+      openContactList: false,
+      contacts: null,
     }
   }
 
-  handleBarCodeScanned = async({_type, data}) => {
+  handleBarCodeScanned = async ({ _type, data }) => {
     parsedScan = JSON.parse(data)
-    if (this.state.scannedEmail === parsedScan.email) {
+    if (this.state.emailOrPhone === parsedScan.email) {
       return
     }
-    this.setState({scannedEmail: parsedScan.email})
+    this.setState({ emailOrPhone: parsedScan.email })
     this.toggleQRModal(false)
   }
 
   toggleQRModal = (visible) => {
-    this.setState({showQRModal: visible})
+    this.setState({
+      showQRModal: visible,
+      emailOrPhone: '',
+    })
     if (visible && !this.state.hasCameraPermission) {
       this.cameraPermissions()
     }
@@ -114,11 +107,11 @@ export default class TransferTickets extends Component {
     const {
       navigation: {
         state: {
-          params: {activeTab, eventId},
+          params: { activeTab, eventId },
         },
       },
       screenProps: {
-        store: {ticketsForEvent},
+        store: { ticketsForEvent },
       },
     } = this.props
 
@@ -129,7 +122,7 @@ export default class TransferTickets extends Component {
     const {
       navigation: {
         state: {
-          params: {firstName},
+          params: { firstName },
         },
       },
     } = this.props
@@ -141,7 +134,7 @@ export default class TransferTickets extends Component {
     const {
       navigation: {
         state: {
-          params: {lastName},
+          params: { lastName },
         },
       },
     } = this.props
@@ -154,14 +147,14 @@ export default class TransferTickets extends Component {
   }
 
   get transferTickets() {
-    const {checkboxes} = this.state
+    const { checkboxes } = this.state
     const keys = Object.keys(checkboxes)
 
     return keys.filter((key) => checkboxes[key])
   }
 
   setChecked = (id, bool) => {
-    const checkboxes = {...this.state.checkboxes}
+    const checkboxes = { ...this.state.checkboxes }
 
     if (bool) {
       checkboxes[id] = bool
@@ -169,7 +162,7 @@ export default class TransferTickets extends Component {
       delete checkboxes[id]
     }
 
-    this.setState({checkboxes})
+    this.setState({ checkboxes })
   }
 
   toggleCheck = (id) => {
@@ -185,47 +178,82 @@ export default class TransferTickets extends Component {
     return Object.keys(this.state.checkboxes).length
   }
 
-  cameraPermissions = async() => {
-    const {status} = await Permissions.askAsync(Permissions.CAMERA)
+  cameraPermissions = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA)
 
-    this.setState({hasCameraPermission: status === 'granted'})
+    this.setState({ hasCameraPermission: status === 'granted' })
   }
 
-  transfer = async() => {
-    if (this.state.isSubmitting) {
+  contactsPermissions = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CONTACTS)
+    this.setState({ hasContactsPermission: status === 'granted' })
+
+  }
+
+  transfer = async () => {
+    const { isSubmitting } = this.state;
+    const { screenProps, navigation } = this.props;
+
+    if (isSubmitting) {
       return
     }
-    this.setState({isSubmitting: true})
+    this.setState({ isSubmitting: true })
 
-    const {checkboxes, emailOrPhone} = this.state
+    const { checkboxes, emailOrPhone } = this.state
     const ticketIds = Object.keys(checkboxes).filter((key) => checkboxes[key])
 
     try {
-      await this.props.screenProps.store.transferTickets(
+      await screenProps.store.transferTickets(
         emailOrPhone,
         ticketIds
       )
 
       const onDismiss = () => {
-        this.props.navigation.popToTop()
+        navigation.popToTop()
       }
 
       Alert.alert(
         'Transfer Complete',
         'Tickets have been successfully transferred!',
-        [{text: 'OK', onPress: onDismiss}],
-        {onDismiss}
+        [{ text: 'OK', onPress: onDismiss }],
+        { onDismiss }
       )
     } catch (error) {
-      this.setState({isSubmitting: false})
+      this.setState({ isSubmitting: false })
       throw error
     }
   }
 
+  getContactList = async () => {
+    const { hasContactsPermission } = this.state;
+
+    if (!hasContactsPermission) {
+      this.contactsPermissions()
+    }
+
+    const { data } = await Contacts.getContactsAsync();
+    const sortedContacts = sortArray(data, 'name')
+    this.setState({ contacts: sortedContacts, openContactList: true })
+  }
+
+  closeContactList = () => {
+    this.setState({
+      openContactList: false,
+    })
+  }
+
+  selectNumberFromContacts = (contact) => {
+    this.setState({
+      emailOrPhone: contact.phoneNumbers[0].number
+    })
+    this.closeContactList();
+  }
+
+
   render() {
-    const {navigation} = this.props
-    const {checkboxes, showQRModal} = this.state
-    const {hasValidRecipient, transferCount} = this
+    const { navigation } = this.props
+    const { isSubmitting, emailOrPhone, checkboxes, showQRModal, openContactList, contacts } = this.state
+    const { hasValidRecipient, transferCount } = this
 
     let disabled = true
     let buttonText = `Transfer ${pluralize(transferCount, 'Ticket')}`
@@ -254,68 +282,60 @@ export default class TransferTickets extends Component {
             <Icon
               style={styles.iconLinkCircle}
               name="close"
-              onPress={() => {
-                navigation.goBack()
-              }}
+              onPress={openContactList ?
+                () => this.closeContactList() :
+                () => navigation.goBack()
+              }
             />
           </View>
-
-          <View style={modalStyles.contentRoundedWrapper}>
-            <View style={styles.container}>
-              <View style={styles.flexRowSpaceBetween}>
-                <Text style={modalStyles.headerSecondary}>Add Recipient</Text>
-                <TouchableHighlight onPress={() => this.toggleQRModal(true)}>
-                  <Image
-                    style={[
-                      ticketTransferStyles.qrCodeSmall,
-                      styles.marginLeftTiny,
-                    ]}
-                    source={qrCodeIcon}
-                  />
-                </TouchableHighlight>
-              </View>
-              <TextInput
-                keyboardType="email-address"
-                style={formStyles.input}
-                placeholder="Recipient email or phone or scan"
-                searchIcon={{size: 24}}
-                underlineColorAndroid="transparent"
-                value={this.state.scannedEmail}
-                onChangeText={autotrim((emailOrPhone) =>
-                  this.setState({emailOrPhone})
-                )}
-              />
-            </View>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={{paddingTop: 10}}
-            >
-              {this.tickets.map(({id, ticket_type_name: name}) => (
-                <Card key={id}>
-                  <View style={styles.flexRowFlexStart}>
-                    <CircleCheckBox
-                      checked={checkboxes[id]}
-                      onToggle={this.toggleCheck(id)}
-                      innerColor="#FF20B1"
-                      outerColor="#FF20B1"
-                      innerSize={15}
-                      outerSize={29}
-                      styleCheckboxContainer={styles.marginRight}
-                    />
-                    <View>
-                      <Text style={ticketStyles.ticketHolderHeader}>
-                        {name}
-                      </Text>
-                      <Text style={ticketStyles.ticketHolderSubheader}>
-                        #{id.slice(-8)}
-                      </Text>
-                    </View>
+          {
+            !openContactList ?
+              <View style={modalStyles.contentRoundedWrapper}>
+                <View style={styles.container}>
+                  <View style={styles.flexRowSpaceBetween}>
+                    <Text style={modalStyles.headerSecondary}>Add Recipient</Text>
+                    <TouchableOpacity onPress={() => this.toggleQRModal(true)}>
+                      <Image
+                        style={[
+                          ticketTransferStyles.qrCodeSmall,
+                          styles.marginLeftTiny,
+                        ]}
+                        source={qrCodeIcon}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.getContactList()}>
+                      <Icon style={{ fontSize: 24 }} name="contacts" />
+                    </TouchableOpacity>
                   </View>
-                </Card>
-              ))}
-            </ScrollView>
-          </View>
-
+                  <TextInput
+                    keyboardType="email-address"
+                    style={formStyles.input}
+                    placeholder="Recipient email or phone or scan"
+                    searchIcon={{ size: 24 }}
+                    underlineColorAndroid="transparent"
+                    value={emailOrPhone}
+                    onChangeText={autotrim((emailOrPhone) =>
+                      this.setState({ emailOrPhone })
+                    )}
+                  />
+                </View>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  style={{ paddingTop: 10 }}
+                >
+                  {this.tickets.map(({ id, ticket_type_name: name }) => (
+                    <CardItem
+                      id={id}
+                      name={name}
+                      checkboxes={checkboxes}
+                      toggleCheck={this.toggleCheck}
+                    />
+                  ))}
+                </ScrollView>
+              </View>
+              :
+              <ContactList contacts={contacts} selectContact={this.selectNumberFromContacts} />
+          }
           <View style={[styles.buttonContainer, styles.marginHorizontal]}>
             <BusyButton
               style={
@@ -325,7 +345,7 @@ export default class TransferTickets extends Component {
               }
               underlayColor={primaryColor}
               onPress={disabled ? null : (onPress = this.transfer)}
-              isBusy={this.state.isSubmitting}
+              isBusy={isSubmitting}
               busyContent={<ActivityIndicator color="#FFF" />}
             >
               <Text style={styles.buttonText}>{buttonText}</Text>
