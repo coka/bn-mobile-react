@@ -10,15 +10,12 @@ import {
   globalFontSizeSmaller,
   globalFontSizeSmall,
   globalFontSizeLarge,
-  globalPaddingMedium,
   globalPadding,
   globalPaddingSmall,
   globalPaddingTiny,
-  globalMargin,
   globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
-const fullHeight = Dimensions.get('window').height
+import {StyleSheet, Dimensions} from 'react-native'
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
@@ -104,7 +101,7 @@ const DoormanStyles = {
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
-    marginLeft: globalMargin,
+    marginLeft: globalMarginSmall,
   },
   ticketPurchasedBadgeWrapper: {
     backgroundColor: badgeSuccess,
