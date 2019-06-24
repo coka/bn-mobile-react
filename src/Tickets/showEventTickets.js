@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, Image} from 'react-native'
+import {Text, View, ScrollView, Image} from 'react-native'
 import Carousel, {Pagination} from 'react-native-snap-carousel'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Ticket from './Ticket'
@@ -158,7 +158,7 @@ export default class EventsTicket extends Component {
           style={ticketWalletStyles.modalBkgdImage}
           source={require('../../assets/account-placeholder-bkgd.png')}
         />
-        <View>
+        <ScrollView scrollEnabled>
           <View
             style={[
               ticketWalletStyles.closeModalContainer,
@@ -205,7 +205,7 @@ export default class EventsTicket extends Component {
             carouselRef={this._ticketSlider}
             tappableDots={!!this._ticketSlider}
           />
-        </View>
+        </ScrollView>
       </View>
     )
   }
