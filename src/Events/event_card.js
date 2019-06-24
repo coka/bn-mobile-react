@@ -93,11 +93,6 @@ export default class EventsIndex extends Component {
                     />
                   </View>
                 </TouchableHighlight>
-                <View style={styles.avatarContainer}>
-                  {
-                    null // event.avatarImages.map((source, key) => <Image style={styles.avatarSmall} source={source} key={key} />)}
-                  }
-                </View>
               </View>
               {this.priceTag}
             </View>
