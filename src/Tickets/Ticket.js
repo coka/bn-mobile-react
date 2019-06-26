@@ -183,9 +183,10 @@ export default class Ticket extends Component {
 
   get qrContainer() {
     const {activeTab} = this.props
+    const {qrText} = this.state
 
     if (activeTab === 'upcoming') {
-      if (this.state.qrText) {
+      if (qrText) {
         return (
           // https://github.com/cssivision/react-native-qrcode/issues/68
           // Fix from https://github.com/cssivision/react-native-qrcode/issues/68#issuecomment-455791280
@@ -194,7 +195,7 @@ export default class Ticket extends Component {
               size={200}
               fgColor="white"
               bgColor="black"
-              value={this.state.qrText}
+              value={qrText}
             />
           </View>
         )
