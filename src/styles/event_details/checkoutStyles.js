@@ -18,7 +18,7 @@ import {
   globalMargin,
   globalPaddingMedium,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions} from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -42,6 +42,13 @@ const CheckoutStyles = {
     borderTopRightRadius: 30 / 2,
     borderTopLeftRadius: 30 / 2,
     height: fullHeight,
+    paddingTop: globalPaddingMedium,
+    minHeight: '100%',
+  },
+  mainBodyTicketContent: {
+    backgroundColor: 'white',
+    borderTopRightRadius: 30 / 2,
+    borderTopLeftRadius: 30 / 2,
     paddingTop: globalPaddingMedium,
     minHeight: '100%',
   },
@@ -191,7 +198,7 @@ const CheckoutStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...CheckoutStyles, ...overrides})
+  return StyleSheet.create({ ...CheckoutStyles, ...overrides })
 }
 
 export default {
