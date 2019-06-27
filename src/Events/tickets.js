@@ -41,7 +41,7 @@ export default class GetTickets extends Component {
   }
 
   onPromoApply = async (code = '') => {
-    if (!code) {
+    if (String(code).trim() === '') {
       Alert.alert('Error', 'You must enter a promotional code.')
       return
     }
@@ -199,7 +199,7 @@ export default class GetTickets extends Component {
 
   get hasTicketDisplay() {
     return (
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView extraScrollHeight={200}>
           <View style={checkoutStyles.headerWrapper}>
             <Text style={checkoutStyles.header}>Select Ticket Type</Text>
           </View>
