@@ -19,8 +19,10 @@ export default class EventsIndex extends Component {
     onInterested: PropTypes.func,
   }
 
-  setFavorite = () => {
-    this.props.onInterested(this.props.event)
+  setFavorite = (e) => {
+    e.stopPropagation()
+    const {onInterested, event} = this.props
+    onInterested(event)
   }
 
   get scheduleText() {
