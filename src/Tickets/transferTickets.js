@@ -267,7 +267,7 @@ export default class TransferTickets extends Component {
     }
 
     return (
-      <Modal>
+      <Modal onRequestClose={navigation.goBack}>
         <View style={ticketWalletStyles.modalContainer}>
           <QRCodeScanner
             handleBarCodeScanned={this.handleBarCodeScanned}
@@ -325,6 +325,7 @@ export default class TransferTickets extends Component {
                 >
                   {this.tickets.map(({ id, ticket_type_name: name }) => (
                     <CardItem
+                      key={id}
                       id={id}
                       name={name}
                       checkboxes={checkboxes}
@@ -336,7 +337,7 @@ export default class TransferTickets extends Component {
               :
               <ContactList contacts={contacts} selectContact={this.selectNumberFromContacts} />
           }
-          <View style={[styles.buttonContainer, styles.marginHorizontal]}>
+          {!openContactList && <View style={[styles.buttonContainer, styles.marginHorizontal]}>
             <BusyButton
               style={
                 disabled ?
@@ -350,7 +351,7 @@ export default class TransferTickets extends Component {
             >
               <Text style={styles.buttonText}>{buttonText}</Text>
             </BusyButton>
-          </View>
+          </View>}
         </View>
       </Modal>
     )

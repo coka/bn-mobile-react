@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import { PropTypes } from 'prop-types'
 import { View, Text, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles';
 import FormStyles from '../styles/shared/formStyles'
 
 const styles = SharedStyles.createStyles()
 const formStyles = FormStyles.createStyles()
 
-class ContactList extends Component {
+class ContactList extends PureComponent {
 
   constructor(props) {
     super(props)
@@ -27,26 +29,32 @@ class ContactList extends Component {
     const { selectContact } = this.props;
     const { filteredContacts } = this.state;
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <TextInput
-          style={[{ paddingTop: 20 }, formStyles.input]}
-          placeholder="Search"
-          searchIcon={{ size: 24 }}
+          style={[formStyles.input, { marginBottom: 0 }]}
+          placeholder="Type here"
           underlineColorAndroid="transparent"
           onChangeText={(text) => this.searchList(text)}
         />
-        <View>
+        <View style={styles.paddingBottom}>
           <FlatList
             keyExtractor={(item) => item.id}
-            style={[styles.container, styles.marginVertical, styles.marginHorizontal]}
+            style={styles.marginVertical}
             data={filteredContacts}
-            renderItem={({ item }) => (
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            renderItem={({ item, separators }) => (
               <TouchableOpacity
-                style={[styles.rowContainer, styles.paddingVerticalSmall]}
+                style={[styles.rowContainer, { width: '100%' }]}
                 onPress={() => selectContact(item)}
+                onShowUnderlay={separators.highlight}
+                onHideUnderlay={separators.unhighlight}
               >
-                <View>
-                  <Text >{item.name}</Text>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View style={{ flex: 1, flexDirection: 'column' }}>
+                    <Text style={styles.bodyText}>{item.name}</Text>
+                    <Text style={styles.helpText}>{item.phoneNumbers[0].number}</Text>
+                  </View>
+                  <Icon style={styles.rightIcon} name='chevron-right' />
                 </View>
               </TouchableOpacity>
             )}
@@ -55,6 +63,10 @@ class ContactList extends Component {
       </View>
     )
   }
+}
+
+ContactList.propTypes = {
+  contacts: PropTypes.array.isRequired,
 }
 
 export default ContactList;
