@@ -106,12 +106,15 @@ class CartContainer extends Container {
   }
 
   get maxAdditionalQuantity() {
+
     const item = this.data.limited_tickets_remaining.find(
       ({ticket_type_id: id}) => id === this.ticketTypeId
     )
 
     if (item) {
       return item.tickets_remaining
+    } else if (this.ticketType) {
+      return this.ticketType.limit_per_person || this.ticketType.available;
     }
 
     return 0
