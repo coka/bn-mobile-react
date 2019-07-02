@@ -25,6 +25,8 @@ const styles = SharedStyles.createStyles()
 const accountStyles = AccountStyles.createStyles()
 const modalStyles = ModalStyles.createStyles()
 
+const FAN_SUPPORT_LINK = 'https://support.bigneon.com/hc/en-us/categories/360001444351-Fan-Support'
+
 const QRCode = ({_qrCode, toggleModal, modalVisible}) => (
   <Modal
     onRequestClose={() => {
@@ -261,7 +263,7 @@ export default class Account extends Component {
           )) ||
             null}
           <Button
-            onPress={() => Linking.openURL('mailto:fansupport@bigneon.com')}
+            onPress={() => Linking.openURL(FAN_SUPPORT_LINK)}
             title="Contact Support"
           />
           <Text
