@@ -123,24 +123,9 @@ export default class Account extends Component {
               coverPhotoPlaceholder
             }
           />
-          {false && ( // TODO: Re-enable when functionality is implemented.
-            <View style={accountStyles.accountPhotoContainer}>
-              <TouchableHighlight underlayColor="rgba(0, 0, 0, 0)">
-                <Text style={accountStyles.accountPhotoText}>
-                  + TAP TO ADD A COVER PHOTO
-                </Text>
-              </TouchableHighlight>
-            </View>
-          )}
         </View>
 
         <View style={styles.headerContainer}>
-          {false && ( // TODO: Re-enable when functionality is implemented.
-            <View style={accountStyles.avatarPlaceholderContainer}>
-              <Icon style={accountStyles.avatarIcon} name="person-add" />
-            </View>
-          )}
-
           <View style={accountStyles.accountHeaderWrapper}>
             <View>
               <Text style={accountStyles.accountEmailHeader}>
@@ -175,49 +160,6 @@ export default class Account extends Component {
               />
             </View>
           </TouchableHighlight>
-
-          {false && ( // TODO: Re-enable when functionality is implemented.
-            <TouchableHighlight
-              underlayColor="rgba(0, 0, 0, 0)"
-              onPress={() => navigate('Notifications')}
-            >
-              <View style={accountStyles.rowContainer}>
-                <View style={accountStyles.row}>
-                  <Icon
-                    style={accountStyles.accountIcon}
-                    name="notifications"
-                  />
-                  <Text style={accountStyles.accountHeader}>
-                    Notification Preferences
-                  </Text>
-                </View>
-                <Icon
-                  style={accountStyles.accountArrow}
-                  name="keyboard-arrow-right"
-                />
-              </View>
-            </TouchableHighlight>
-          )}
-
-          {false && ( // TODO: Re-enable when functionality is implemented.
-            <TouchableHighlight
-              underlayColor="rgba(0, 0, 0, 0)"
-              onPress={() => navigate('Billing')}
-            >
-              <View style={accountStyles.rowContainer}>
-                <View style={accountStyles.row}>
-                  <Icon style={accountStyles.accountIcon} name="credit-card" />
-                  <Text style={accountStyles.accountHeader}>
-                    Billing Information
-                  </Text>
-                </View>
-                <Icon
-                  style={accountStyles.accountArrow}
-                  name="keyboard-arrow-right"
-                />
-              </View>
-            </TouchableHighlight>
-          )}
 
           <TouchableHighlight
             underlayColor="rgba(0, 0, 0, 0)"
