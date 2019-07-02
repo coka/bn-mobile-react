@@ -83,7 +83,6 @@ export default class EventShow extends Component {
     this.state = {
       event: props.navigation.getParam('event', false),
       eventId: props.navigation.getParam('eventId', false),
-      favorite: false,
       currentScreen: 'details',
       showLoadingModal: false,
       showSuccessModal: false,
@@ -139,10 +138,6 @@ export default class EventShow extends Component {
 
   get store() {
     return this.props.screenProps.store
-  }
-
-  toggleFavorite = (favorite) => {
-    this.setState({favorite})
   }
 
   changeScreen = (currentScreen) => {

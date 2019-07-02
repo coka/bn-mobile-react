@@ -16,8 +16,6 @@ import {NavigationEvents} from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import ModalDropdown from 'react-native-modal-dropdown'
 import SharedStyles from '../styles/shared/sharedStyles'
-import FormStyles from '../styles/shared/formStyles'
-import SlideShowStyles from '../styles/shared/slideshowStyles'
 import NavigationStyles from '../styles/shared/navigationStyles'
 import ModalStyles from '../styles/shared/modalStyles'
 import EventItemView from './event_card'
@@ -27,8 +25,6 @@ import TicketStyles from '../styles/tickets/ticketStyles'
 import emptyState from '../../assets/icon-empty-state.png'
 
 const styles = SharedStyles.createStyles()
-const formStyles = FormStyles.createStyles()
-const slideshowStyles = SlideShowStyles.createStyles()
 const navigationStyles = NavigationStyles.createStyles()
 const modalStyles = ModalStyles.createStyles()
 const ticketStyles = TicketStyles.createStyles()

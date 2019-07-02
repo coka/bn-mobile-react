@@ -19,10 +19,20 @@ export default class EventsIndex extends Component {
     onInterested: PropTypes.func,
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      favorite: props.event.user_is_interested
+    }
+  }
+
   setFavorite = (e) => {
     e.stopPropagation()
     const {onInterested, event} = this.props
-    onInterested(event)
+    onInterested(event, true)
+    this.setState(prevState => ({
+      favorite: !prevState.favorite,
+    }))
   }
 
   get scheduleText() {
@@ -62,6 +72,7 @@ export default class EventsIndex extends Component {
 
   render() {
     const {onPress, event} = this.props
+    const {favorite} = this.state
 
     return (
       <TouchableHighlight underlayColor="#fff" onPress={onPress}>
@@ -80,14 +91,14 @@ export default class EventsIndex extends Component {
                 >
                   <View
                     style={
-                      event.user_is_interested ?
+                      favorite ?
                         eventCardStyles.iconLinkCircleContainerSmallActive :
                         eventCardStyles.iconLinkCircleContainerSmall
                     }
                   >
                     <Icon
                       style={
-                        event.user_is_interested ?
+                        favorite ?
                           eventCardStyles.iconLinkCircleSmallActive :
                           eventCardStyles.iconLinkCircleSmall
                       }

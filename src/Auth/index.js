@@ -1,11 +1,10 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Text, View, Image, TouchableHighlight} from 'react-native'
-import {LinearGradient} from 'expo'
+import {LinearGradient, WebBrowser} from 'expo'
 import {LoadingScreen} from '../constants/modals'
 import LoginStyles from '../styles/login/loginStyles'
 import SharedStyles from '../styles/shared/sharedStyles'
-import {WebBrowser} from 'expo'
 
 const loginStyles = LoginStyles.createStyles()
 const styles = SharedStyles.createStyles()
