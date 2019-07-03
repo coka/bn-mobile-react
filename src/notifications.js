@@ -47,6 +47,10 @@ export async function registerPushTokenIfPermitted() {
       await savePushToken(token)
     }
   } catch (error) {
-    console.warn(`Unable to get notification token. Error: ${error.message}`)
+    if (error && error.response && error.response.status === 409) {
+      console.log(`This device has already stored the token.`);
+    } else {
+      console.warn(`Unable to get notification token. Error: ${error.message}`)
+    }
   }
 }
