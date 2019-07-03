@@ -275,7 +275,7 @@ class EventsContainer extends Container {
   // allEvents will refresh all events (ie: from the index page), whereas setting it to false will refresh the interested event
   toggleInterest = async (event, singleEvent = false) => {
     const {user_is_interested, id} = event
-    const {remove, create} = server.events
+    const {remove, create} = server.events.interests
 
     try {
       if (user_is_interested) {
