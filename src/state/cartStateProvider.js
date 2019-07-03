@@ -114,7 +114,7 @@ class CartContainer extends Container {
     if (item) {
       return item.tickets_remaining
     } else if (this.ticketType) {
-      return this.ticketType.limit_per_person || this.ticketType.available;
+      return Math.max((this.ticketType.limit_per_person || this.ticketType.available) - 1, 0);
     }
 
     return 0
