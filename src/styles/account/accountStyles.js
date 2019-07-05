@@ -4,9 +4,7 @@ import {
   sectionHeaderColor,
   white,
   borderColor,
-  containerDarkColor,
   disabledHeaderColor,
-  disabledColor,
   globalFontSizeSmaller,
   globalFontSizeSmall,
   globalFontSize,
@@ -14,15 +12,12 @@ import {
   globalFontSizeLargest,
   globalFontRegular,
   globalFontMedium,
-  globalPaddingLarge,
-  globalPaddingMedium,
   globalPadding,
   globalPaddingSmall,
   globalPaddingTiny,
   globalMarginSmall,
 } from '../shared/sharedStyles'
 import {StyleSheet, Dimensions, Platform} from 'react-native'
-const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'

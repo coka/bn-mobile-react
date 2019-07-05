@@ -41,7 +41,7 @@ export default class GetTickets extends Component {
   }
 
   onPromoApply = async (code = '') => {
-    if (code === '') {
+    if (String(code).trim() === '') {
       Alert.alert('Error', 'You must enter a promotional code.')
       return
     }
@@ -115,11 +115,12 @@ export default class GetTickets extends Component {
   }
 
   get ticketList() {
-    return this.props.ticketsToDisplay.map((ticket) => (
+    const {ticketsToDisplay, onTicketSelection} = this.props;
+    return ticketsToDisplay.map((ticket) => (
       <Ticket
         key={ticket.id}
         ticket={ticket}
-        onTicketSelection={this.props.onTicketSelection}
+        onTicketSelection={onTicketSelection}
       />
     ))
   }
@@ -199,13 +200,11 @@ export default class GetTickets extends Component {
   get hasTicketDisplay() {
     return (
       <KeyboardAwareScrollView extraScrollHeight={200}>
-        <View>
           <View style={checkoutStyles.headerWrapper}>
             <Text style={checkoutStyles.header}>Select Ticket Type</Text>
           </View>
           {this.ticketList}
           {this.promoCode}
-        </View>
       </KeyboardAwareScrollView>
     )
   }
@@ -214,7 +213,7 @@ export default class GetTickets extends Component {
     return (
       <View style={checkoutStyles.mainBody}>
         <LoadingScreen visible={this.state.applyingPromo} />
-        <View style={checkoutStyles.mainBodyContent}>
+        <View style={checkoutStyles.mainBodyTicketContent}>
           {this.hasTickets ? this.hasTicketDisplay : this.noAvailableTickets}
         </View>
       </View>

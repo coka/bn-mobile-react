@@ -8,7 +8,7 @@ import {
   globalPaddingSmall,
   globalPaddingTiny,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import {StyleSheet} from 'react-native'
 
 const OrderHistoryStyles = {
   row: {
