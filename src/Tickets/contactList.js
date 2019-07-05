@@ -29,17 +29,16 @@ class ContactList extends PureComponent {
     const { selectContact } = this.props;
     const { filteredContacts } = this.state;
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.flex1}>
         <TextInput
           style={[formStyles.input, { marginBottom: 0 }]}
           placeholder="Type here"
           underlineColorAndroid="transparent"
           onChangeText={(text) => this.searchList(text)}
         />
-        <View style={styles.paddingBottom}>
           <FlatList
             keyExtractor={(item) => item.id}
-            style={styles.marginVertical}
+            style={{marginBottom: 15}}
             data={filteredContacts}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
             renderItem={({ item, separators }) => (
@@ -59,7 +58,6 @@ class ContactList extends PureComponent {
               </TouchableOpacity>
             )}
           />
-        </View>
       </View>
     )
   }
