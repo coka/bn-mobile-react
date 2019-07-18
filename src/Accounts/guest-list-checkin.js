@@ -1,18 +1,5 @@
 import React, {Component} from 'react'
-import {
-  ScrollView,
-  View,
-  Text,
-  TouchableHighlight,
-  TextInput,
-  Image,
-  FlatList,
-  StyleSheet,
-  Dimensions,
-  Animated,
-  Alert,
-  Keyboard,
-} from 'react-native'
+import {View, Text, TouchableHighlight, TextInput, Image, Dimensions, BackHandler, Keyboard} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {price, username, usernameLastFirst} from '../string'
 import SharedStyles from '../styles/shared/sharedStyles'
@@ -261,9 +248,6 @@ function SearchBox({textInput}) {
 }
 
 export default class ManualCheckin extends Component {
-  state = {
-    selectedGuest: null,
-  }
 
   componentDidMount() {
     this.searchGuestList()
@@ -273,12 +257,8 @@ export default class ManualCheckin extends Component {
     this.props.searchGuestList(query)
   }
 
-  selectGuest = (selectedGuest) => {
-    this.setState({selectedGuest})
-  }
-
   unselectGuest = () => {
-    this.selectGuest(null)
+    this.props.selectGuest(null)
   }
 
   checkInGuest = async(guest) => {
@@ -304,14 +284,13 @@ export default class ManualCheckin extends Component {
   }
 
   render() {
-    const {selectedGuest} = this.state
-    const {guests, guestListQuery, totalNumberOfGuests} = this.props
+      const {guests, guestListQuery, totalNumberOfGuests, selectedGuest} = this.props
 
-    let guestText = 'guests'
+      let guestText = 'guests'
 
-    if (totalNumberOfGuests === 1) {
-      guestText = 'guest'
-    }
+      if (totalNumberOfGuests === 1) {
+          guestText = 'guest'
+      }
 
     if (selectedGuest !== null) {
       return (
@@ -353,7 +332,7 @@ export default class ManualCheckin extends Component {
             <GuestList
               style={{flex: 1}}
               guests={guests}
-              onSelect={this.selectGuest}
+              onSelect={this.props.selectGuest}
               onCheckIn={this.checkInGuest}
             />
             <View style={doormanStyles.spacer} />
