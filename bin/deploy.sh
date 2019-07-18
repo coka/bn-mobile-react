@@ -9,7 +9,7 @@ usage () {
     Deploys mobile applications using expo to the play store
     and the app stores.
 
-    $ ./deploy environment
+    $ ./deploy.sh environment
 
     environment: Either "production" or "staging"
 
