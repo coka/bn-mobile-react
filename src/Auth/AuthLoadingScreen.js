@@ -4,6 +4,9 @@ import {ActivityIndicator, StatusBar, View} from 'react-native'
 import {Subscribe} from 'unstated'
 import {AuthContainer} from '../state/authStateProvider'
 import {retrieveTokens} from '../constants/Server'
+import SharedStyles, {primaryColor} from '../styles/shared/sharedStyles'
+
+const styles = SharedStyles.createStyles()
 
 function shouldDoNextSignUpStep({first_name: first, last_name: last}) {
   return !(first || last)
@@ -52,8 +55,8 @@ class AuthStore extends Component {
 
   render() {
     return (
-      <View>
-        <ActivityIndicator />
+      <View  style={[styles.flex1, styles.flexRowCenter]}>
+        <ActivityIndicator size="large" color={primaryColor} />
         <StatusBar barStyle="default" />
       </View>
     )
