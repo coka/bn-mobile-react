@@ -110,6 +110,7 @@ export default class EventsTicket extends Component {
       doors: event.formattedDoors,
       user: 'Test Name',
       ticketType: ticket.ticket_type_name,
+      transferId: ticket.transfer_id,
       eventId: event.id,
       ticketId: ticket.id,
       status: ticket.status,

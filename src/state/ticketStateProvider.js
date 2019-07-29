@@ -96,10 +96,10 @@ class TicketsContainer extends Container {
     await server.tickets.transfer.send(payload)
   }
 
-  cancelTicketTransfer = async (ticketId) => {
+  cancelTicketTransfer = async (ticket) => {
     try {
       const payload = {
-        id: ticketId,
+        id: ticket.transferId,
       }
       const response = await server.transfers.cancel(payload)
     } catch (error) {
