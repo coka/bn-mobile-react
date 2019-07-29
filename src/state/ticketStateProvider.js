@@ -1,6 +1,6 @@
-import {Container} from 'unstated'
-import {server, apiErrorAlert} from '../constants/Server'
-import {eventDateTimes, eventIsInPast} from '../time'
+import { Container } from 'unstated'
+import { server, apiErrorAlert } from '../constants/Server'
+import { eventDateTimes, eventIsInPast } from '../time'
 
 /* eslint-disable camelcase,space-before-function-paren */
 
@@ -18,7 +18,7 @@ class TicketsContainer extends Container {
   userTickets = async () => {
     try {
       const response = await server.tickets.index()
-      const {data, _paging} = response.data // @TODO: pagination
+      const { data, _paging } = response.data // @TODO: pagination
       const tabData = {
         upcoming: [],
         past: [],
@@ -27,7 +27,7 @@ class TicketsContainer extends Container {
 
       data.forEach(([event, tix]) => {
         const untransferredCategory = eventIsInPast(event) ? 'past' : 'upcoming'
-        const {event_start, door_time} = eventDateTimes(event.localized_times)
+        const { event_start, door_time } = eventDateTimes(event.localized_times)
 
         event.formattedDate = event_start.toFormat('EEE, MMMM d')
         event.formattedDoors = door_time.toFormat('t')
@@ -49,7 +49,7 @@ class TicketsContainer extends Container {
           const tickets = categories[key]
 
           if (tickets.length) {
-            tabData[key].push({event, tickets})
+            tabData[key].push({ event, tickets })
           }
         })
       })
@@ -57,26 +57,26 @@ class TicketsContainer extends Container {
       // sort past events in reverse order
       tabData.past = tabData.past.reverse()
 
-      this.setState({tickets: tabData})
+      this.setState({ tickets: tabData })
     } catch (error) {
       apiErrorAlert(error, 'Loading tickets failed.')
     }
   }
 
   setPurchasedTicket = (purchasedTicket) => {
-    this.setState({purchasedTicket})
+    this.setState({ purchasedTicket })
   }
 
   ticketsForEvent = (activeTab, eventId) => {
     return this.state.tickets[activeTab || 'upcoming'].find(
-      ({event: {id}}) => id === eventId
+      ({ event: { id } }) => id === eventId
     )
   }
 
   redeemTicketInfo = async (ticket_id) => {
     // eslint-disable-line complexity
     try {
-      const response = await server.tickets.redeem.read({ticket_id})
+      const response = await server.tickets.redeem.read({ ticket_id })
 
       return response.data
     } catch (error) {
@@ -95,6 +95,18 @@ class TicketsContainer extends Container {
 
     await server.tickets.transfer.send(payload)
   }
+
+  cancelTicketTransfer = async (ticketId) => {
+    try {
+      const payload = {
+        id: ticketId,
+      }
+      const response = await server.transfers.cancel(payload)
+    } catch (error) {
+      apiErrorAlert(error, 'Failed to transfer ticket.')
+      return null
+    }
+  }
 }
 
-export {TicketsContainer}
+export { TicketsContainer }

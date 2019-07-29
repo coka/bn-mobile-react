@@ -132,7 +132,7 @@ export default class EventsTicket extends Component {
         },
       },
       screenProps: {
-        store: {redeemTicketInfo},
+        store: {redeemTicketInfo, cancelTicketTransfer},
       },
     } = this.props
 
@@ -142,6 +142,7 @@ export default class EventsTicket extends Component {
         ticket={item}
         navigate={navigate}
         redeemTicketInfo={redeemTicketInfo}
+        cancelTicketTransfer={cancelTicketTransfer}
       />
     )
   }
