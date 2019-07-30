@@ -101,7 +101,7 @@ class TicketsContainer extends Container {
       const payload = {
         id: ticket.transferId,
       }
-      const response = await server.transfers.cancel(payload)
+      await server.transfers.cancel(payload)
     } catch (error) {
       apiErrorAlert(error, 'Failed to transfer ticket.')
       return null

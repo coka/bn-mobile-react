@@ -7,6 +7,7 @@ import {
   Platform,
   TouchableHighlight,
   Image,
+  Alert,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import QRCode from 'react-native-qrcode'
@@ -38,7 +39,7 @@ function staticBottomText(text) {
 
 export default class Ticket extends Component {
   static propTypes = {
-    navigate: PropTypes.func.isRequired,
+    navigation: PropTypes.object.isRequired,
     ticket: PropTypes.object.isRequired,
     activeTab: PropTypes.string,
   }
@@ -118,8 +119,27 @@ export default class Ticket extends Component {
     }
   }
 
+  handleCancelTransferTicket = async () => {
+    try {
+      const { cancelTicketTransfer, ticket, navigation } = this.props
+      await cancelTicketTransfer(ticket);
+
+      const onDismiss = () => {
+        navigation.popToTop()
+      }
+
+      Alert.alert(
+        'Transfer Cancelled',
+        'Tickets have been successfully cancelled!',
+        [{ text: 'OK', onPress: onDismiss }],
+        { onDismiss }
+      )
+    } catch (error) {
+    }
+  }
+
   get upcomingTabText() {
-    const { navigate, ticket, activeTab, cancelTicketTransfer } = this.props
+    const { navigation, ticket, activeTab } = this.props
     const { eventId, ticketId, status } = ticket
     const { firstName, lastName } = this.state
 
@@ -131,7 +151,7 @@ export default class Ticket extends Component {
           <TouchableHighlight
             underlayColor="rgba(0, 0, 0, 0)"
             onPress={() =>
-              navigate('TransferTickets', {
+              navigation.navigate('TransferTickets', {
                 activeTab,
                 ticketId,
                 eventId,
@@ -153,13 +173,12 @@ export default class Ticket extends Component {
   }
 
   get transferBottomText() {
-    const { cancelTicketTransfer, ticket } = this.props
 
     return (
       <View>
         <TouchableHighlight
           underlayColor="rgba(0, 0, 0, 0)"
-          onPress={() => cancelTicketTransfer(ticket)}
+          onPress={this.handleCancelTransferTicket}
         >
           <View style={ticketWalletStyles.bottomNavLinkContainer}>
             <Text style={ticketWalletStyles.bottomNavLinkText}>

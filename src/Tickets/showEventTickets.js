@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, ScrollView, Image} from 'react-native'
-import Carousel, {Pagination} from 'react-native-snap-carousel'
+import { Text, View, ScrollView, Image } from 'react-native'
+import Carousel, { Pagination } from 'react-native-snap-carousel'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Ticket from './Ticket'
 import SharedStyles from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
-import {Brightness} from 'expo'
-import {optimizeCloudinaryImage} from '../cloudinary'
+import { Brightness } from 'expo'
+import { optimizeCloudinaryImage } from '../cloudinary'
 
 // In case we cannot get a value for the brightness from
 // Brightness.getBrightnessAsync()
@@ -76,11 +76,11 @@ export default class EventsTicket extends Component {
   get eventAndTickets() {
     const {
       screenProps: {
-        store: {ticketsForEvent},
+        store: { ticketsForEvent },
       },
       navigation: {
         state: {
-          params: {activeTab, eventId},
+          params: { activeTab, eventId },
         },
       },
     } = this.props
@@ -117,23 +117,23 @@ export default class EventsTicket extends Component {
     }))
 
     const statusCriteria = 'Redeemed'
-    tickets.sort(function(a,b){
+    tickets.sort(function (a, b) {
       return a.status === statusCriteria && b.status !== statusCriteria ? 1 : a.status !== statusCriteria && b.status === statusCriteria ? -1 : 0
     });
 
     return tickets;
   }
 
-  _renderItem = ({item, _index}) => {
+  _renderItem = ({ item, _index }) => {
     const {
+      navigation,
       navigation: {
-        navigate,
         state: {
-          params: {activeTab},
+          params: { activeTab },
         },
       },
       screenProps: {
-        store: {redeemTicketInfo, cancelTicketTransfer},
+        store: { redeemTicketInfo, cancelTicketTransfer },
       },
     } = this.props
 
@@ -141,7 +141,7 @@ export default class EventsTicket extends Component {
       <Ticket
         activeTab={activeTab}
         ticket={item}
-        navigate={navigate}
+        navigation={navigation}
         redeemTicketInfo={redeemTicketInfo}
         cancelTicketTransfer={cancelTicketTransfer}
       />
@@ -149,9 +149,9 @@ export default class EventsTicket extends Component {
   }
 
   render() {
-    const {navigation} = this.props
-    const {fullWidth, itemWidth} = TicketWalletStyles
-    const {activeSlide} = this.state
+    const { navigation } = this.props
+    const { fullWidth, itemWidth } = TicketWalletStyles
+    const { activeSlide } = this.state
     const tickets = this.ticketData
 
     return (
@@ -188,7 +188,7 @@ export default class EventsTicket extends Component {
             sliderWidth={fullWidth}
             itemWidth={itemWidth}
             slideStyle={ticketWalletStyles.slideWrapper}
-            onSnapToItem={(index) => this.setState({activeSlide: index})}
+            onSnapToItem={(index) => this.setState({ activeSlide: index })}
             // The following line of code is a workaround for a bug. References:
             //
             // https://github.com/archriss/react-native-snap-carousel/issues/238
