@@ -25,8 +25,30 @@ class ContactList extends PureComponent {
     this.setState({ filteredContacts })
   }
 
-  render() {
+  _renderItem = ({ item, separators }) => {
     const { selectContact } = this.props;
+
+    if (!item.name || !item.phoneNumbers) return null
+
+    return (
+      <TouchableOpacity
+        style={[styles.rowContainer, { width: '100%' }]}
+        onPress={() => selectContact(item)}
+        onShowUnderlay={separators.highlight}
+        onHideUnderlay={separators.unhighlight}
+      >
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ flex: 1, flexDirection: 'column' }}>
+            <Text style={styles.bodyText}>{item.name}</Text>
+            <Text style={styles.helpText}>{item.phoneNumbers[0].number}</Text>
+          </View>
+          <Icon style={styles.rightIcon} name='chevron-right' />
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
+  render() {
     const { filteredContacts } = this.state;
     return (
       <View style={styles.flex1}>
@@ -36,28 +58,13 @@ class ContactList extends PureComponent {
           underlineColorAndroid="transparent"
           onChangeText={(text) => this.searchList(text)}
         />
-          <FlatList
-            keyExtractor={(item) => item.id}
-            style={{marginBottom: 15}}
-            data={filteredContacts}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-            renderItem={({ item, separators }) => (
-              <TouchableOpacity
-                style={[styles.rowContainer, { width: '100%' }]}
-                onPress={() => selectContact(item)}
-                onShowUnderlay={separators.highlight}
-                onHideUnderlay={separators.unhighlight}
-              >
-                <View style={{ flex: 1, flexDirection: 'row' }}>
-                  <View style={{ flex: 1, flexDirection: 'column' }}>
-                    <Text style={styles.bodyText}>{item.name}</Text>
-                    <Text style={styles.helpText}>{item.phoneNumbers[0].number}</Text>
-                  </View>
-                  <Icon style={styles.rightIcon} name='chevron-right' />
-                </View>
-              </TouchableOpacity>
-            )}
-          />
+        <FlatList
+          keyExtractor={(item) => item.id}
+          style={{ marginBottom: 15 }}
+          data={filteredContacts}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          renderItem={this._renderItem}
+        />
       </View>
     )
   }
