@@ -130,7 +130,7 @@ export default class Ticket extends Component {
 
       Alert.alert(
         'Transfer Cancelled',
-        'Tickets have been successfully cancelled!',
+        'The transfer has been successfully cancelled!',
         [{ text: 'OK', onPress: onDismiss }],
         { onDismiss }
       )
