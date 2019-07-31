@@ -128,22 +128,6 @@ export default class Ticket extends Component {
     } else {
       return (
         <View>
-          {false && ( // TODO: Re-enable when functionality is implemented -- issue #253
-            <View
-              style={[
-                ticketWalletStyles.bottomNavLinkContainer,
-                styles.borderRight,
-              ]}
-            >
-              <Icon
-                style={ticketWalletStyles.bottomNavIcon}
-                name="account-balance-wallet"
-              />
-              <Text style={ticketWalletStyles.bottomNavLinkText}>
-                ADD TO WALLET
-              </Text>
-            </View>
-          )}
           <TouchableHighlight
             underlayColor="rgba(0, 0, 0, 0)"
             onPress={() =>
@@ -269,15 +253,7 @@ export default class Ticket extends Component {
           </View>
         </View>
         <View style={ticketWalletStyles.ticketContainerBottom}>
-          <View style={[styles.flexRowFlexStartCenter, styles.padding]}>
-            {false && ( // TODO: Re-enable when functionality is implemented.
-              <View style={ticketWalletStyles.avatarContainer}>
-                <Image
-                  style={ticketWalletStyles.avatar}
-                  source={require('../../assets/avatar-female.png')}
-                />
-              </View>
-            )}
+          <View style={[styles.flexRowFlexStartCenter]}>
             <View>
               <Text style={ticketStyles.ticketHolderHeader}>
                 {ticket.ticketType}
