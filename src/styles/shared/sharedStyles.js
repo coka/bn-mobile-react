@@ -1,7 +1,10 @@
 import {StyleSheet, Dimensions} from 'react-native'
-import {scale, verticalScale, moderateScale} from 'react-native-size-matters'
+import {moderateScale} from 'react-native-size-matters'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
+const smallHeight = 650
+
+export const isSmallDevice = fullHeight < smallHeight
 
 export const primaryColor = '#FF20B1'
 export const secondaryColor = '#707CED'
@@ -551,6 +554,16 @@ const SharedStyles = {
     width: '100%',
     backgroundColor: borderColor,
   },
+
+  //ICONS
+  rightIcon: {
+    textAlign: 'right',
+    alignItems: 'center',
+    alignContent: 'center',
+    color: textColor,
+    fontSize: globalFontSize,
+    paddingRight: globalPaddingSmall,
+  }
 }
 
 function createStyles(overrides = {}) {

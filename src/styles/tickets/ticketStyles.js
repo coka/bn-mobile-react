@@ -1,4 +1,5 @@
 import {
+  isSmallDevice,
   white,
   sectionHeaderColor,
   globalFontRegular,
@@ -11,8 +12,9 @@ import {
   globalPaddingSmall,
   globalPaddingTiny,
   globalMargin,
+  globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -24,7 +26,7 @@ const TicketStyles = {
     borderTopRightRadius: 6,
     borderTopLeftRadius: 6,
     overflow: 'hidden',
-    marginTop: globalMargin,
+    marginTop: isSmallDevice ? globalMarginSmall : globalMargin,
     padding: globalPadding,
   },
   detailsContainer: {
@@ -127,7 +129,7 @@ const TicketStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...TicketStyles, ...overrides})
+  return StyleSheet.create({ ...TicketStyles, ...overrides })
 }
 
 export default {
