@@ -32,18 +32,18 @@ class ContactList extends PureComponent {
 
     return (
       <TouchableOpacity
-        style={[styles.rowContainer, { width: '100%' }]}
+        style={[styles.rowContainer, { marginBottom: 2, width: '100%' }]}
         onPress={() => selectContact(item)}
         onShowUnderlay={separators.highlight}
         onHideUnderlay={separators.unhighlight}
       >
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
-            <Text style={styles.bodyText}>{item.name}</Text>
-            <Text style={styles.helpText}>{item.phoneNumbers[0].number}</Text>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ flex: 1, flexDirection: 'column' }}>
+              <Text style={styles.bodyText}>{item.name}</Text>
+              <Text style={styles.helpText}>{item.phoneNumbers[0].number}</Text>
+            </View>
+            <Icon style={styles.rightIcon} name='chevron-right' />
           </View>
-          <Icon style={styles.rightIcon} name='chevron-right' />
-        </View>
       </TouchableOpacity>
     )
   }
