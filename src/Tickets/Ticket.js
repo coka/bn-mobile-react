@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
@@ -7,6 +7,7 @@ import {
   Platform,
   TouchableHighlight,
   Image,
+  Alert,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import QRCode from 'react-native-qrcode'
@@ -20,11 +21,11 @@ const styles = SharedStyles.createStyles()
 const ticketStyles = TicketStyles.createStyles()
 const ticketWalletStyles = TicketWalletStyles.createStyles()
 
-import {Image as CachedImage} from 'react-native-expo-image-cache'
+import { Image as CachedImage } from 'react-native-expo-image-cache'
 
 /* eslint-disable camelcase */
 
-function TicketBottomRow({children}) {
+function TicketBottomRow({ children }) {
   return <View style={ticketWalletStyles.bottomNav}>{children}</View>
 }
 
@@ -38,7 +39,7 @@ function staticBottomText(text) {
 
 export default class Ticket extends Component {
   static propTypes = {
-    navigate: PropTypes.func.isRequired,
+    navigation: PropTypes.object.isRequired,
     ticket: PropTypes.object.isRequired,
     activeTab: PropTypes.string,
   }
@@ -59,7 +60,7 @@ export default class Ticket extends Component {
   }
 
   get skipQR() {
-    const {redeem_key} = this.state
+    const { redeem_key } = this.state
 
     return (
       !redeem_key ||
@@ -69,9 +70,9 @@ export default class Ticket extends Component {
   }
 
   buildQRText() {
-    const {redeem_key} = this.state
+    const { redeem_key } = this.state
     const {
-      ticket: {ticketId, eventId},
+      ticket: { ticketId, eventId },
     } = this.props
 
     if (this.skipQR) {
@@ -80,14 +81,14 @@ export default class Ticket extends Component {
 
     const qrObj = {
       type: 0,
-      data: {redeem_key, id: ticketId, event_id: eventId, extra: ''},
+      data: { redeem_key, id: ticketId, event_id: eventId, extra: '' },
     }
 
-    this.setState({qrText: JSON.stringify(qrObj)})
+    this.setState({ qrText: JSON.stringify(qrObj) })
   }
 
   async ticketDetails() {
-    const {redeemTicketInfo, ticket} = this.props
+    const { redeemTicketInfo, ticket } = this.props
     const details = await redeemTicketInfo(ticket.ticketId)
 
     if (details) {
@@ -105,8 +106,8 @@ export default class Ticket extends Component {
   }
 
   openVenueDirections = () => {
-    const {ticket} = this.props
-    const {venue} = ticket
+    const { ticket } = this.props
+    const { venue } = ticket
     const daddr = encodeURIComponent(
       `${venue.address} ${venue.postal_code}, ${venue.city}, ${venue.country}`
     )
@@ -118,36 +119,39 @@ export default class Ticket extends Component {
     }
   }
 
+  handleCancelTransferTicket = async () => {
+    try {
+      const { cancelTicketTransfer, ticket, navigation } = this.props
+      await cancelTicketTransfer(ticket);
+
+      const onDismiss = () => {
+        navigation.popToTop()
+      }
+
+      Alert.alert(
+        'Transfer Cancelled',
+        'The transfer has been successfully cancelled!',
+        [{ text: 'OK', onPress: onDismiss }],
+        { onDismiss }
+      )
+    } catch (error) {
+    }
+  }
+
   get upcomingTabText() {
-    const {navigate, ticket, activeTab} = this.props
-    const {eventId, ticketId, status} = ticket
-    const {firstName, lastName} = this.state
+    const { navigation, ticket, activeTab } = this.props
+    const { eventId, ticketId, status } = ticket
+    const { firstName, lastName } = this.state
 
     if (status === 'Redeemed') {
       return staticBottomText('Redeemed')
     } else {
       return (
         <View>
-          {false && ( // TODO: Re-enable when functionality is implemented -- issue #253
-            <View
-              style={[
-                ticketWalletStyles.bottomNavLinkContainer,
-                styles.borderRight,
-              ]}
-            >
-              <Icon
-                style={ticketWalletStyles.bottomNavIcon}
-                name="account-balance-wallet"
-              />
-              <Text style={ticketWalletStyles.bottomNavLinkText}>
-                ADD TO WALLET
-              </Text>
-            </View>
-          )}
           <TouchableHighlight
             underlayColor="rgba(0, 0, 0, 0)"
             onPress={() =>
-              navigate('TransferTickets', {
+              navigation.navigate('TransferTickets', {
                 activeTab,
                 ticketId,
                 eventId,
@@ -168,33 +172,54 @@ export default class Ticket extends Component {
     }
   }
 
+  get transferBottomText() {
+
+    return (
+      <View>
+        <TouchableHighlight
+          underlayColor="rgba(0, 0, 0, 0)"
+          onPress={this.handleCancelTransferTicket}
+        >
+          <View style={ticketWalletStyles.bottomNavLinkContainer}>
+            <Text style={ticketWalletStyles.bottomNavLinkText}>
+              CANCEL TRANSFER
+            </Text>
+            <Icon style={ticketWalletStyles.bottomNavIcon} name="launch" />
+          </View>
+        </TouchableHighlight>
+      </View>
+    )
+  }
+
   get bottomRow() {
-    switch (this.props.activeTab) {
-    case 'upcoming':
-      return this.upcomingTabText
-    case 'past':
-      return staticBottomText('This event has ended')
-    case 'transfer':
-      return staticBottomText('This ticket was transferred')
-    default:
-      return null
+    const { activeTab } = this.props
+    switch (activeTab) {
+      case 'upcoming':
+        return this.upcomingTabText
+      case 'past':
+        return staticBottomText('This event has ended')
+      case 'transfer':
+        return this.transferBottomText
+      default:
+        return null
     }
   }
 
   get qrContainer() {
-    const {activeTab} = this.props
+    const { activeTab } = this.props
+    const { qrText } = this.state
 
     if (activeTab === 'upcoming') {
-      if (this.state.qrText) {
+      if (qrText) {
         return (
           // https://github.com/cssivision/react-native-qrcode/issues/68
           // Fix from https://github.com/cssivision/react-native-qrcode/issues/68#issuecomment-455791280
-          <View style={{overflow: 'hidden'}}>
+          <View style={{ overflow: 'hidden' }}>
             <QRCode
               size={200}
               fgColor="white"
               bgColor="black"
-              value={this.state.qrText}
+              value={qrText}
             />
           </View>
         )
@@ -217,7 +242,7 @@ export default class Ticket extends Component {
     } else {
       return (
         <Image
-          style={{width: 150, height: 150}}
+          style={{ width: 150, height: 150 }}
           source={require('../../assets/heart-white.png')}
         />
       )
@@ -225,8 +250,8 @@ export default class Ticket extends Component {
   }
 
   render() {
-    const {ticket} = this.props
-    const {firstName, lastName} = this.state
+    const { ticket } = this.props
+    const { firstName, lastName } = this.state
 
     return (
       <View>
@@ -270,14 +295,6 @@ export default class Ticket extends Component {
         </View>
         <View style={ticketWalletStyles.ticketContainerBottom}>
           <View style={[styles.flexRowFlexStartCenter, styles.padding]}>
-            {false && ( // TODO: Re-enable when functionality is implemented.
-              <View style={ticketWalletStyles.avatarContainer}>
-                <Image
-                  style={ticketWalletStyles.avatar}
-                  source={require('../../assets/avatar-female.png')}
-                />
-              </View>
-            )}
             <View>
               <Text style={ticketStyles.ticketHolderHeader}>
                 {ticket.ticketType}
