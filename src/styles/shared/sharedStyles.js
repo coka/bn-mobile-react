@@ -554,6 +554,16 @@ const SharedStyles = {
     width: '100%',
     backgroundColor: borderColor,
   },
+
+  //ICONS
+  rightIcon: {
+    textAlign: 'right',
+    alignItems: 'center',
+    alignContent: 'center',
+    color: textColor,
+    fontSize: globalFontSize,
+    paddingRight: globalPaddingSmall,
+  }
 }
 
 function createStyles(overrides = {}) {
