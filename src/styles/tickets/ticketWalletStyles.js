@@ -1,4 +1,5 @@
 import {
+  isSmallDevice,
   primaryColor,
   white,
   containerDarkColor,
@@ -52,6 +53,7 @@ const TicketWalletStyles = {
   ticketContainerBottom: {
     backgroundColor: white,
     marginTop: -10,
+    padding: isSmallDevice ? globalPaddingSmall : globalPadding,
     width: fullWidth - 43,
   },
   detailsContainerBottom: {

@@ -2,6 +2,9 @@ import {StyleSheet, Dimensions} from 'react-native'
 import {moderateScale} from 'react-native-size-matters'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
+const smallHeight = 650
+
+export const isSmallDevice = fullHeight < smallHeight
 
 export const primaryColor = '#FF20B1'
 export const secondaryColor = '#707CED'

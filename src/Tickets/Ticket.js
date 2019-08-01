@@ -294,7 +294,7 @@ export default class Ticket extends Component {
           </View>
         </View>
         <View style={ticketWalletStyles.ticketContainerBottom}>
-          <View style={[styles.flexRowFlexStartCenter, styles.padding]}>
+          <View style={[styles.flexRowFlexStartCenter]}>
             <View>
               <Text style={ticketStyles.ticketHolderHeader}>
                 {ticket.ticketType}
