@@ -389,16 +389,6 @@ export default class EventsIndex extends Component {
           onEndReachedThreshold={0.5}
         />
 
-        {false && (
-          <Text
-            style={
-              styles.sectionHeader // TODO: Re-enable when functionality is implemented.
-            }
-          >
-            Hot This Week
-          </Text>
-        )}
-
         <Animated.View
           style={[
             navigationStyles.scrollHeaderContainer,
