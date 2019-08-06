@@ -1,9 +1,6 @@
 import {
-  tertiaryColor,
-  white,
   textColor,
   borderColor,
-  searchIconColor,
   inputBackgroundColor,
   disabledColor,
   globalFontRegular,
@@ -16,9 +13,7 @@ import {
   globalMargin,
   globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
-const fullHeight = Dimensions.get('window').height
-const fullWidth = Dimensions.get('window').width
+import {StyleSheet, Dimensions} from 'react-native'
 
 const FormStyles = {
   // CONTAINER STYLES
