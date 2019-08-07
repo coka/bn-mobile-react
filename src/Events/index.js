@@ -16,8 +16,6 @@ import {NavigationEvents} from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import ModalDropdown from 'react-native-modal-dropdown'
 import SharedStyles from '../styles/shared/sharedStyles'
-import FormStyles from '../styles/shared/formStyles'
-import SlideShowStyles from '../styles/shared/slideshowStyles'
 import NavigationStyles from '../styles/shared/navigationStyles'
 import ModalStyles from '../styles/shared/modalStyles'
 import EventItemView from './event_card'
@@ -27,8 +25,6 @@ import TicketStyles from '../styles/tickets/ticketStyles'
 import emptyState from '../../assets/icon-empty-state.png'
 
 const styles = SharedStyles.createStyles()
-const formStyles = FormStyles.createStyles()
-const slideshowStyles = SlideShowStyles.createStyles()
 const navigationStyles = NavigationStyles.createStyles()
 const modalStyles = ModalStyles.createStyles()
 const ticketStyles = TicketStyles.createStyles()
@@ -73,7 +69,6 @@ export default class EventsIndex extends Component {
       duration: 2000,
       easing: Easing.linear,
       selectedLocationId: state.selectedLocationId || 2,
-      mainFavorite: true,
       searchText: '',
     }
   }
@@ -138,10 +133,6 @@ export default class EventsIndex extends Component {
     } = this.props
 
     return events
-  }
-
-  setFavorite = (mainFavorite) => {
-    this.setState({mainFavorite})
   }
 
   get currentLocationDisplayName() {
@@ -351,7 +342,6 @@ export default class EventsIndex extends Component {
         store: {toggleInterest},
       },
     } = this.props
-    const {mainFavorite} = this.state
     const events = this.events
 
     return (
@@ -398,93 +388,6 @@ export default class EventsIndex extends Component {
           onEndReached={this._handleLoadMore}
           onEndReachedThreshold={0.5}
         />
-
-        {false && (
-          <Text
-            style={
-              styles.sectionHeader // TODO: Re-enable when functionality is implemented.
-            }
-          >
-            Hot This Week
-          </Text>
-        )}
-
-        {false && (
-          <TouchableHighlight
-            underlayColor="rgba(0, 0, 0, 0)"
-            onPress={() => navigate('EventsShow', {name: 'Childish Gambino'})}
-          >
-            <View style={slideshowStyles.slideshowContainer}>
-              <Image
-                style={slideshowStyles.slideShowImage}
-                source={require('../../assets/featured-1.png')}
-              />
-              <Image
-                style={slideshowStyles.slideShowImage}
-                source={require('../../assets/featured-img-overlay.png')}
-              />
-
-              <View style={slideshowStyles.detailsContainer}>
-                <View style={slideshowStyles.sectionTop}>
-                  <TouchableHighlight
-                    underlayColor="rgba(0, 0, 0, 0)"
-                    onPress={() => this.setFavorite(!mainFavorite)}
-                  >
-                    <View
-                      style={
-                        mainFavorite ?
-                          styles.iconLinkCircleContainerActive :
-                          styles.iconLinkCircleContainer
-                      }
-                    >
-                      <Icon
-                        style={
-                          mainFavorite ?
-                            styles.iconLinkCircleActive :
-                            styles.iconLinkCircle
-                        }
-                        name="star"
-                      />
-                    </View>
-                  </TouchableHighlight>
-                  <View style={styles.avatarContainer}>
-                    <Image
-                      style={styles.avatar}
-                      source={require('../../assets/avatar-male.png')}
-                    />
-                    <Image
-                      style={styles.avatar}
-                      source={require('../../assets/avatar-female.png')}
-                    />
-                  </View>
-                </View>
-
-                <View style={slideshowStyles.sectionMiddle}>
-                  <Icon
-                    style={slideshowStyles.slideShowIconLinkLeft}
-                    name="keyboard-arrow-left"
-                  />
-                  <Icon
-                    style={slideshowStyles.slideShowIconLinkRight}
-                    name="keyboard-arrow-right"
-                  />
-                </View>
-                <View>
-                  <View style={styles.priceTagContainer}>
-                    <Text style={styles.priceTag}>$30</Text>
-                  </View>
-                  <Text style={slideshowStyles.header}>Childish Gambino</Text>
-                  <View style={styles.flexRowSpaceBetween}>
-                    <Text style={slideshowStyles.details}>
-                      Fox Theater &bull; Oakland, CA
-                    </Text>
-                    <Text style={slideshowStyles.details}>July 15, 2018</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </TouchableHighlight>
-        )}
 
         <Animated.View
           style={[

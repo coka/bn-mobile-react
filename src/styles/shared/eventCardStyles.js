@@ -51,8 +51,11 @@ const EventCardStyles = {
     backgroundColor: whiteTransparent,
     borderRadius: 100 / 2,
     height: 28,
-    padding: globalPaddingTiny,
+    paddingLeft: 1,
+    paddingTop: 1,
     width: 28,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   iconLinkCircleSmall: {
     color: white,
@@ -62,8 +65,12 @@ const EventCardStyles = {
     backgroundColor: white,
     borderRadius: 100 / 2,
     height: 28,
-    padding: globalPaddingTiny,
+    paddingLeft: 1,
+    paddingTop: 1,
     width: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+
   },
   iconLinkCircleSmallActive: {
     color: primaryColor,
