@@ -110,7 +110,7 @@ export default class Details extends Component {
   }
 
   render() {
-    const { event } = this.props
+    const { event, loading } = this.props
     const { venue } = event
     const { event_start: eventStart, door_time: doorTime } = eventDateTimes(
       event.localized_times
@@ -139,15 +139,15 @@ export default class Details extends Component {
               </Text>
             </View>
           </View>
-
           <View style={[styles.flexRowSpaceBetween, styles.paddingTop]}>
             <TouchableHighlight
               style={[interestedStyles.button, styles.marginRightTiny]}
               onPress={this.toggleInterest}
+              disabled={loading}
             >
               <View style={styles.flexRowCenter}>
-                <Icon style={interestedStyles.icon} name="star" />
-                <Text style={interestedStyles.text}>I&apos;m Interested</Text>
+                <Icon style={interestedStyles.icon} name={!loading ? 'star' : 'autorenew'} />
+                <Text style={interestedStyles.text}>{!loading ? 'I\'m Interested' : 'Please wait'}</Text>
               </View>
             </TouchableHighlight>
             <TouchableHighlight

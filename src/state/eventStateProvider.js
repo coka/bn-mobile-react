@@ -278,6 +278,7 @@ class EventsContainer extends Container {
     const { remove, create } = server.events.interests
 
     try {
+      this.setState({ loading: true })
       if (user_is_interested) {
         await remove({ event_id: id })
       } else {
@@ -286,10 +287,11 @@ class EventsContainer extends Container {
     } catch (error) {
       apiErrorAlert(error, 'There was a problem selecting this event.')
     } finally {
-      this.getEvents({replaceEvents: true})
+      this.getEvents({ replaceEvents: true })
       if (singleEvent) {
         this.getEvent(id)
       }
+      this.setState({ loading: false })
     }
   }
 
