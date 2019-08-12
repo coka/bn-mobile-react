@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {createStackNavigator} from 'react-navigation'
+import { createStackNavigator } from 'react-navigation'
 import EventRoutes from '../Events/routes'
-import {Subscribe} from 'unstated'
-import {EventsContainer} from '../state/eventStateProvider'
-import {TicketsContainer} from '../state/ticketStateProvider'
-import {CartContainer} from '../state/cartStateProvider'
-import {AuthContainer} from '../state/authStateProvider'
-import {NetworkContainer} from '../state/networkStateProvider'
+import { Subscribe } from 'unstated'
+import { EventsContainer } from '../state/eventStateProvider'
+import { TicketsContainer } from '../state/ticketStateProvider'
+import { CartContainer } from '../state/cartStateProvider'
+import { AuthContainer } from '../state/authStateProvider'
+import { NetworkContainer } from '../state/networkStateProvider'
 
 const EventsStack = createStackNavigator(
   {
@@ -28,7 +28,7 @@ export default class eventStackWithStore extends Component {
   }
 
   // Hide bottom tab bar on any Event page that isnt the index
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     let tabBarVisible = true
 
     if (navigation.state.index > 0) {

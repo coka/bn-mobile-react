@@ -301,6 +301,26 @@ class EventsContainer extends Container {
     ticketTypesById[ticket_type.id] = ticket_type
     await this.setState({ ticketTypesById })
   }
+
+
+  clearEventState = async () => {
+    this.setState({
+      total: null,
+      page: 0,
+      limit: 10,
+      loading: false,
+      query: '',
+      suggestedNames: [],
+      events: [],
+      eventsById: {},
+      ticketTypesById: {},
+      paging: {},
+      lastUpdate: null,
+      locations: [],
+      selectedLocationId: null,
+      selectedEvent: {},
+    })
+  }
 }
 
 export { EventsContainer }
