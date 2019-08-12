@@ -126,15 +126,16 @@ class EventsContainer extends Container {
   }
 
   _fetchLocations = async () => {
-    try {
-      const {
-        data: { data: locations },
-      } = await server.regions.index()
+    return []
+    // try {
+    //   const {
+    //     data: { data: locations },
+    //   } = await server.regions.index()
 
-      await this.setState({ locations })
-    } catch (error) {
-      apiErrorAlert(error)
-    }
+    //   await this.setState({ locations })
+    // } catch (error) {
+    //   apiErrorAlert(error)
+    // }
   }
 
   _cacheResourcesAsync = async (eventImagePrefetch) => {
