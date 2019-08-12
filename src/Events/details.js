@@ -1,12 +1,12 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Text, Platform, View, Linking, TouchableHighlight} from 'react-native'
+import { Text, Platform, View, Linking, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
-import {eventDateTimes} from '../time'
-import {map} from 'lodash'
-import {shareEvent} from '../sharing'
+import { eventDateTimes } from '../time'
+import { map } from 'lodash'
+import { shareEvent } from '../sharing'
 
 /*  eslint-disable camelcase */
 
@@ -40,7 +40,7 @@ export default class Details extends Component {
   }
 
   toggleInterest = () => {
-    const {onInterested, event} = this.props
+    const { onInterested, event } = this.props
 
     // set 'true' for individual event
     onInterested(event, true)
@@ -48,7 +48,7 @@ export default class Details extends Component {
 
   get topLineInfo() {
     const {
-      event: {top_line_info},
+      event: { top_line_info },
     } = this.props
 
     if (top_line_info) {
@@ -64,7 +64,7 @@ export default class Details extends Component {
 
   get artistNames() {
     const {
-      event: {artists},
+      event: { artists },
     } = this.props
 
     if (!artists || artists.length === 0) {
@@ -76,7 +76,7 @@ export default class Details extends Component {
 
   get ageLimit() {
     const {
-      event: {age_limit},
+      event: { age_limit },
     } = this.props
 
 
@@ -91,152 +91,13 @@ export default class Details extends Component {
       //It is a number so use the pre-canned version
       return `You must be ${age_limit} to enter this event.`
     }
-
-
-  }
-
-  get youtube() {
-    return null
-
-    // return (
-    //   <View>
-    //     <View style={eventDetailsStyles.iconSectionHeaderContainer}>
-    //       <Image
-    //         style={eventDetailsStyles.iconYoutube}
-    //         source={require('../../assets/icon-youtube.png')}
-    //       />
-    //       <Text style={eventDetailsStyles.iconSectionHeader}>YOUTUBE</Text>
-    //     </View>
-
-    //     <View style={eventDetailsStyles.youtubeVideoContainer}>
-    //       <Image
-    //         style={eventDetailsStyles.videoBkgd}
-    //         source={require('../../assets/video-youtube-bkgd.png')}
-    //       />
-    //       <Image
-    //         style={eventDetailsStyles.videoBkgd}
-    //         source={require('../../assets/video-bkgd-overlay.png')}
-    //       />
-    //       <Icon style={eventDetailsStyles.iconPlayLink} name="play-circle-outline" />
-    //     </View>
-    //   </View>
-    // )
-  }
-
-  get interested() {
-    return null
-
-    // return (
-    //   <View style={eventDetailsStyles.eventDetailsContainer}>
-    //     <View style={eventDetailsStyles.eventDetailsLeft}>
-    //       <View style={eventDetailsStyles.avatarContainer}>
-    //         <Image
-    //           style={eventDetailsStyles.avatar}
-    //           source={require('../../assets/avatar-male.png')}
-    //         />
-    //         <Image
-    //           style={eventDetailsStyles.avatar}
-    //           source={require('../../assets/avatar-female-2.png')}
-    //         />
-    //         <Image
-    //           style={eventDetailsStyles.avatar}
-    //           source={require('../../assets/avatar-male-2.png')}
-    //         />
-    //         <Image
-    //           style={eventDetailsStyles.avatar}
-    //           source={require('../../assets/avatar-female-3.png')}
-    //         />
-    //         <Image
-    //           style={eventDetailsStyles.avatar}
-    //           source={require('../../assets/avatar-female.png')}
-    //         />
-    //         <View style={eventDetailsStyles.attendeeContainer}>
-    //           <Text style={eventDetailsStyles.attendeeNumber}>+{event.total_interest}</Text>
-    //         </View>
-    //       </View>
-    //     </View>
-    //   </View>
-    // )
-  }
-
-  get instagram() {
-    return null
-
-    // return  (
-    //   <View>
-    //     <View style={eventDetailsStyles.iconSectionHeaderContainer}>
-    //       <Image
-    //         style={eventDetailsStyles.iconInstagram}
-    //         source={require('../../assets/icon-instagram.png')}
-    //       />
-    //       <Text style={eventDetailsStyles.iconSectionHeader}>INSTAGRAM</Text>
-    //     </View>
-
-    //     <View style={imageGridStyles.imageGridContainer}>
-    //       <Image
-    //         style={imageGridStyles.image}
-    //         source={require('../../assets/image-grid-1.png')}
-    //       />
-    //       <Image
-    //         style={imageGridStyles.image}
-    //         source={require('../../assets/image-grid-2.png')}
-    //       />
-    //       <Image
-    //         style={imageGridStyles.image}
-    //         source={require('../../assets/image-grid-3.png')}
-    //       />
-    //     </View>
-    //     <View style={imageGridStyles.imageGridContainer}>
-    //       <Image
-    //         style={imageGridStyles.image}
-    //         source={require('../../assets/image-grid-1.png')}
-    //       />
-    //       <Image
-    //         style={imageGridStyles.image}
-    //         source={require('../../assets/image-grid-2.png')}
-    //       />
-    //       <Image
-    //         style={imageGridStyles.image}
-    //         source={require('../../assets/image-grid-3.png')}
-    //       />
-    //     </View>
-    //   </View>
-    // )
-  }
-
-  get spotify() {
-    return null
-
-    // return (
-    //   <View>
-    //     <View style={eventDetailsStyles.iconSectionHeaderContainer}>
-    //       <Image
-    //         style={eventDetailsStyles.iconSpotify}
-    //         source={require('../../assets/icon-spotify.png')}
-    //       />
-    //       <Text style={eventDetailsStyles.iconSectionHeader}>SPOTIFY</Text>
-    //     </View>
-
-    //     <View style={eventDetailsStyles.imagePlaceholderContainer}>
-    //       <Image
-    //         style={eventDetailsStyles.imagePlaceholder}
-    //         source={require('../../assets/spotify-placeholder.png')}
-    //       />
-    //       <View style={eventDetailsStyles.sliderArrowContainer}>
-    //         <Icon style={eventDetailsStyles.slideShowIconLinkLeft} name="keyboard-arrow-left" />
-    //         <Icon style={eventDetailsStyles.slideShowIconLinkRight} name="keyboard-arrow-right" />
-    //       </View>
-    //     </View>
-
-    //   </View>
-    // )
   }
 
   onPressShare = () => shareEvent(this.props.event)
 
   openVenueDirections = () => {
-    const {event} = this.props
-    const {venue} = event
+    const { event } = this.props
+    const { venue } = event
     const daddr = encodeURIComponent(
       `${venue.address} ${venue.postal_code}, ${venue.city}, ${venue.country}`
     )
@@ -249,9 +110,9 @@ export default class Details extends Component {
   }
 
   render() {
-    const {event} = this.props
-    const {venue} = event
-    const {event_start: eventStart, door_time: doorTime} = eventDateTimes(
+    const { event, loading } = this.props
+    const { venue } = event
+    const { event_start: eventStart, door_time: doorTime } = eventDateTimes(
       event.localized_times
     )
     const interestedStyles = interestedStylesForEvent(event.user_is_interested)
@@ -278,15 +139,15 @@ export default class Details extends Component {
               </Text>
             </View>
           </View>
-
           <View style={[styles.flexRowSpaceBetween, styles.paddingTop]}>
             <TouchableHighlight
               style={[interestedStyles.button, styles.marginRightTiny]}
               onPress={this.toggleInterest}
+              disabled={loading}
             >
               <View style={styles.flexRowCenter}>
-                <Icon style={interestedStyles.icon} name="star" />
-                <Text style={interestedStyles.text}>I&apos;m Interested</Text>
+                <Icon style={interestedStyles.icon} name={!loading ? 'star' : 'autorenew'} />
+                <Text style={interestedStyles.text}>{!loading ? 'I\'m Interested' : 'Please wait'}</Text>
               </View>
             </TouchableHighlight>
             <TouchableHighlight
@@ -304,8 +165,6 @@ export default class Details extends Component {
               </View>
             </TouchableHighlight>
           </View>
-
-          {this.interested}
 
           <View style={eventDetailsStyles.eventDescriptionContainer}>
             <View style={eventDetailsStyles.eventDescriptionHeaderWrapper}>
@@ -370,10 +229,6 @@ export default class Details extends Component {
               {event.additional_info}
             </Text>
           </View>
-
-          {this.youtube}
-          {this.instagram}
-          {this.spotify}
         </View>
         <View style={eventDetailsStyles.spacerFooter} />
       </View>

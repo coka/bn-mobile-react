@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, TouchableHighlight} from 'react-native'
+import { Text, View, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import EventCardStyles from '../styles/shared/eventCardStyles'
-import {eventDateTimes} from '../time'
-import {toDollars} from '../constants/money'
-import {optimizeCloudinaryImage} from '../cloudinary'
-import {Image} from 'react-native-expo-image-cache'
+import { eventDateTimes } from '../time'
+import { toDollars } from '../constants/money'
+import { optimizeCloudinaryImage } from '../cloudinary'
+import { Image } from 'react-native-expo-image-cache'
 
 const styles = SharedStyles.createStyles()
 const eventCardStyles = EventCardStyles.createStyles()
@@ -19,8 +19,27 @@ export default class EventsIndex extends Component {
     onInterested: PropTypes.func,
   }
 
-  setFavorite = () => {
-    this.props.onInterested(this.props.event)
+  constructor(props) {
+    super(props)
+    this.state = {
+      favorite: props.event.user_is_interested
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { event } = this.props
+    if (nextProps.event.user_is_interested !== event.user_is_interested) {
+      this.setState({ favorite: nextProps.event.user_is_interested })
+    }
+  }
+
+  setFavorite = (e) => {
+    e.stopPropagation()
+    const { onInterested, event } = this.props
+    onInterested(event, true)
+    this.setState(prevState => ({
+      favorite: !prevState.favorite,
+    }))
   }
 
   get scheduleText() {
@@ -31,7 +50,7 @@ export default class EventsIndex extends Component {
 
   get priceTag() {
     const {
-      event: {min_ticket_price},
+      event: { min_ticket_price },
     } = this.props
 
     if (min_ticket_price) {
@@ -51,7 +70,7 @@ export default class EventsIndex extends Component {
   get location() {
     const {
       event: {
-        venue: {city, state},
+        venue: { city, state },
       },
     } = this.props
 
@@ -59,7 +78,8 @@ export default class EventsIndex extends Component {
   }
 
   render() {
-    const {onPress, event} = this.props
+    const { onPress, event } = this.props
+    const { favorite } = this.state
 
     return (
       <TouchableHighlight underlayColor="#fff" onPress={onPress}>
@@ -78,14 +98,14 @@ export default class EventsIndex extends Component {
                 >
                   <View
                     style={
-                      event.user_is_interested ?
+                      favorite ?
                         eventCardStyles.iconLinkCircleContainerSmallActive :
                         eventCardStyles.iconLinkCircleContainerSmall
                     }
                   >
                     <Icon
                       style={
-                        event.user_is_interested ?
+                        favorite ?
                           eventCardStyles.iconLinkCircleSmallActive :
                           eventCardStyles.iconLinkCircleSmall
                       }
