@@ -258,7 +258,8 @@ export default class EventsIndex extends Component {
           <Animated.Text style={[styles.header, {opacity}]}>
             Explore
           </Animated.Text>
-          <ModalDropdown
+          {/* Removed due to issue #118 */}
+          {/* <ModalDropdown
             ref={(ref) => {
               this._dropdown = ref
             }}
@@ -278,7 +279,7 @@ export default class EventsIndex extends Component {
               </Text>
               <Icon style={styles.iconLink} name="keyboard-arrow-down" />
             </View>
-          </ModalDropdown>
+          </ModalDropdown> */}
         </View>
 
         <EventSearch navigate={navigate} store={store} />
