@@ -37,23 +37,31 @@ class ContactList extends PureComponent {
         onShowUnderlay={separators.highlight}
         onHideUnderlay={separators.unhighlight}
       >
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            <View style={{ flex: 1, flexDirection: 'column' }}>
-              <Text style={styles.bodyText}>{item.name}</Text>
-              <Text style={styles.helpText}>{item.phoneNumbers[0].number}</Text>
-            </View>
-            <Icon style={styles.rightIcon} name='chevron-right' />
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ flex: 1, flexDirection: 'column' }}>
+            <Text style={styles.bodyText}>{item.name}</Text>
+            <Text style={styles.helpText}>{item.phoneNumbers[0].number}</Text>
           </View>
+          <Icon style={styles.rightIcon} name='chevron-right' />
+        </View>
       </TouchableOpacity>
     )
   }
+
+  emptyListComponent = () => (
+    <View style={[styles.flex1, styles.flexRowCenter]}>
+      <Text style={styles.bodyTextLight}>
+        Contact List is Empty
+      </Text>
+    </View>
+  )
 
   render() {
     const { filteredContacts } = this.state;
     return (
       <View style={styles.flex1}>
         <TextInput
-          style={[formStyles.input, { marginBottom: 0 }]}
+          style={[formStyles.input, styles.marginBottomTiny]}
           placeholder="Type here"
           underlineColorAndroid="transparent"
           onChangeText={(text) => this.searchList(text)}
@@ -64,6 +72,7 @@ class ContactList extends PureComponent {
           data={filteredContacts}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           renderItem={this._renderItem}
+          ListEmptyComponent={this.emptyListComponent}
         />
       </View>
     )
