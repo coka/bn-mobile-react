@@ -150,7 +150,8 @@ export default class TransferTickets extends Component {
     const { checkboxes } = this.state
     const keys = Object.keys(checkboxes)
 
-    return keys.filter((key) => checkboxes[key])
+    return keys.filter((key)
+      => checkboxes[key])
   }
 
   setChecked = (id, bool) => {
@@ -200,7 +201,8 @@ export default class TransferTickets extends Component {
     this.setState({ isSubmitting: true })
 
     const { checkboxes, emailOrPhone } = this.state
-    const ticketIds = Object.keys(checkboxes).filter((key) => checkboxes[key])
+    const ticketIds = Object.keys(checkboxes).filter((key)
+      => checkboxes[key])
 
     try {
       await screenProps.store.transferTickets(
@@ -242,9 +244,9 @@ export default class TransferTickets extends Component {
     })
   }
 
-  selectNumberFromContacts = (contact) => {
+  selectEmailOrPhone = (emailOrPhone) => {
     this.setState({
-      emailOrPhone: contact.phoneNumbers[0].number
+      emailOrPhone
     })
     this.closeContactList();
   }
@@ -335,7 +337,7 @@ export default class TransferTickets extends Component {
                 </ScrollView>
               </View>
               :
-              <ContactList contacts={contacts} selectContact={this.selectNumberFromContacts} />
+              <ContactList contacts={contacts} selectEmailOrPhone={this.selectEmailOrPhone} />
           }
           {!openContactList && <View style={[styles.buttonContainer, styles.marginHorizontal]}>
             <BusyButton
