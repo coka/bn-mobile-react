@@ -4,11 +4,9 @@ import {View, Text, TextInput, FlatList, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles';
 import FormStyles from '../styles/shared/formStyles'
-import ModalStyles from '../styles/shared/modalStyles'
 
 const styles = SharedStyles.createStyles()
 const formStyles = FormStyles.createStyles()
-const modalStyles = ModalStyles.createStyles()
 
 class ContactList extends PureComponent {
 
