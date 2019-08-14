@@ -1,13 +1,14 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {createStackNavigator} from 'react-navigation'
-import {Subscribe} from 'unstated'
-import {AuthContainer} from '../state/authStateProvider'
-import {EventManagerContainer} from '../state/eventManagerStateProvider'
-import {NetworkContainer} from '../state/networkStateProvider'
-import {OrderHistoryContainer} from '../state/orderHistoryProvider'
+import { createStackNavigator } from 'react-navigation'
+import { Subscribe } from 'unstated'
+import { AuthContainer } from '../state/authStateProvider'
+import { EventsContainer } from '../state/eventStateProvider'
+import { EventManagerContainer } from '../state/eventManagerStateProvider'
+import { NetworkContainer } from '../state/networkStateProvider'
+import { OrderHistoryContainer } from '../state/orderHistoryProvider'
 import AccountRoutes from '../Accounts/routes'
-import {last} from 'lodash'
+import { last } from 'lodash'
 
 const AccountsStack = createStackNavigator(
   {
@@ -25,7 +26,7 @@ export default class accountsStackWithStore extends Component {
   }
 
   // Hide bottom tab bar on any Event page that isnt the index
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     let tabBarVisible = true
     const curRoute = last(navigation.state.routes)
 
@@ -46,15 +47,22 @@ export default class accountsStackWithStore extends Component {
       <Subscribe
         to={[
           AuthContainer,
+          EventsContainer,
           EventManagerContainer,
           NetworkContainer,
           OrderHistoryContainer,
         ]}
       >
-        {(auth, eventManager, network, orderHistory) => (
+        {(auth, eventStore, eventManager, network, orderHistory) => (
           <AccountsStack
             navigation={this.props.navigation}
-            screenProps={{auth, eventManager, network, orderHistory}}
+            screenProps={{
+              auth,
+              store: eventStore,
+              eventManager,
+              network,
+              orderHistory
+            }}
           />
         )}
       </Subscribe>

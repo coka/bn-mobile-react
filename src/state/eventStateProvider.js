@@ -126,15 +126,16 @@ class EventsContainer extends Container {
   }
 
   _fetchLocations = async () => {
-    try {
-      const {
-        data: { data: locations },
-      } = await server.regions.index()
+    return []
+    // try {
+    //   const {
+    //     data: { data: locations },
+    //   } = await server.regions.index()
 
-      await this.setState({ locations })
-    } catch (error) {
-      apiErrorAlert(error)
-    }
+    //   await this.setState({ locations })
+    // } catch (error) {
+    //   apiErrorAlert(error)
+    // }
   }
 
   _cacheResourcesAsync = async (eventImagePrefetch) => {
@@ -300,6 +301,26 @@ class EventsContainer extends Container {
 
     ticketTypesById[ticket_type.id] = ticket_type
     await this.setState({ ticketTypesById })
+  }
+
+
+  clearEventState = async () => {
+    this.setState({
+      total: null,
+      page: 0,
+      limit: 10,
+      loading: false,
+      query: '',
+      suggestedNames: [],
+      events: [],
+      eventsById: {},
+      ticketTypesById: {},
+      paging: {},
+      lastUpdate: null,
+      locations: [],
+      selectedLocationId: null,
+      selectedEvent: {},
+    })
   }
 }
 

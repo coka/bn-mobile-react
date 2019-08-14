@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   Text,
   View,
@@ -10,10 +10,10 @@ import {
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
-import {autotrim} from '../string'
-import {accessCameraRoll, selectCameraRollImage} from '../image'
-import {uploadImageToCloudinary} from '../cloudinary'
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import { autotrim } from '../string'
+import { accessCameraRoll, selectCameraRollImage } from '../image'
+import { uploadImageToCloudinary } from '../cloudinary'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const styles = SharedStyles.createStyles()
 const accountStyles = AccountStyles.createStyles()
@@ -24,22 +24,22 @@ export default class AccountDetails extends Component {
     super(props)
 
     this.state = {
-      user: {...props.screenProps.auth.state.currentUser.user},
+      user: { ...props.screenProps.auth.state.currentUser.user },
     }
   }
 
   _updateUser(attr, value) {
-    const user = {...this.state.user}
+    const user = { ...this.state.user }
 
     user[attr] = value
-    this.setState({user})
+    this.setState({ user })
   }
 
   updateUser = (attr) => (value) => this._updateUser(attr, value)
 
   async prepareUserChanges() {
-    const {user, newProfilePic} = this.state
-    const changes = {...user}
+    const { user, newProfilePic } = this.state
+    const changes = { ...user }
 
     if (newProfilePic) {
       changes.profile_pic_url = await uploadImageToCloudinary(newProfilePic)
@@ -48,7 +48,7 @@ export default class AccountDetails extends Component {
     return changes
   }
 
-  saveChanges = async() => {
+  saveChanges = async () => {
     const changes = await this.prepareUserChanges()
     const result = await this.props.screenProps.auth.updateCurrentUser(changes)
 
@@ -64,36 +64,40 @@ export default class AccountDetails extends Component {
     Alert.alert('Success', 'Your information has been updated.')
   }
 
-  onSaveChangesError({error, fields}) {
+  onSaveChangesError({ error, fields }) {
     const msg = Object.keys(fields)
-      .map((key) => fields[key].map(({message}) => message).join('\n'))
+      .map((key) => fields[key].map(({ message }) => message).join('\n'))
       .join('\n')
 
     Alert.alert('Error', `There was a problem:\n\n${msg}`)
   }
 
-  onPressPictureButton = async() => {
+  onPressPictureButton = async () => {
     if (await accessCameraRoll()) {
-      this.setState({newProfilePic: await selectCameraRollImage()})
+      this.setState({ newProfilePic: await selectCameraRollImage() })
     }
   }
 
   get profilePicSourceToDisplay() {
     const uri = this.state.newProfilePic || this.state.user.profile_pic_url
 
-    return uri ? {uri} : null
+    return uri ? { uri } : null
+  }
+
+  handleLogout = async () => {
+    const {
+      screenProps: {
+        auth: { logOut },
+        store: { clearEventState },
+      },
+      navigation: { navigate },
+    } = this.props;
+    await clearEventState();
+    logOut(navigate)
   }
 
   render() {
-    const {
-      props: {
-        navigation: {navigate},
-        screenProps: {
-          auth: {logOut},
-        },
-      },
-      state: {user},
-    } = this
+    const { user } = this.state;
 
     return (
       <KeyboardAwareScrollView
@@ -215,7 +219,7 @@ export default class AccountDetails extends Component {
           <View style={[styles.buttonContainer, styles.marginTop]}>
             <TouchableHighlight
               style={styles.buttonSecondary}
-              onPress={() => logOut(navigate)}
+              onPress={this.handleLogout}
               underlayColor="rgba(0, 0, 0, 0)"
             >
               <Text style={styles.buttonSecondaryText}>Sign Out</Text>
