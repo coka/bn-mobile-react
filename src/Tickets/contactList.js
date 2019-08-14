@@ -59,7 +59,7 @@ class ContactList extends PureComponent {
   render() {
     const { filteredContacts } = this.state;
     return (
-      <View style={styles.flex1}>
+      <View style={[styles.flex1, styles.container]}>
         <TextInput
           style={[formStyles.input, styles.marginBottomTiny]}
           placeholder="Type here"
