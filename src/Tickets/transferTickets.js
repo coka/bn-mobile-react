@@ -303,9 +303,9 @@ export default class TransferTickets extends Component {
                         source={qrCodeIcon}
                       />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.getContactList()}>
+                    {/* <TouchableOpacity onPress={() => this.getContactList()}>
                       <Icon style={{ fontSize: 24 }} name="contacts" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                   <TextInput
                     keyboardType="email-address"
