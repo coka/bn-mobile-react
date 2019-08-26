@@ -150,8 +150,7 @@ export default class TransferTickets extends Component {
     const { checkboxes } = this.state
     const keys = Object.keys(checkboxes)
 
-    return keys.filter((key)
-      => checkboxes[key])
+    return keys.filter((key) => checkboxes[key])
   }
 
   setChecked = (id, bool) => {
@@ -201,8 +200,7 @@ export default class TransferTickets extends Component {
     this.setState({ isSubmitting: true })
 
     const { checkboxes, emailOrPhone } = this.state
-    const ticketIds = Object.keys(checkboxes).filter((key)
-      => checkboxes[key])
+    const ticketIds = Object.keys(checkboxes).filter((key) => checkboxes[key])
 
     try {
       await screenProps.store.transferTickets(
@@ -305,9 +303,9 @@ export default class TransferTickets extends Component {
                         source={qrCodeIcon}
                       />
                     </TouchableOpacity>
-                    {/* <TouchableOpacity onPress={() => this.getContactList()}>
+                    <TouchableOpacity onPress={() => this.getContactList()}>
                       <Icon style={{ fontSize: 24 }} name="contacts" />
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                   </View>
                   <TextInput
                     keyboardType="email-address"
