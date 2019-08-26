@@ -61,7 +61,6 @@ class ContactList extends PureComponent {
 
   constructor(props) {
     super(props)
-
     this.state = {
       filteredContacts: this.props.contacts,
       selectedContact: null,
@@ -112,6 +111,14 @@ class ContactList extends PureComponent {
     </TouchableOpacity>
   )
 
+  emptyListComponent = () => (
+    <View style={[styles.flex1, styles.flexRowCenter]}>
+      <Text style={styles.bodyTextLight}>
+        Contact List is Empty
+        </Text>
+    </View>
+  )
+
   render() {
     const { filteredContacts, selectedContact } = this.state;
     const { selectEmailOrPhone } = this.props;
@@ -129,6 +136,7 @@ class ContactList extends PureComponent {
           data={filteredContacts}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           renderItem={this._renderItem}
+          ListEmptyComponent={this.emptyListComponent}
         />
         {
           !!selectedContact ?

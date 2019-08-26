@@ -282,7 +282,7 @@ export default class TransferTickets extends Component {
           />
           <View style={ticketWalletStyles.closeModalContainer}>
             <Icon
-              style={styles.iconLinkCircle}
+              style={[styles.iconLinkCircle, openContactList ? ticketWalletStyles.customContactListPadding : '']}
               name="close"
               onPress={openContactList ?
                 () => this.closeContactList() :
@@ -305,9 +305,9 @@ export default class TransferTickets extends Component {
                         source={qrCodeIcon}
                       />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.getContactList()}>
+                    {/* <TouchableOpacity onPress={() => this.getContactList()}>
                       <Icon style={{ fontSize: 24 }} name="contacts" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                   <TextInput
                     keyboardType="email-address"
@@ -339,21 +339,22 @@ export default class TransferTickets extends Component {
               :
               <ContactList contacts={contacts} selectEmailOrPhone={this.selectEmailOrPhone} />
           }
-          {!openContactList && <View style={[styles.buttonContainer, styles.marginHorizontal]}>
-            <BusyButton
-              style={
-                disabled ?
-                  [styles.buttonDisabled, modalStyles.bottomRadius] :
-                  [styles.button, modalStyles.bottomRadius]
-              }
-              underlayColor={primaryColor}
-              onPress={disabled ? null : (onPress = this.transfer)}
-              isBusy={isSubmitting}
-              busyContent={<ActivityIndicator color="#FFF" />}
-            >
-              <Text style={styles.buttonText}>{buttonText}</Text>
-            </BusyButton>
-          </View>}
+          {!openContactList &&
+            <View style={[styles.buttonContainer, styles.marginHorizontal]}>
+              <BusyButton
+                style={
+                  disabled ?
+                    [styles.buttonDisabled, modalStyles.bottomRadius] :
+                    [styles.button, modalStyles.bottomRadius]
+                }
+                underlayColor={primaryColor}
+                onPress={disabled ? null : (onPress = this.transfer)}
+                isBusy={isSubmitting}
+                busyContent={<ActivityIndicator color="#FFF" />}
+              >
+                <Text style={styles.buttonText}>{buttonText}</Text>
+              </BusyButton>
+            </View>}
         </View>
       </Modal>
     )

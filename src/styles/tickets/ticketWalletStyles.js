@@ -15,8 +15,8 @@ import {
   globalPaddingSmall,
   globalPaddingTiny,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
-import {scale, verticalScale, moderateScale} from 'react-native-size-matters'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 const fullHeight = Dimensions.get('window').height
 
 export const fullWidth = Dimensions.get('window').width
@@ -177,10 +177,14 @@ const TicketWalletStyles = {
   paddingTop: {
     paddingTop: verticalScale(40),
   },
+  customContactListPadding: {
+    paddingTop: 45,
+    paddingBottom: 10,
+  }
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...TicketWalletStyles, ...overrides})
+  return StyleSheet.create({ ...TicketWalletStyles, ...overrides })
 }
 
 export default {
