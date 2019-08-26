@@ -23,7 +23,8 @@ function buildErrorMessage({error, fields}) {
 }
 
 /* eslint-disable-next-line complexity */
-export function apiErrorAlert(error, msg = DEFAULT_ERROR_MSG) {
+export function apiErrorAlert(error = {}, msg = DEFAULT_ERROR_MSG) {
+
   if (error.message === 'Network Error') {
     return Alert.alert(
       'Error',
@@ -31,17 +32,17 @@ export function apiErrorAlert(error, msg = DEFAULT_ERROR_MSG) {
     )
   }
 
-  const {response} = error
+  const {response, message} = error
 
-  if (!response) {
+  if (!response && !message) {
     throw error
   }
 
-  const {data} = response
+  const {data} = (response || {})
 
   return Alert.alert(
     'Error',
-    (data && data.error && buildErrorMessage(data)) || msg
+    (data && data.error && buildErrorMessage(data)) || message || msg
   )
 }
 
