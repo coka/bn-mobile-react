@@ -37,7 +37,7 @@ const ContactModal = ({ open, contact, selectEmailOrPhone, handleClose }) => (
         {
           contact.phoneNumbers ?
             contact.phoneNumbers.map(({ number }, index) => (
-              <TouchableOpacity key={index} onPress={() => selectEmailOrPhone(number)}>
+              <TouchableOpacity key={index} style={styles.borderBot} onPress={() => selectEmailOrPhone(number)}>
                 <Text style={styles.bodyText}>{number}</Text>
               </TouchableOpacity>
             ))
@@ -46,7 +46,7 @@ const ContactModal = ({ open, contact, selectEmailOrPhone, handleClose }) => (
         {
           contact.emails ?
             contact.emails.map(({ email }, index) => (
-              <TouchableOpacity key={index} onPress={() => selectEmailOrPhone(email)}>
+              <TouchableOpacity key={index} style={styles.borderBot} onPress={() => selectEmailOrPhone(email)}>
                 <Text style={styles.bodyText}>{email}</Text>
               </TouchableOpacity>
             ))
