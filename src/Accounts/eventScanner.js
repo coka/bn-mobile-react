@@ -1,7 +1,9 @@
 import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {Text, View, TouchableHighlight, Image, StyleSheet} from 'react-native'
-import {BarCodeScanner, Permissions, BlurView} from 'expo'
+import { BlurView } from 'expo-blur';
+import * as Permissions from 'expo-permissions';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 import {MaterialIcons, EvilIcons} from '@expo/vector-icons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'

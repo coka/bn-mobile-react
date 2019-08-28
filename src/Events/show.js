@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native'
-import { WebBrowser } from 'expo'
+import * as WebBrowser from 'expo-web-browser';
 import {
   NavigationActions,
   StackActions,

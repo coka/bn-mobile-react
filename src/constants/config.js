@@ -1,4 +1,4 @@
-import {Constants} from 'expo'
+import Constants from 'expo-constants';
 
 const RELEASE_CHANNEL = Constants.manifest.releaseChannel || 'dev'
 const WEB_STAGING = 'https://beta.bigneon.com'
