@@ -238,7 +238,7 @@ export default class Ticket extends Component {
       return (
         <View style={ticketWalletStyles.placeholderCard}>
           <Text style={[ticketWalletStyles.placeholderText, styles.paddingBottom, styles.helpText]}>
-            Transfered to: {ticket.transferAddress}
+            Transferred to: {ticket.transferAddress}
           </Text>
         </View>
       )
