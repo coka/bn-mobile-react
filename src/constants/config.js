@@ -5,7 +5,7 @@ const WEB_STAGING = 'https://beta.bigneon.com'
 const API_STAGING = 'https://api.staging.bigneon.com'
 const CLOUDINARY_CLOUD_STAGING = 'bigneon-dev'
 const CLOUDINARY_UPLOAD_PRESET_STAGING = 'dthcf8uc'
-const WEB_PRODUCTION = 'https://prod-1-mobile-www.bigneon.com'
+const WEB_PRODUCTION = 'https://www.bigneon.com'
 const API_PRODUCTION = 'https://api.production.bigneon.com'
 
 const SEGMENT_ANDROID_STAGING = 'juWgBzBtJX0DRiJLcw5UoGqFVZpiYi9j'
