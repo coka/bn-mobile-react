@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {LinearGradient} from 'expo'
+import { LinearGradient } from 'expo-linear-gradient';
 import SharedStyles from '../styles/shared/sharedStyles'
 import LoginStyles from '../styles/login/loginStyles'
 import BusyButton from '../BusyButton'

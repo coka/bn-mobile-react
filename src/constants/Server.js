@@ -4,7 +4,7 @@ import {AsyncStorage, Alert} from 'react-native'
 // import mocker from './mocker'
 import {apiURL, timeout} from './config'
 import Base64 from './base64'
-import {Constants} from 'expo'
+import Constants from 'expo-constants';
 
 const DEFAULT_ERROR_MSG = 'There was a problem.'
 

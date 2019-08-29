@@ -1,4 +1,5 @@
-import {Constants, Facebook} from 'expo'
+import * as Facebook from 'expo-facebook';
+import Constants from 'expo-constants';
 import {Platform} from 'react-native'
 import {server} from './constants/Server'
 

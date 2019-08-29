@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import Ticket from './Ticket'
 import SharedStyles from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
-import { Brightness } from 'expo'
+import * as Brightness from 'expo-brightness';
 import { optimizeCloudinaryImage } from '../cloudinary'
 
 // In case we cannot get a value for the brightness from
