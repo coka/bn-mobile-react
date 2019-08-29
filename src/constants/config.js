@@ -22,7 +22,7 @@ const dev = {
   baseURL: WEB_STAGING,
   stripeFormURL: WEB_STAGING,
   apiURL: API_STAGING,
-  timeout: 4500,
+  timeout: 15000,
   cloudinaryCloud: CLOUDINARY_CLOUD_STAGING,
   cloudinaryUploadPreset: CLOUDINARY_UPLOAD_PRESET_STAGING,
   androidWriteKey: SEGMENT_ANDROID_STAGING,
