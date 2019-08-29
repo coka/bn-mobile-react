@@ -43,7 +43,7 @@ const QRCodeScanner = ({ toggleModal, modalVisible, handleBarCodeScanned }) => (
     <View style={modalStyles.modalContainer}>
       <View style={modalStyles.contentWrapper}>
         <BarCodeScanner
-          onBarCodeRead={handleBarCodeScanned}
+            onBarCodeScanned={handleBarCodeScanned}
           style={{ height: 250, width: 250 }}
         />
         <Text style={modalStyles.headerSecondary}>

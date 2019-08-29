@@ -256,7 +256,7 @@ export default class EventScanner extends Component {
     this.setState({hasCameraPermission: status === 'granted'})
   }
 
-  onBarCodeRead = async(scanResult) => {
+  onBarCodeScanned = async(scanResult) => {
     // don't scan while we're mid-checkin
     if (this.isScanningDisabled) {
       return
@@ -426,7 +426,6 @@ export default class EventScanner extends Component {
       checkInMode,
       isCommittingManualCheckIn,
     } = this.state
-
     if (hasCameraPermission === null) {
       return <Text>Requesting for camera permission</Text>
     }
@@ -443,7 +442,7 @@ export default class EventScanner extends Component {
 
         {this.state.isFocused && (
           <BarCodeScanner
-            onBarCodeRead={this.onBarCodeRead}
+              onBarCodeScanned={this.onBarCodeScanned}
             style={StyleSheet.absoluteFill}
           />
         )}
