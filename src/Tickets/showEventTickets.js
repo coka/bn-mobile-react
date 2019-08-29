@@ -109,6 +109,7 @@ export default class EventsTicket extends Component {
       starts: event.formattedStart,
       doors: event.formattedDoors,
       user: 'Test Name',
+      transferAddress: ticket.transfer_address,
       ticketType: ticket.ticket_type_name,
       transferId: ticket.transfer_id,
       eventId: event.id,

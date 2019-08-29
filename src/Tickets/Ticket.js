@@ -23,8 +23,6 @@ const ticketWalletStyles = TicketWalletStyles.createStyles()
 
 import { Image as CachedImage } from 'react-native-expo-image-cache'
 
-/* eslint-disable camelcase */
-
 function TicketBottomRow({ children }) {
   return <View style={ticketWalletStyles.bottomNav}>{children}</View>
 }
@@ -173,7 +171,6 @@ export default class Ticket extends Component {
   }
 
   get transferBottomText() {
-
     return (
       <View>
         <TouchableHighlight
@@ -206,7 +203,7 @@ export default class Ticket extends Component {
   }
 
   get qrContainer() {
-    const { activeTab } = this.props
+    const { ticket, activeTab } = this.props
     const { qrText } = this.state
 
     if (activeTab === 'upcoming') {
@@ -226,9 +223,7 @@ export default class Ticket extends Component {
       } else {
         return (
           <View style={ticketWalletStyles.placeholderCard}>
-            <Text
-              style={[ticketWalletStyles.placeholderText, styles.paddingBottom]}
-            >
+            <Text style={[ticketWalletStyles.placeholderText, styles.paddingBottom]}>
               To protect you and your purchase against fraudulent activity the
               QR code used to grant access to the event will be hidden until
               closer to the event door time.
@@ -239,7 +234,16 @@ export default class Ticket extends Component {
           </View>
         )
       }
-    } else {
+    } else if (activeTab === 'transfer') {
+      return (
+        <View style={ticketWalletStyles.placeholderCard}>
+          <Text style={[ticketWalletStyles.placeholderText, styles.paddingBottom, styles.helpText]}>
+            Transferred to: {ticket.transferAddress || ""}
+          </Text>
+        </View>
+      )
+    }
+    else {
       return (
         <Image
           style={{ width: 150, height: 150 }}
