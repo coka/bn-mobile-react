@@ -81,7 +81,6 @@ export class EventManagerContainer extends Container {
   // this just unpacks the barcode scanner result, nothing else
   readCode = ({data: json}) => {
     const {data} = JSON.parse(json)
-
     if (!data.redeem_key) {
       throw new Error('missing_redeem_key')
     }

@@ -259,7 +259,7 @@ class CartContainer extends Container {
             await server.cart.checkout({amount, method})
             onSuccess()
         } catch (error) {
-            onError()
+            onError(error)
             setTimeout(() => {
                 apiErrorAlert(error)
             }, 600)

@@ -109,14 +109,24 @@ export default class PaymentTypes extends Component {
     } = event
 
     try {
-      const payment = JSON.parse(data)
+      let jsonString = '';
+      if(Platform.OS === "ios"){
+        // IOS returns the data url encoded/percent-encoding twice
+        // unescape('%257B') -> %7B
+        // unescape(%7B) -> {
+        jsonString = decodeURI(decodeURI(data));
+      } else {
+        jsonString = data;
+      }
 
+      const payment = JSON.parse(jsonString)
       if (payment.error) {
         Alert.alert('Error', `There was an error.\n\n${payment.error}`)
       } else {
         this.props.selectPayment(payment)
       }
     } catch (error) {
+      console.error(error)
       return
     }
   }
@@ -148,6 +158,7 @@ export default class PaymentTypes extends Component {
           onMessage={this.parseMessage}
           onLoadStart={this.setIsLoading(true)}
           onLoad={this.setIsLoading(false)}
+          useWebKit={true}
         />
       </View>
     )
