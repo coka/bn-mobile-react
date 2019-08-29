@@ -123,11 +123,12 @@ export default class EventShow extends Component {
   }
 
   async loadEvent() {
+
     const {
       screenProps: { store, cart },
     } = this.props
-    const { eventId } = this.state
 
+    const { eventId } = this.state
     // Clear any pre-existing cart data from earlier transactions
     await cart.clearCart()
 
@@ -285,6 +286,8 @@ export default class EventShow extends Component {
         return { ctaText: 'Off-Sale', enabled: false }
       case 'Ended':
         return { ctaText: 'Sale Ended', enabled: false }
+      case undefined:
+        return { ctaText: 'Fetching Tickets', enabled: false }
       default:
         return {
           ctaText: !event.is_external ?
@@ -334,7 +337,7 @@ export default class EventShow extends Component {
 
     return (
       <CheckoutButton
-        onCheckout={this.purchaseTicket}
+        onCheckout={async () => await this.purchaseTicket()}
         disabled={!this.props.screenProps.cart.canPlaceOrder}
         busy={this.props.screenProps.cart.isChangingQuantity}
       />
@@ -347,8 +350,9 @@ export default class EventShow extends Component {
       navigation: { navigate },
     } = this.props
     const onSuccess = () => this.setState({ success: true })
-    const onError = () =>
-      this.setState({ showLoadingModal: false, success: false })
+    const onError = (error) => {
+      this.setState({showLoadingModal: false, success: false})
+    }
 
     if (cart.totalCents && !cart.payment) {
       Alert.alert('Error', 'Please enter your payment details')
@@ -433,8 +437,8 @@ export default class EventShow extends Component {
     return (
       <View style={{ backgroundColor: 'white' }}>
         <NavigationEvents
-          onDidFocus={() => this.loadEvent()}
-          onWillBlur={() => this.clearEvent()}
+          onDidFocus={async () => this.loadEvent()}
+          onWillBlur={async () => this.clearEvent()}
         />
         <LoadingScreen visible={showLoadingModal} />
         <SuccessScreen visible={showSuccessModal} />
