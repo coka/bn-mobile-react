@@ -52,11 +52,13 @@ export default class Checkout extends Component {
   }
 
   get incrementButton() {
-    return this.createQuantityButton(1, 'add-circle')
+    const increment = this.ticketType.increment || 1;
+    return this.createQuantityButton(increment, 'add-circle')
   }
 
   get decrementButton() {
-    return this.createQuantityButton(-1, 'remove-circle')
+    const increment = (this.ticketType.increment || 1) * -1;
+    return this.createQuantityButton(increment, 'remove-circle')
   }
 
   get ticketType() {

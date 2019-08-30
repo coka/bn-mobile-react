@@ -167,11 +167,14 @@ export default class EventShow extends Component {
     try {
       await this.props.screenProps.cart.setTicketType(
         ticketType.id,
-        ticketType.redemption_code
+                ticketType.redemption_code,
+                ticketType.increment
       )
       this.changeScreen('checkout')
-    } catch (_error) {
+        } catch (error) {
       // something went wrong. error alert should have shown.
+            Alert.alert('Error', 'There was an error choosing this ticket');
+            console.error(error);
     }
   }
 
