@@ -3,9 +3,9 @@ lane :setup_env do
 
   match(
     type: appstore,
-    app_identifier: com.revelrylabs.bigneon,
+    app_identifier: com.bigneon.mobile,
     readonly: true,
-    team_id: M2C9MHL336
+    team_id: 119447135
   )
 end
 
