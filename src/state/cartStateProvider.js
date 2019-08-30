@@ -124,7 +124,6 @@ class CartContainer extends Container {
 
     get ticketIncrement() {
         const {increment = 1} = this.selectedTicket;
-        console.log(increment);
         return increment;
     }
 
