@@ -85,7 +85,8 @@ curl -o app.ipa "$(npx expo url:ipa --non-interactive)"
 
 # Use fastlane to upload your current standalone iOS build to test flight on iTunes Connect.
 echo "Publishing to iTunes Connect"
-fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata --username $DELIVER_USERNAME
+
+fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata --username "$DELIVER_USERNAME"
 
 echo "$ENVIRONMENT deploy completed"
 exit 0
