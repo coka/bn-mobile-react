@@ -2,6 +2,8 @@ import { Container } from 'unstated'
 import { server, apiErrorAlert, defaultEventSort } from '../constants/Server'
 
 /* eslint-disable camelcase,space-before-function-paren */
+const LIMIT = 50
+
 export class EventManagerContainer extends Container {
   constructor(props = {}) {
     super(props)
@@ -13,11 +15,26 @@ export class EventManagerContainer extends Container {
       isFetchingGuests: false,
       guestListQuery: '',
       totalNumberOfGuests: 0,
+      page: 0,
+
     }
   }
 
   get events() {
     return this.state.events
+  }
+
+  get hasNextPage() {
+    const { totalNumberOfGuests, page } = this.state
+
+    if (totalNumberOfGuests && totalNumberOfGuests > 0) {
+      return totalNumberOfGuests - (page + 1) * LIMIT > 0
+    }
+    return false
+  }
+
+  refreshParams = () => {
+    this.setState({ page: 0 })
   }
 
   // TODO: filter by live vs upcoming?
@@ -39,24 +56,28 @@ export class EventManagerContainer extends Container {
     this.setState({ eventToScan: event, guests: [] })
   }
 
-  searchGuestList = async (guestListQuery = '') => {
+  searchGuestList = async (guestListQuery = '', page = this.state.page) => {
 
     await this.setState({ isFetchingGuests: true, guestListQuery })
 
     const { id } = this.state.eventToScan
-
+    const { guests } = this.state
     try {
-      const response = await server.events.guests.index({
+      const { data } = await server.events.guests.index({
         event_id: id,
-        query: guestListQuery,
+        // query: guestListQuery,
+        limit: LIMIT,
+        page,
       })
 
-      // So that we show the total number of guests
       if (guestListQuery === '') {
-        await this.setState({ totalNumberOfGuests: response.data.paging.total })
+        await this.setState({ totalNumberOfGuests: data.paging.total })
       }
 
-      await this.setState({ guests: response.data.data })
+      await this.setState({
+        guests: guests.concat(data.data),
+        page: data.paging.page + 1
+      })
     } catch (error) {
       apiErrorAlert(error)
     }

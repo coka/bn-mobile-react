@@ -33,6 +33,8 @@ export default class GuestListScreen extends Component {
   render() {
     const {
       state: managerState,
+      hasNextPage,
+      refreshParams,
       searchGuestList,
       updateGuestStatus,
     } = this.props.screenProps.eventManager
@@ -47,6 +49,8 @@ export default class GuestListScreen extends Component {
           updateGuestStatus={updateGuestStatus}
           selectGuest={this.selectGuest}
           selectedGuest={selectedGuest}
+          hasNextPage={hasNextPage}
+          refreshParams={refreshParams}
         />
       </View>
     )

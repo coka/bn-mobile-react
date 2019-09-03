@@ -1,17 +1,17 @@
-import React, {Component} from 'react'
-import {View, Text, TouchableHighlight, TextInput, Image, Dimensions, BackHandler, Keyboard} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, TouchableHighlight, TextInput, Image, Dimensions, Keyboard } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {price, username, usernameLastFirst} from '../string'
+import { price, usernameLastFirst } from '../string'
 import SharedStyles from '../styles/shared/sharedStyles'
 import DoormanStyles from '../styles/account/doormanStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import TicketStyles from '../styles/tickets/ticketStyles'
 import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
 import emptyState from '../../assets/icon-empty-state.png'
-import {server, apiErrorAlert} from '../constants/Server'
-import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view'
-import {KeyboardDismisser} from '../ui'
-import {LoadingScreen} from '../constants/modals'
+import { server, apiErrorAlert } from '../constants/Server'
+import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
+import { KeyboardDismisser } from '../ui'
+import { LoadingScreen } from '../constants/modals'
 
 const styles = SharedStyles.createStyles()
 const doormanStyles = DoormanStyles.createStyles()
@@ -20,24 +20,24 @@ const ticketStyles = TicketStyles.createStyles()
 const eventDetailsStyles = EventDetailsStyles.createStyles()
 const SCREEN_WIDTH = Dimensions.get('window').width
 
-function shouldAllowCheckIn({status, redeem_key}) {
+function shouldAllowCheckIn({ status, redeem_key }) {
   return status === 'Purchased' && redeem_key
 }
 
 function guestStatusBadgeStyle(status) {
   switch (status) {
-  case 'Purchased':
-    return doormanStyles.ticketPurchasedBadgeWrapper
-  default:
-    null
+    case 'Purchased':
+      return doormanStyles.ticketPurchasedBadgeWrapper
+    default:
+      null
   }
 }
 
-function TicketStatusBadge({status, style}) {
+function TicketStatusBadge({ status, style }) {
   return <Text style={doormanStyles.ticketStatusBadge}>{status}</Text>
 }
 
-function GuestRowContent({guest}) {
+function GuestRowContent({ guest }) {
   return (
     <View>
       <View style={doormanStyles.flexRowGuestList}>
@@ -53,7 +53,7 @@ function GuestRowContent({guest}) {
   )
 }
 
-function GuestFullNameContent({guest}) {
+function GuestFullNameContent({ guest }) {
   return (
     <View>
       <View style={doormanStyles.row}>
@@ -69,7 +69,7 @@ function GuestFullNameContent({guest}) {
   )
 }
 
-function GuestTicketCard({guest, onSelect}) {
+function GuestTicketCard({ guest, onSelect }) {
   return (
     <TouchableHighlight
       style={doormanStyles.rowContainer}
@@ -102,7 +102,7 @@ function EmptyState() {
   )
 }
 
-function GuestTicketCardUnderlay({guest}) {
+function GuestTicketCardUnderlay({ guest }) {
   if (canCheckOut(guest)) {
     return (
       <View
@@ -147,7 +147,7 @@ function checkInErrorText(guest) {
 class GuestList extends Component {
   // Calm down, eslint. Quit punishing us for handling errors. Geez.
   /* eslint-disable-next-line complexity */
-  onRowOpen = async(rowKey, rowMap, toValue) => {
+  onRowOpen = async (rowKey, rowMap, toValue) => {
     const guest = this.props.guests.find((item) => item.id === rowKey)
 
     if (canCheckOut(guest) && toValue === SCREEN_WIDTH) {
@@ -162,7 +162,7 @@ class GuestList extends Component {
   }
 
   render() {
-    const {guests, onSelect, onCheckIn, ...rest} = this.props
+    const { guests, onSelect, onCheckIn, ...rest } = this.props
 
     if (guests.length === 0) {
       return <EmptyState />
@@ -174,9 +174,9 @@ class GuestList extends Component {
         onScroll={() => Keyboard.dismiss()}
         useFlatList
         data={guests}
-        keyExtractor={({id}) => id}
+        keyExtractor={({ id }) => id}
         onRowOpen={this.onRowOpen}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <SwipeRow
             disableLeftSwipe
             swipeToOpenPercent={40}
@@ -191,7 +191,7 @@ class GuestList extends Component {
   }
 }
 
-function GuestToCheckIn({guest, onCancel, onCheckIn}) {
+function GuestToCheckIn({ guest, onCancel, onCheckIn }) {
   return (
     <View>
       <View style={doormanStyles.rowContainer}>
@@ -221,17 +221,17 @@ function GuestToCheckIn({guest, onCancel, onCheckIn}) {
               </Text>
             </TouchableHighlight>
           ) : (
-            <View
-              style={[
-                eventDetailsStyles.buttonRoundedActive,
-                styles.marginLeftTiny,
-              ]}
-            >
-              <Text style={eventDetailsStyles.buttonRoundedActiveText}>
-                Already Checked-In
+              <View
+                style={[
+                  eventDetailsStyles.buttonRoundedActive,
+                  styles.marginLeftTiny,
+                ]}
+              >
+                <Text style={eventDetailsStyles.buttonRoundedActiveText}>
+                  Already Checked-In
               </Text>
-            </View>
-          )}
+              </View>
+            )}
         </View>
         <View style={[styles.flexRowSpaceBetween, styles.paddingTop]}>
           {guest.redeem_key ? null : (
@@ -243,14 +243,19 @@ function GuestToCheckIn({guest, onCancel, onCheckIn}) {
   )
 }
 
-function SearchBox({textInput}) {
+function SearchBox({ textInput }) {
   return <TextInput {...textInput} />
 }
 
 export default class ManualCheckin extends Component {
 
   componentDidMount() {
-    this.searchGuestList()
+    this.searchGuestList('', 0)
+  }
+
+  componentWillUnmount() {
+    console.log('unmount')
+    this.props.refreshParams()
   }
 
   searchGuestList = (query) => {
@@ -261,12 +266,12 @@ export default class ManualCheckin extends Component {
     this.props.selectGuest(null)
   }
 
-  checkInGuest = async(guest) => {
-    const {event_id, id: ticket_id, redeem_key} = guest
+  checkInGuest = async (guest) => {
+    const { event_id, id: ticket_id, redeem_key } = guest
 
     try {
       this.props.updateGuestStatus(guest.id, 'processing')
-      await server.events.tickets.redeem({event_id, ticket_id, redeem_key})
+      await server.events.tickets.redeem({ event_id, ticket_id, redeem_key })
     } catch (error) {
       apiErrorAlert(error)
     } finally {
@@ -276,7 +281,7 @@ export default class ManualCheckin extends Component {
   }
 
   get shouldShowLoadingScreen() {
-    const {isFetchingGuests, guests, guestListQuery} = this.props
+    const { isFetchingGuests, guests, guestListQuery } = this.props
 
     return (
       isFetchingGuests && guests.length === 0 && guestListQuery.length === 0
@@ -284,13 +289,9 @@ export default class ManualCheckin extends Component {
   }
 
   render() {
-      const {guests, guestListQuery, totalNumberOfGuests, selectedGuest} = this.props
+    const { guests, guestListQuery, totalNumberOfGuests, selectedGuest, hasNextPage } = this.props
 
-      let guestText = 'guests'
-
-      if (totalNumberOfGuests === 1) {
-          guestText = 'guest'
-      }
+    let guestText = totalNumberOfGuests === 1 ? 'guest' : 'guests'
 
     if (selectedGuest !== null) {
       return (
@@ -330,12 +331,15 @@ export default class ManualCheckin extends Component {
             <LoadingScreen visible={this.shouldShowLoadingScreen} />
 
             <GuestList
-              style={{flex: 1}}
+              style={styles.flex1}
               guests={guests}
               onSelect={this.props.selectGuest}
               onCheckIn={this.checkInGuest}
             />
             <View style={doormanStyles.spacer} />
+            {hasNextPage ? <TouchableHighlight onPress={this.searchGuestList}>
+              <Text>Load More</Text>
+            </TouchableHighlight> : null}
           </View>
         </View>
       </KeyboardDismisser>

@@ -29,8 +29,6 @@ function DoorEventCard({event, onPress}) {
           <Text numberOfLines={1} style={styles.headerSecondary}>
             {event.name}
           </Text>
-          {/* TODO: Add venue info and times */}
-          {/* <Text numberOfLines={1} style={eventManagerStyles.cardSubHeader}>{event.venue.name} &bull; {event.scheduleText}</Text> */}
         </View>
         <Icon
           style={[accountStyles.accountArrow, styles.paddingTop]}
