@@ -42,4 +42,10 @@ const production = {
   iosWriteKey: SEGMENT_IOS_PRODUCTION,
 }
 
-module.exports = {dev, staging, production}[RELEASE_CHANNEL]
+if (RELEASE_CHANNEL.indexOf('prod') === 0) {
+  module.exports = production;
+} else if (RELEASE_CHANNEL.indexOf('staging') === 0) {
+  module.exports = staging;
+} else {
+  module.exports = dev;
+}
