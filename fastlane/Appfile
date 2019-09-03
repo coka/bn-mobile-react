@@ -1,0 +1,8 @@
+apple_id ENV["DELIVER_USERNAME"]
+app_identifier ENV["APP_IDENTIFIER"]
+
+apple_dev_portal_id ENV["DELIVER_USERNAME"]  # Apple Developer Account
+itunes_connect_id ENV["DELIVER_USERNAME"]     # App Store Connect Account
+
+team_id ENV["APPLE_DEVELOPER_PORTAL_ID"] # Developer Portal Team ID
+itc_team_id ENV["FASTLANE_ITC_TEAM_ID"] # App Store Connect Team ID
