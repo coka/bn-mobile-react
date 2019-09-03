@@ -30,7 +30,7 @@
     },
     "android": {
       "package": "com.bigneon.mobile",
-      "versionCode": 146,
+      "versionCode": 147,
       "permissions": [
         "CAMERA",
         "CAMERA_ROLL",
