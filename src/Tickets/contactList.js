@@ -30,7 +30,7 @@ const ContactModal = ({ open, contact, selectEmailOrPhone, handleClose }) => (
         {
           contact.name ?
             <Text style={[styles.helpText, styles.paddingBottom]}>
-              Chose number or email for {contact.name}
+              Choose number or email for {contact.name}
             </Text>
             : null
         }

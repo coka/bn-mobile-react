@@ -403,6 +403,8 @@ const SharedStyles = {
   borderBot: {
     borderBottomColor: borderColor,
     borderBottomWidth: 1,
+    width: '100%',
+    paddingTop: 10
   },
   borderRight: {
     borderRightColor: borderColor,
