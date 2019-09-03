@@ -11,7 +11,9 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native'
-import { BarCodeScanner, Permissions, Contacts } from 'expo'
+import * as Contacts from 'expo-contacts';
+import * as Permissions from 'expo-permissions';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles, { primaryColor } from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
@@ -41,7 +43,7 @@ const QRCodeScanner = ({ toggleModal, modalVisible, handleBarCodeScanned }) => (
     <View style={modalStyles.modalContainer}>
       <View style={modalStyles.contentWrapper}>
         <BarCodeScanner
-          onBarCodeRead={handleBarCodeScanned}
+            onBarCodeScanned={handleBarCodeScanned}
           style={{ height: 250, width: 250 }}
         />
         <Text style={modalStyles.headerSecondary}>

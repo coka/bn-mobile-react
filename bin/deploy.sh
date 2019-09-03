@@ -25,6 +25,10 @@ usage () {
 HELP_USAGE
 }
 
+if [ -f "./.creds/local_source.sh" ]; then
+    source "./.creds/local_source.sh";
+fi
+
 if [ "$#" -lt 1 ]; then
   usage
   exit 1
@@ -49,7 +53,7 @@ write_visual_bells&
 ENVIRONMENT=$1
 
 #The track is used to tell fastlane where to place the android release
-TRACK=$([ "$ENVIRONMENT" = "production" ] && echo "beta" || echo "alpha")
+TRACK=$([[ "$ENVIRONMENT" = prod* ]] && echo "beta" || echo "alpha")
 
 # inject sentry auth token into app.json
 echo "Injecting SENTRY_AUTH_TOKEN into app.json"
@@ -60,13 +64,13 @@ echo "Installing dependencies"
 npm ci
 
 echo "Logging into Expo as Big Neon"
-npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+npx expo login -u "$EXPO_USERNAME" -p "$EXPO_PASSWORD"
 
 echo "Publishing release to $ENVIRONMENT channel"
-npx expo publish --release-channel $ENVIRONMENT --non-interactive
+npx expo publish --release-channel "$ENVIRONMENT" --non-interactive
 
 echo "Starting standalone android build on $ENVIRONMENT channel"
-npx expo build:android --release-channel $ENVIRONMENT --non-interactive --no-publish
+npx expo build:android --release-channel "$ENVIRONMENT" --non-interactive --no-publish
 
 # Download the built android binary
 echo "Downloading android apk"
@@ -74,10 +78,10 @@ curl -o app.apk "$(npx expo url:apk --non-interactive)"
 
 # Ask Keith for the JSON key. Store this one directory below the app, and DO NOT ADD TO GIT
 echo "Publishing apk to $TRACK track in Google Play Store"
-fastlane supply --track $TRACK --json_key './.creds/google-deploy-key.json' --package_name "com.bigneon.mobile" --apk "app.apk" --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
+fastlane supply --track "$TRACK" --json_key './.creds/google-deploy-key.json' --package_name "com.bigneon.mobile" --apk "app.apk" --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
 
 echo "Starting standalone iOS build on $ENVIRONMENT channel"
-npx expo build:ios --release-channel $ENVIRONMENT --non-interactive --no-publish
+npx expo build:ios --release-channel "$ENVIRONMENT" --non-interactive --no-publish
 
 # Download the artifact to current directory as `app.ipa`
 echo "Downloading iOS ipa"
@@ -85,7 +89,8 @@ curl -o app.ipa "$(npx expo url:ipa --non-interactive)"
 
 # Use fastlane to upload your current standalone iOS build to test flight on iTunes Connect.
 echo "Publishing to iTunes Connect"
-fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata --username $DELIVER_USERNAME
+
+fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata --username "$DELIVER_USERNAME"
 
 echo "$ENVIRONMENT deploy completed"
 exit 0

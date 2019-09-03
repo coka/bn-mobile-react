@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Text, View, Image, TouchableHighlight} from 'react-native'
-import {LinearGradient, WebBrowser} from 'expo'
+import * as WebBrowser from 'expo-web-browser';
+import { LinearGradient } from 'expo-linear-gradient';
 import {LoadingScreen} from '../constants/modals'
 import LoginStyles from '../styles/login/loginStyles'
 import SharedStyles from '../styles/shared/sharedStyles'

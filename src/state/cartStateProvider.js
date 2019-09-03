@@ -29,7 +29,7 @@ class CartContainer extends Container {
 
     async _resetState() {
         this.state = {
-            requestedQuantity: 1,
+            requestedQuantity: 0,
             isReady: false,
             isChangingQuantity: false,
             ticketTypeId: null,
@@ -120,6 +120,11 @@ class CartContainer extends Container {
         }
 
         return 0
+    }
+
+    get ticketIncrement() {
+        const {increment = 1} = this.selectedTicket;
+        return increment;
     }
 
     get maxCommittableQuantity() {
@@ -218,8 +223,8 @@ class CartContainer extends Container {
         }
     }
 
-    async setTicketType(ticketTypeId, ticketPromo) {
-        await this.setState({ticketTypeId, ticketPromo, requestedQuantity: 1})
+    async setTicketType(ticketTypeId, ticketPromo, increment) {
+        await this.setState({ticketTypeId, ticketPromo, requestedQuantity: increment})
         return await this._commitQuantity()
     }
 
@@ -259,7 +264,7 @@ class CartContainer extends Container {
             await server.cart.checkout({amount, method})
             onSuccess()
         } catch (error) {
-            onError()
+            onError(error)
             setTimeout(() => {
                 apiErrorAlert(error)
             }, 600)

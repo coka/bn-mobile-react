@@ -10,11 +10,11 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {LinearGradient} from 'expo'
+import * as WebBrowser from 'expo-web-browser';
+import { LinearGradient } from 'expo-linear-gradient';
 import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
 import LoginStyles from '../styles/login/loginStyles'
-import {WebBrowser} from 'expo'
 import {autotrim} from '../string'
 import BusyButton from '../BusyButton'
 import {NavigationEvents} from 'react-navigation'

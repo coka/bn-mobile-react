@@ -1,11 +1,11 @@
-import {Constants} from 'expo'
+import Constants from 'expo-constants';
 
 const RELEASE_CHANNEL = Constants.manifest.releaseChannel || 'dev'
 const WEB_STAGING = 'https://beta.bigneon.com'
 const API_STAGING = 'https://api.staging.bigneon.com'
 const CLOUDINARY_CLOUD_STAGING = 'bigneon-dev'
 const CLOUDINARY_UPLOAD_PRESET_STAGING = 'dthcf8uc'
-const WEB_PRODUCTION = 'https://prod-1-mobile-www.bigneon.com'
+const WEB_PRODUCTION = 'https://www.bigneon.com'
 const API_PRODUCTION = 'https://api.production.bigneon.com'
 
 const SEGMENT_ANDROID_STAGING = 'juWgBzBtJX0DRiJLcw5UoGqFVZpiYi9j'
@@ -22,7 +22,7 @@ const dev = {
   baseURL: WEB_STAGING,
   stripeFormURL: WEB_STAGING,
   apiURL: API_STAGING,
-  timeout: 4500,
+  timeout: 15000,
   cloudinaryCloud: CLOUDINARY_CLOUD_STAGING,
   cloudinaryUploadPreset: CLOUDINARY_UPLOAD_PRESET_STAGING,
   androidWriteKey: SEGMENT_ANDROID_STAGING,
@@ -42,4 +42,10 @@ const production = {
   iosWriteKey: SEGMENT_IOS_PRODUCTION,
 }
 
-module.exports = {dev, staging, production}[RELEASE_CHANNEL]
+if (RELEASE_CHANNEL.indexOf('prod') === 0) {
+  module.exports = production;
+} else if (RELEASE_CHANNEL.indexOf('staging') === 0) {
+  module.exports = staging;
+} else {
+  module.exports = dev;
+}
