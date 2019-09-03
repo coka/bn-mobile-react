@@ -1,4 +1,5 @@
-import {Asset, Image} from 'expo'
+import {Image} from 'expo'
+import {Asset} from 'expo-asset'
 
 const IMAGES = [
   require('./account-placeholder-bkgd.png'),

@@ -10,7 +10,7 @@ import {
   Button,
   Linking,
 } from 'react-native'
-import {Constants} from 'expo'
+import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'

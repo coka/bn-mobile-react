@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import Ticket from './Ticket'
 import SharedStyles from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
-import { Brightness } from 'expo'
+import * as Brightness from 'expo-brightness';
 import { optimizeCloudinaryImage } from '../cloudinary'
 
 // In case we cannot get a value for the brightness from
@@ -109,6 +109,7 @@ export default class EventsTicket extends Component {
       starts: event.formattedStart,
       doors: event.formattedDoors,
       user: 'Test Name',
+      transferAddress: ticket.transfer_address,
       ticketType: ticket.ticket_type_name,
       transferId: ticket.transfer_id,
       eventId: event.id,
