@@ -1,4 +1,4 @@
-#git_url("https://#{ENV['APPLE_USERNAME']}:#{ENV['CI_USER_PASSWORD']}@github.com/revelrylabs/bn-mobile-react-match-creds")
+git_url("https://#{ENV['GH_USER']}:#{ENV['GH_TOKEN']}@github.com/Krakaw/bn-fastlane-creds.git")
 type "appstore"
 app_identifier "com.bigneon.mobile"
 username ENV['DELIVER_USERNAME']

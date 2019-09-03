@@ -14,6 +14,7 @@ usage () {
     environment: Either "production" or "staging"
 
     Required environment variables:
+    APP_IDENTIFIER: App identifier (com.bigneon.mobile)
     SENTRY_AUTH_TOKEN: The auth token for sentry
     EXPO_USERNAME: The Big Neon Expo username
     EXPO_PASSWORD: The Big Neon Expo password
@@ -34,7 +35,7 @@ if [ "$#" -lt 1 ]; then
   exit 1
 fi
 
-if [ -z "$SENTRY_AUTH_TOKEN" ] || [ -z "$EXPO_USERNAME" ] || [ -z "$EXPO_PASSWORD" ] || [ -z "$DELIVER_USERNAME" ] || [ -z "$DELIVER_PASSWORD" ] || [ -z "$FASTLANE_ITC_TEAM_ID" ]; then
+if [ -z "$APP_IDENTIFIER" ] || [ -z "$SENTRY_AUTH_TOKEN" ] || [ -z "$EXPO_USERNAME" ] || [ -z "$EXPO_PASSWORD" ] || [ -z "$DELIVER_USERNAME" ] || [ -z "$DELIVER_PASSWORD" ] || [ -z "$FASTLANE_ITC_TEAM_ID" ]; then
   echo 'ERROR: Missing required environment variable'
   usage
   exit 1
