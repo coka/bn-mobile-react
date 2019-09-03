@@ -400,6 +400,12 @@ const SharedStyles = {
     paddingBottom: globalPaddingMedium,
     paddingTop: globalPaddingMedium,
   },
+  borderBot: {
+    borderBottomColor: borderColor,
+    borderBottomWidth: 1,
+    width: '100%',
+    paddingTop: 10
+  },
   borderRight: {
     borderRightColor: borderColor,
     borderStyle: 'solid',
@@ -490,7 +496,6 @@ const SharedStyles = {
     borderBottomRightRadius: 6,
     borderBottomLeftRadius: 6,
   },
-
   // FLEX HELPER STYLES
   flexRowFlexStart: {
     flexDirection: 'row',

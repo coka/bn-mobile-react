@@ -244,9 +244,9 @@ export default class TransferTickets extends Component {
     })
   }
 
-  selectNumberFromContacts = (contact) => {
+  selectEmailOrPhone = (emailOrPhone) => {
     this.setState({
-      emailOrPhone: contact.phoneNumbers[0].number
+      emailOrPhone
     })
     this.closeContactList();
   }
@@ -305,9 +305,9 @@ export default class TransferTickets extends Component {
                         source={qrCodeIcon}
                       />
                     </TouchableOpacity>
-                    {/* <TouchableOpacity onPress={() => this.getContactList()}>
+                    <TouchableOpacity onPress={() => this.getContactList()}>
                       <Icon style={{ fontSize: 24 }} name="contacts" />
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                   </View>
                   <TextInput
                     keyboardType="email-address"
@@ -337,7 +337,7 @@ export default class TransferTickets extends Component {
                 </ScrollView>
               </View>
               :
-              <ContactList contacts={contacts} selectContact={this.selectNumberFromContacts} />
+              <ContactList contacts={contacts} selectEmailOrPhone={this.selectEmailOrPhone} />
           }
           {!openContactList &&
             <View style={[styles.buttonContainer, styles.marginHorizontal]}>
