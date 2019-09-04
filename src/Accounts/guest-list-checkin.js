@@ -254,7 +254,6 @@ export default class ManualCheckin extends Component {
   }
 
   componentWillUnmount() {
-    console.log('unmount')
     this.props.refreshParams()
   }
 
