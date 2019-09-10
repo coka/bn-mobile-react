@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {createStackNavigator} from 'react-navigation'
-import LogInScreen from '../Auth/LogIn'
+import LogIn from '../Auth/LogIn'
 import SignUpScreen from '../Auth/SignUp'
 import SignUpNext from '../Auth/SignUpNext'
 import SignUpNotifications from '../Auth/SignUpNotifications'
-import IndexScreen from '../Auth/index'
+import AuthIndex from '../Auth/index'
 import {Subscribe} from 'unstated'
 import {AuthContainer} from '../state/authStateProvider'
 import {NetworkContainer} from '../state/networkStateProvider'
@@ -13,11 +13,11 @@ import PasswordReset from '../Auth/PasswordReset'
 
 const AuthStack = createStackNavigator(
   {
-    AuthRoot: IndexScreen,
+    AuthRoot: AuthIndex,
     SignUp: SignUpScreen,
     SignUpNext,
     SignUpNotifications,
-    LogIn: LogInScreen,
+    LogIn,
     PasswordReset,
   },
   {
