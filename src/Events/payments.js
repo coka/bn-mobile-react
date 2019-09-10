@@ -6,6 +6,7 @@ import {
   Image,
   TouchableHighlight,
   WebView,
+  Platform,
   Alert,
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'

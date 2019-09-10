@@ -1,5 +1,4 @@
 import * as Segment from 'expo-analytics-segment';
-import {Platform} from 'react-native'
 import {iosWriteKey, androidWriteKey} from './config'
 
 export function analyticsInit() {
