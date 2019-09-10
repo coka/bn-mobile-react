@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableHighlight, TextInput, Image, Dimensions, Keyboard } from 'react-native'
+import { View, ScrollView, Text, TouchableHighlight, TextInput, Image, Dimensions, Keyboard } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { price, usernameLastFirst } from '../string'
 import SharedStyles from '../styles/shared/sharedStyles'
@@ -287,8 +287,21 @@ export default class ManualCheckin extends Component {
     )
   }
 
+  get loadMoreGuests() {
+    const { hasNextPage, fetchNextPage } = this.props
+
+    if (hasNextPage) {
+      fetchNextPage()
+    }
+    return null
+  }
+
+  isCloseToBottom({ layoutMeasurement, contentOffset, contentSize }) {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
+  }
+
   render() {
-    const { guests, guestListQuery, totalNumberOfGuests, selectedGuest, hasNextPage } = this.props
+    const { guests, guestListQuery, totalNumberOfGuests, selectedGuest } = this.props
 
     let guestText = totalNumberOfGuests === 1 ? 'guest' : 'guests'
 
@@ -328,17 +341,21 @@ export default class ManualCheckin extends Component {
             </View>
 
             <LoadingScreen visible={this.shouldShowLoadingScreen} />
-
-            <GuestList
+            <ScrollView
               style={styles.flex1}
-              guests={guests}
-              onSelect={this.props.selectGuest}
-              onCheckIn={this.checkInGuest}
-            />
-            <View style={doormanStyles.spacer} />
-            {hasNextPage ? <TouchableHighlight onPress={this.searchGuestList}>
-              <Text>Load More</Text>
-            </TouchableHighlight> : null}
+              scrollEventThrottle={16}
+              onScroll={({ nativeEvent }) => {
+                if (this.isCloseToBottom(nativeEvent)) {
+                  this.loadMoreGuests
+                }
+              }}
+            >
+              <GuestList
+                guests={guests}
+                onSelect={this.props.selectGuest}
+                onCheckIn={this.checkInGuest}
+              />
+            </ScrollView>
           </View>
         </View>
       </KeyboardDismisser>

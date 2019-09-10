@@ -34,6 +34,7 @@ export default class GuestListScreen extends Component {
     const {
       state: managerState,
       hasNextPage,
+      fetchNextPage,
       refreshParams,
       searchGuestList,
       updateGuestStatus,
@@ -50,6 +51,7 @@ export default class GuestListScreen extends Component {
           selectGuest={this.selectGuest}
           selectedGuest={selectedGuest}
           hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
           refreshParams={refreshParams}
         />
       </View>

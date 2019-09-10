@@ -33,6 +33,13 @@ export class EventManagerContainer extends Container {
     return false
   }
 
+  fetchNextPage = async () => {
+    await this.setState((state) => {
+      return { page: state.page + 1 }
+    })
+    this.searchGuestList()
+  }
+
   refreshParams = () => {
     this.setState({ page: 0 })
   }
@@ -76,7 +83,6 @@ export class EventManagerContainer extends Container {
 
       await this.setState({
         guests: guests.concat(data.data),
-        page: data.paging.page + 1
       })
     } catch (error) {
       apiErrorAlert(error)
