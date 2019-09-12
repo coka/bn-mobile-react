@@ -309,15 +309,12 @@ export default class TransferTickets extends Component {
 
   validateEmailOrPhone = () => {
     const { emailOrPhone } = this.state
-    const startsWithCharacter = /^[a-zA-Z]/
-    const allDigits = /\d/
+    const allDigits = /^[0-9]+$/
     const startsWithDigit = /^\d/
 
-    //If starts with character - email
-    if (startsWithCharacter.test(emailOrPhone)) {
-      if (!emailOrPhone.includes('@')) {
-        return 'Email must containt @ character!'
-      } else if (emailOrPhone.endsWith('.con') || emailOrPhone.endsWith('.cm')) {
+    //If contains @ - email
+    if (emailOrPhone.indexOf('@') > -1) {
+      if (emailOrPhone.endsWith('.con') || emailOrPhone.endsWith('.cm')) {
         return 'Wrong domain of email!'
       }
       else if (
@@ -337,8 +334,9 @@ export default class TransferTickets extends Component {
       //Phone numbers cannot start with +
     } else if (emailOrPhone.startsWith('+')) {
       return 'Number cannot start with +'
+    } else {
+      return 'Invalid recipient data'
     }
-    return ''
   }
 
 
