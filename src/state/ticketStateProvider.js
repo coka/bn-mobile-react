@@ -44,7 +44,10 @@ class TicketsContainer extends Container {
         })
 
         Object.keys(categories).forEach((key) => {
-          const tickets = categories[key]
+          let tickets = categories[key]
+          if (key === 'upcoming') {
+            tickets = tickets.filter(item => item.status !== 'Redeemed')
+          }
           if (tickets.length) {
             tabData[key].push({ event, tickets })
           }
