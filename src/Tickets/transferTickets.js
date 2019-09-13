@@ -252,6 +252,8 @@ export default class TransferTickets extends Component {
     const { isSubmitting } = this.state;
     const { screenProps, navigation } = this.props;
 
+    this.toggleAreYouSureModal(false)
+
     if (isSubmitting) return
 
     this.setState({ isSubmitting: true })
@@ -266,7 +268,6 @@ export default class TransferTickets extends Component {
       )
 
       const onDismiss = () => {
-        this.toggleAreYouSureModal(false)
         navigation.popToTop()
       }
 
