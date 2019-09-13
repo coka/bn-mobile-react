@@ -287,7 +287,7 @@ export default class ManualCheckin extends Component {
     )
   }
 
-  get loadMoreGuests() {
+  loadMoreGuests = () => {
     const { hasNextPage, fetchNextPage } = this.props
 
     if (hasNextPage) {
@@ -346,7 +346,7 @@ export default class ManualCheckin extends Component {
               scrollEventThrottle={16}
               onScroll={({ nativeEvent }) => {
                 if (this.isCloseToBottom(nativeEvent)) {
-                  this.loadMoreGuests
+                  this.loadMoreGuests()
                 }
               }}
             >

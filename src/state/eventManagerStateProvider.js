@@ -72,7 +72,7 @@ export class EventManagerContainer extends Container {
     try {
       const { data } = await server.events.guests.index({
         event_id: id,
-        // query: guestListQuery,
+        query: guestListQuery,
         limit: LIMIT,
         page,
       })
