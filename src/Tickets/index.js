@@ -247,6 +247,10 @@ export default class MyTickets extends Component {
     this.springValue = new Animated.Value(0.3)
   }
 
+  static navigationOptions = {
+    header: null
+  }
+
   get activeTab() {
     return this.props.navigation.getParam('activeTab', 'upcoming')
   }

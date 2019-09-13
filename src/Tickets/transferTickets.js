@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { PropTypes } from 'prop-types'
 import {
   Modal,
@@ -43,7 +43,7 @@ const QRCodeScanner = ({ toggleModal, modalVisible, handleBarCodeScanned }) => (
     <View style={modalStyles.modalContainer}>
       <View style={modalStyles.contentWrapper}>
         <BarCodeScanner
-            onBarCodeScanned={handleBarCodeScanned}
+          onBarCodeScanned={handleBarCodeScanned}
           style={{ height: 250, width: 250 }}
         />
         <Text style={modalStyles.headerSecondary}>
@@ -66,6 +66,54 @@ const QRCodeScanner = ({ toggleModal, modalVisible, handleBarCodeScanned }) => (
   </Modal>
 )
 
+const AreYouSureModal = ({ toggleVisible, modalVisible, emailOrPhone, validationError, handleSubmit }) => (
+  <Modal
+    onRequestClose={() => toggleVisible(false)}
+    visible={modalVisible}
+    transparent
+  >
+    <View style={modalStyles.modalContainer}>
+      <View style={modalStyles.contentWrapper}>
+        <Text style={[modalStyles.headerSecondary, styles.textCenter]}>
+          {
+            validationError ?
+              validationError :
+              `You are sending this ticket to ${emailOrPhone}. Are you sure this is correct?`
+          }
+        </Text>
+        <View style={styles.flexRowCenter}>
+          {validationError ?
+            <TouchableOpacity
+              style={[styles.buttonSecondary, { height: 50, borderRadius: 6 }]}
+              name="Cancel"
+              onPress={() => toggleVisible(false)}
+            >
+              <Text style={styles.buttonSecondaryText}>Cancel</Text>
+            </TouchableOpacity>
+            :
+            <Fragment>
+              <TouchableOpacity
+                style={[styles.button, { height: 50, borderRadius: 6 }]}
+                name="Yes"
+                onPress={handleSubmit}
+              >
+                <Text style={styles.buttonText}>YES</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.buttonSecondary, styles.marginLeftTiny, { borderRadius: 6 }]}
+                name="No"
+                onPress={() => toggleVisible(false)}
+              >
+                <Text style={styles.buttonSecondaryText}>NO</Text>
+              </TouchableOpacity>
+            </Fragment>
+          }
+        </View>
+      </View>
+    </View>
+  </Modal>
+)
+
 QRCodeScanner.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   modalVisible: PropTypes.bool.isRequired,
@@ -80,6 +128,7 @@ export default class TransferTickets extends Component {
       checkboxes: { [props.navigation.state.params.ticketId]: true },
       emailOrPhone: '',
       showQRModal: false,
+      showAreYouSureModal: false,
       hasCameraPermission: null,
       hasContactsPermission: null,
       openContactList: false,
@@ -96,7 +145,7 @@ export default class TransferTickets extends Component {
     this.toggleQRModal(false)
   }
 
-  toggleQRModal = (visible) => {
+  toggleQRModal = visible => {
     this.setState({
       showQRModal: visible,
       emailOrPhone: '',
@@ -105,6 +154,13 @@ export default class TransferTickets extends Component {
       this.cameraPermissions()
     }
   }
+
+  toggleAreYouSureModal = visible => {
+    this.setState({
+      showAreYouSureModal: visible
+    })
+  }
+
   get tickets() {
     const {
       navigation: {
@@ -167,7 +223,7 @@ export default class TransferTickets extends Component {
     this.setState({ checkboxes })
   }
 
-  toggleCheck = (id) => {
+  toggleCheck = id => {
     return (checked) => this.setChecked(id, checked)
   }
 
@@ -196,9 +252,10 @@ export default class TransferTickets extends Component {
     const { isSubmitting } = this.state;
     const { screenProps, navigation } = this.props;
 
-    if (isSubmitting) {
-      return
-    }
+    this.toggleAreYouSureModal(false)
+
+    if (isSubmitting) return
+
     this.setState({ isSubmitting: true })
 
     const { checkboxes, emailOrPhone } = this.state
@@ -244,17 +301,49 @@ export default class TransferTickets extends Component {
     })
   }
 
-  selectEmailOrPhone = (emailOrPhone) => {
+  selectEmailOrPhone = emailOrPhone => {
     this.setState({
       emailOrPhone
     })
     this.closeContactList();
   }
 
+  validateEmailOrPhone = () => {
+    const { emailOrPhone } = this.state
+    const allDigits = /^[0-9]+$/
+    const startsWithDigit = /^\d/
+
+    //If contains @ - email
+    if (emailOrPhone.indexOf('@') > -1) {
+      if (emailOrPhone.endsWith('.con') || emailOrPhone.endsWith('.cm')) {
+        return 'Wrong domain of email!'
+      }
+      else if (
+        emailOrPhone.startsWith('mail:') ||
+        emailOrPhone.startsWith('mailto:') ||
+        emailOrPhone.endsWith('@')
+      ) {
+        return 'Invalid email!'
+      }
+      //If starts with digit - phone number
+    } else if (startsWithDigit.test(emailOrPhone)) {
+      if (emailOrPhone.length > 10) {
+        return 'Number too long!'
+      } else if (!allDigits.test(emailOrPhone)) {
+        return 'Number cannot contain characters!'
+      }
+      //Phone numbers cannot start with +
+    } else if (emailOrPhone.startsWith('+')) {
+      return 'Number cannot start with +'
+    } else {
+      return 'Invalid recipient data'
+    }
+  }
+
 
   render() {
     const { navigation } = this.props
-    const { isSubmitting, emailOrPhone, checkboxes, showQRModal, openContactList, contacts } = this.state
+    const { isSubmitting, emailOrPhone, checkboxes, showQRModal, showAreYouSureModal, openContactList, contacts } = this.state
     const { hasValidRecipient, transferCount } = this
 
     let disabled = true
@@ -339,7 +428,8 @@ export default class TransferTickets extends Component {
               :
               <ContactList contacts={contacts} selectEmailOrPhone={this.selectEmailOrPhone} />
           }
-          {!openContactList &&
+          {
+            !openContactList &&
             <View style={[styles.buttonContainer, styles.marginHorizontal]}>
               <BusyButton
                 style={
@@ -348,13 +438,21 @@ export default class TransferTickets extends Component {
                     [styles.button, modalStyles.bottomRadius]
                 }
                 underlayColor={primaryColor}
-                onPress={disabled ? null : (onPress = this.transfer)}
+                onPress={disabled ? null : () => this.toggleAreYouSureModal(true)}
                 isBusy={isSubmitting}
                 busyContent={<ActivityIndicator color="#FFF" />}
               >
                 <Text style={styles.buttonText}>{buttonText}</Text>
               </BusyButton>
-            </View>}
+            </View>
+          }
+          <AreYouSureModal
+            toggleVisible={this.toggleAreYouSureModal}
+            modalVisible={showAreYouSureModal}
+            emailOrPhone={emailOrPhone}
+            validationError={this.validateEmailOrPhone()}
+            handleSubmit={this.transfer}
+          />
         </View>
       </Modal>
     )
