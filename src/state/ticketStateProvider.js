@@ -49,7 +49,6 @@ class TicketsContainer extends Container {
             let redeemedTickets = tickets.filter(item => item.status === 'Redeemed')
             tickets = tickets.filter(item => item.status !== 'Redeemed')
             if (redeemedTickets.length > 0) {
-              console.log('----->', event, redeemedTickets)
               tabData['past'].push({ event, tickets: redeemedTickets })
             }
           }
