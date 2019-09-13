@@ -316,13 +316,14 @@ export default class EventsIndex extends Component {
   goToEventDetails = (eventId, event) => {
     const {
       navigation: { navigate },
-      screenProps: { 
+      screenProps: {
         store: {
           setQuery
         }
-       },
+      },
     } = this.props
     setQuery('')
+    this._handleRefresh()
     navigate('EventsShow', { eventId, event })
   }
 
