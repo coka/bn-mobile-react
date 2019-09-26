@@ -28,6 +28,7 @@ HELP_USAGE
 
 if [ -f "./.creds/local_source.sh" ]; then
     source "./.creds/local_source.sh";
+    SKIP_NPM_INSTALL=1
 fi
 
 if [ "$#" -lt 1 ]; then
@@ -61,8 +62,12 @@ echo "Injecting SENTRY_AUTH_TOKEN into app.json"
 sed -i .bak "s/__SECRET_SENTRY_AUTH_TOKEN__/$SENTRY_AUTH_TOKEN/g" app.json
 
 # Install dependencies
-echo "Installing dependencies"
-npm ci
+if [ -z "$SKIP_NPM_INSTALL" ]; then
+    echo "Installing dependencies"
+    npm ci
+else
+    echo "Skipping npm install because we are running locally"
+fi
 
 echo "Logging into Expo as Big Neon"
 npx expo login -u "$EXPO_USERNAME" -p "$EXPO_PASSWORD"
