@@ -408,6 +408,7 @@ export default class TransferTickets extends Component {
                     onChangeText={autotrim((emailOrPhone) =>
                       this.setState({ emailOrPhone })
                     )}
+                    autoCorrect={false}
                   />
                 </View>
                 <ScrollView

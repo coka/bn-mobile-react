@@ -123,14 +123,14 @@ export default class Ticket extends Component {
       await cancelTicketTransfer(ticket);
 
       const onDismiss = () => {
-        navigation.popToTop()
+        navigation.pop()
       }
 
       Alert.alert(
         'Transfer Cancelled',
         'The transfer has been successfully cancelled!',
         [{ text: 'OK', onPress: onDismiss }],
-        { onDismiss }
+
       )
     } catch (error) {
     }
