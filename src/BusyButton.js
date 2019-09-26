@@ -8,12 +8,13 @@ function BusyButtonIndicator() {
 export default function BusyButton({
   children,
   isBusy,
+  disabled,
   busyContent,
   onPress,
   ...touchableProps
 }) {
   return (
-    <TouchableHighlight {...touchableProps} onPress={isBusy ? null : onPress}>
+    <TouchableHighlight {...touchableProps} onPress={isBusy || disabled ? null : onPress}>
       {isBusy ? busyContent || <BusyButtonIndicator /> : children}
     </TouchableHighlight>
   )

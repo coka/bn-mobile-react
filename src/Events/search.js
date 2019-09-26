@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   Text,
   View,
@@ -9,19 +9,19 @@ import {
 } from 'react-native'
 import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
-import {uniqBy} from 'lodash'
+import { uniqBy } from 'lodash'
 
 const styles = SharedStyles.createStyles()
 const formStyles = FormStyles.createStyles()
 
-function SuggestedSearches({searchText, events, navigate}) {
+function SuggestedSearches({ searchText, events, navigate }) {
   if (searchText === '' || events.length === 0) {
     return null
   }
 
   const reducer = (names, event) => {
-    names.push({eventId: event.id, id: event.id, name: event.name, event})
-    event.artists.forEach(({artist}) => {
+    names.push({ eventId: event.id, id: event.id, name: event.name, event })
+    event.artists.forEach(({ artist }) => {
       if (artist.name.toLowerCase().includes(searchText.trim().toLowerCase())) {
         names.push({
           eventId: event.id,
@@ -73,11 +73,11 @@ function SuggestedSearches({searchText, events, navigate}) {
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         data={names.slice(0, 3)}
-        renderItem={({item, separators}) => (
+        renderItem={({ item, separators }) => (
           <TouchableHighlight
             style={[styles.rowContainer, styles.paddingVerticalSmall]}
             onPress={() =>
-              navigate('EventsShow', {eventId: item.eventId, event: item.event})
+              navigate('EventsShow', { eventId: item.eventId, event: item.event })
             }
             onShowUnderlay={separators.highlight}
             onHideUnderlay={separators.unhighlight}
@@ -101,23 +101,23 @@ export default class EventSearch extends Component {
     const query = this.props.store.state.query
 
     if (query.length >= 3 || query.length === 0) {
-      this.props.store.getEvents({page: 0, query, replaceEvents: true})
+      this.props.store.getEvents({ page: 0, query, replaceEvents: true })
     }
   }
 
-  updateSearchText = async(text) => {
+  updateSearchText = async (text) => {
     await this.props.store.setQuery(text)
     this.searchEvents()
   }
 
   shouldShowResults() {
-    const {query} = this.props.store.state
+    const { query } = this.props.store.state
 
     return query.length >= 3
   }
 
   render() {
-    const {query} = this.props.store.state
+    const { query } = this.props.store.state
     const showResults = this.shouldShowResults()
 
     return (
@@ -130,8 +130,9 @@ export default class EventSearch extends Component {
           <TextInput
             style={formStyles.searchInput}
             placeholder="Search artists, shows, venues..."
-            searchIcon={{size: 24}}
+            searchIcon={{ size: 24 }}
             underlineColorAndroid="transparent"
+            value={query}
             onChangeText={this.updateSearchText}
           />
         </View>

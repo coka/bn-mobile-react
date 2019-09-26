@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
@@ -12,14 +12,14 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native'
-import {NavigationEvents} from 'react-navigation'
+import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import NavigationStyles from '../styles/shared/navigationStyles'
 import ModalStyles from '../styles/shared/modalStyles'
 import EventItemView from './event_card'
 import EventSearch from './search'
-import {DateTime} from 'luxon'
+import { DateTime } from 'luxon'
 import TicketStyles from '../styles/tickets/ticketStyles'
 import emptyState from '../../assets/icon-empty-state.png'
 
@@ -32,14 +32,12 @@ const HEADER_MAX_HEIGHT = 0
 const HEADER_MIN_HEIGHT = -25
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
-function EmptyEvents({locationName}) {
+function EmptyEvents({ locationName }) {
   return (
     <View style={ticketStyles.emptyStateContainer}>
       <Image style={ticketStyles.emptyStateIcon} source={emptyState} />
       <Text style={ticketStyles.emptyStateText}>
-        {`More${
-          locationName == 'All Locations' ? '' : ` ${locationName}`
-        } events and experiences powered by Big Neon launching soon!`}
+        {`There doesn't seem to be anything here.`}
       </Text>
     </View>
   )
@@ -55,9 +53,9 @@ export default class EventsIndex extends Component {
   constructor(props) {
     super(props)
     const {
-      screenProps: {store},
+      screenProps: { store },
     } = props
-    const {state} = store
+    const { state } = store
 
     this.state = {
       scrollY: new Animated.Value(
@@ -68,7 +66,6 @@ export default class EventsIndex extends Component {
       duration: 2000,
       easing: Easing.linear,
       selectedLocationId: state.selectedLocationId || 2,
-      searchText: '',
     }
   }
 
@@ -77,14 +74,14 @@ export default class EventsIndex extends Component {
     const {
       screenProps: {
         store: {
-          state: {selectedLocationId},
+          state: { selectedLocationId },
         },
       },
     } = newProps
 
     if (selectedLocationId !== this.state.selectedLocationId) {
       // also do some kind of event re-search action to load new city events
-      this.setState({selectedLocationId})
+      this.setState({ selectedLocationId })
     }
   }
 
@@ -101,12 +98,11 @@ export default class EventsIndex extends Component {
 
   loadEvents() {
     const {
-      screenProps: {store},
+      screenProps: { store },
     } = this.props
 
     if (this.events.length === 0 || this.eventsRefresh) {
       store.getEvents()
-      this.setState({searchText: ''})
     }
   }
 
@@ -114,19 +110,19 @@ export default class EventsIndex extends Component {
     const {
       screenProps: {
         store: {
-          state: {lastUpdate},
+          state: { lastUpdate },
         },
       },
     } = this.props
 
-    return !lastUpdate || lastUpdate.plus({minutes: 15}) < DateTime.local()
+    return !lastUpdate || lastUpdate.plus({ minutes: 15 }) < DateTime.local()
   }
 
   get events() {
     const {
       screenProps: {
         store: {
-          state: {events},
+          state: { events },
         },
       },
     } = this.props
@@ -180,18 +176,18 @@ export default class EventsIndex extends Component {
   _handleRefresh = () => {
     const {
       screenProps: {
-        store: {refreshEvents},
+        store: { refreshEvents },
       },
     } = this.props
 
-    this.setState({refreshing: true})
-    refreshEvents(() => this.setState({refreshing: false}))
+    this.setState({ refreshing: true })
+    refreshEvents(() => this.setState({ refreshing: false }))
   }
 
   _handleLoadMore = () => {
     const {
       screenProps: {
-        store: {fetchNextPage, hasNextPage},
+        store: { fetchNextPage, hasNextPage },
       },
     } = this.props
 
@@ -206,7 +202,7 @@ export default class EventsIndex extends Component {
 
   onLocationChanged = (event, location) => {
     const {
-      screenProps: {store},
+      screenProps: { store },
     } = this.props
 
     store.getEvents({
@@ -220,7 +216,7 @@ export default class EventsIndex extends Component {
     const {
       screenProps: {
         store: {
-          state: {loading},
+          state: { loading },
         },
       },
     } = this.props
@@ -245,8 +241,8 @@ export default class EventsIndex extends Component {
     })
 
     const {
-      navigation: {navigate},
-      screenProps: {store},
+      navigation: { navigate },
+      screenProps: { store },
     } = this.props
 
     return (
@@ -254,7 +250,7 @@ export default class EventsIndex extends Component {
         <View
           style={[styles.sectionHeaderContainer, styles.flexRowSpaceBetween]}
         >
-          <Animated.Text style={[styles.header, {opacity}]}>
+          <Animated.Text style={[styles.header, { opacity }]}>
             Explore
           </Animated.Text>
           {/* Removed due to issue #118 */}
@@ -280,7 +276,6 @@ export default class EventsIndex extends Component {
             </View>
           </ModalDropdown> */}
         </View>
-
         <EventSearch navigate={navigate} store={store} />
       </View>
     )
@@ -290,7 +285,7 @@ export default class EventsIndex extends Component {
     const {
       screenProps: {
         store: {
-          state: {loading},
+          state: { loading },
         },
       },
     } = this.props
@@ -315,6 +310,20 @@ export default class EventsIndex extends Component {
     )
   }
 
+  goToEventDetails = (eventId, event) => {
+    const {
+      navigation: { navigate },
+      screenProps: {
+        store: {
+          setQuery
+        }
+      },
+    } = this.props
+    setQuery('')
+    this._handleRefresh()
+    navigate('EventsShow', { eventId, event })
+  }
+
   /* eslint-disable-next-line complexity */
   render() {
     const scrollY = Animated.add(
@@ -337,9 +346,8 @@ export default class EventsIndex extends Component {
     })
 
     const {
-      navigation: {navigate},
       screenProps: {
-        store: {toggleInterest},
+        store: { toggleInterest },
       },
     } = this.props
     const events = this.events
@@ -348,11 +356,11 @@ export default class EventsIndex extends Component {
       <View style={styles.containerFullHeight}>
         <NavigationEvents onDidFocus={() => this.loadEvents()} />
         <FlatList
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
           onScroll={Animated.event([
-            {nativeEvent: {contentOffset: {y: this.state.scrollY}}},
+            { nativeEvent: { contentOffset: { y: this.state.scrollY } } },
           ])}
           refreshControl={
             <RefreshControl
@@ -376,11 +384,9 @@ export default class EventsIndex extends Component {
           ListEmptyComponent={
             <EmptyEvents locationName={this.currentLocationDisplayName} />
           }
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <EventItemView
-              onPress={() =>
-                navigate('EventsShow', {eventId: item.id, event: item})
-              }
+              onPress={() => this.goToEventDetails(item.id, item)}
               event={item}
               onInterested={toggleInterest}
             />
@@ -392,11 +398,11 @@ export default class EventsIndex extends Component {
         <Animated.View
           style={[
             navigationStyles.scrollHeaderContainer,
-            {height: headerHeight, transform: [{translateY: headerTranslate}]},
+            { height: headerHeight, transform: [{ translateY: headerTranslate }] },
           ]}
         >
           <View style={navigationStyles.scrollHeader}>
-            <Animated.Text style={[navigationStyles.scrollTitle, {opacity}]}>
+            <Animated.Text style={[navigationStyles.scrollTitle, { opacity }]}>
               Explore
             </Animated.Text>
             <Animated.Text style={navigationStyles.scrollSubTitle}>
