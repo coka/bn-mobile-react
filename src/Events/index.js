@@ -38,7 +38,7 @@ function EmptyEvents({ locationName }) {
     <View style={ticketStyles.emptyStateContainer}>
       <Image style={ticketStyles.emptyStateIcon} source={emptyState} />
       <Text style={ticketStyles.emptyStateText}>
-        {`Events and experiences powered by Big Neon!`}
+        {`There doesn't seem to be anything here.`}
       </Text>
     </View>
   )
