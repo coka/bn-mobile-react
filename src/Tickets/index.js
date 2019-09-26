@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {PropTypes} from 'prop-types'
+import React, { Component } from 'react'
+import { PropTypes } from 'prop-types'
 import {
   Text,
   View,
@@ -14,10 +14,10 @@ import SlideShowStyles from '../styles/shared/slideshowStyles'
 import TicketStyles from '../styles/tickets/ticketStyles'
 import emptyState from '../../assets/icon-empty-state.png'
 import imageOverlay from '../../assets/event-img-overlay.png'
-import {some} from 'lodash'
-import {NavigationEvents} from 'react-navigation'
-import {optimizeCloudinaryImage} from '../cloudinary'
-import {Image as CachedImage} from 'react-native-expo-image-cache'
+import { some } from 'lodash'
+import { NavigationEvents } from 'react-navigation'
+import { optimizeCloudinaryImage } from '../cloudinary'
+import { Image as CachedImage } from 'react-native-expo-image-cache'
 
 const styles = SharedStyles.createStyles()
 const slideshowStyles = SlideShowStyles.createStyles()
@@ -26,7 +26,7 @@ const ticketStyles = TicketStyles.createStyles()
 // The height of one ticket. Used for determining scroll position
 const TICKET_HEIGHT = 265
 
-function EmptyTickets({text}) {
+function EmptyTickets({ text }) {
   return (
     <View style={ticketStyles.emptyStateContainer}>
       <Image style={ticketStyles.emptyStateIcon} source={emptyState} />
@@ -42,7 +42,7 @@ class AnimatedTicket extends React.Component {
 
   render() {
     return (
-      <Animated.View style={{transform: [{scale: this.props.springValue}]}}>
+      <Animated.View style={{ transform: [{ scale: this.props.springValue }] }}>
         <Ticket
           navigate={this.props.navigate}
           ticket={this.props.ticket}
@@ -61,16 +61,16 @@ AnimatedTicket.propTypes = {
   requestScrollToTicket: PropTypes.func.isRequired,
 }
 
-const Ticket = ({navigate, ticket, activeTab, setPurchasedTicket}) => {
-  const {event, tickets} = ticket
+const Ticket = ({ navigate, ticket, activeTab, setPurchasedTicket }) => {
+  const { event, tickets } = ticket
 
   return (
     <View>
       <TouchableHighlight
-        underlayColor="#F5F6F7"
+        underlayColor={styles.underlayColor}
         onPress={() => {
           setPurchasedTicket(null)
-          navigate('EventTickets', {eventId: event.id, activeTab})
+          navigate('EventTickets', { eventId: event.id, activeTab })
         }}
       >
         <View style={ticketStyles.ticketContainer}>
@@ -197,10 +197,10 @@ class TicketsView extends React.Component {
           index,
         })}
         data={tickets}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           return some(
             item.tickets,
-            ({order_id}) => order_id === purchasedTicket
+            ({ order_id }) => order_id === purchasedTicket
           ) ? (
               <AnimatedTicket
                 navigate={navigate}
@@ -247,12 +247,16 @@ export default class MyTickets extends Component {
     this.springValue = new Animated.Value(0.3)
   }
 
+  static navigationOptions = {
+    header: null
+  }
+
   get activeTab() {
     return this.props.navigation.getParam('activeTab', 'upcoming')
   }
 
   set activeTab(activeTab) {
-    this.props.navigation.setParams({activeTab})
+    this.props.navigation.setParams({ activeTab })
   }
 
   spring() {
@@ -282,7 +286,7 @@ export default class MyTickets extends Component {
     return EMPTY_TEXT_FOR_ACTIVE_TAB[this.activeTab]
   }
 
-  refreshTickets = async() => {
+  refreshTickets = async () => {
     await this.props.screenProps.store.userTickets()
     this.spring()
   }
@@ -294,11 +298,11 @@ export default class MyTickets extends Component {
 
   render() {
     const {
-      navigation: {navigate},
+      navigation: { navigate },
       screenProps: {
         store: {
           setPurchasedTicket,
-          state: {purchasedTicket},
+          state: { purchasedTicket },
         },
       },
     } = this.props

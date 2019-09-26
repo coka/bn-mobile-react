@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -15,9 +15,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
 import LoginStyles from '../styles/login/loginStyles'
-import {autotrim} from '../string'
+import { autotrim } from '../string'
 import BusyButton from '../BusyButton'
-import {NavigationEvents} from 'react-navigation'
+import { NavigationEvents } from 'react-navigation'
 
 const styles = SharedStyles.createStyles()
 const formStyles = FormStyles.createStyles()
@@ -40,7 +40,7 @@ export default class SignUp extends Component {
     screenProps: PropTypes.object.isRequired,
   }
 
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: returnToButton(navigation),
       headerStyle: loginStyles.navigationContainer,
@@ -59,25 +59,27 @@ export default class SignUp extends Component {
 
   signUp = async () => {
     const {
-      screenProps: {auth},
-      navigation: {navigate},
+      screenProps: { auth },
+      navigation: { navigate },
     } = this.props
-    const {email, password} = this.state
+    const { email, password } = this.state
 
     if (!auth.isFetching()) {
-      this.setState({isBusy: true})
+      this.setState({ isBusy: true })
       // Should register & login on success
-      const isSignedUp = await auth.signUp({email, password}, navigate)
+      const isSignedUp = await auth.signUp({ email, password }, navigate)
 
       // If there was an error, reactivate button
       if (!isSignedUp) {
-        this.setState({isBusy: false})
+        this.setState({ isBusy: false })
       }
     }
   }
 
   render() {
-    const {navigate} = this.props.navigation
+    const { isBusy, email, password } = this.state
+
+    const disableButton = !(email && password)
 
     return (
       <KeyboardAvoidingView
@@ -90,7 +92,7 @@ export default class SignUp extends Component {
           keyboardShouldPersistTaps={'handled'}
         >
           <NavigationEvents
-            onWillFocus={() => this.setState({isBusy: false})}
+            onWillFocus={() => this.setState({ isBusy: false })}
           />
           <View>
             <Text style={loginStyles.smallText}>Secure your experiences</Text>
@@ -109,25 +111,26 @@ export default class SignUp extends Component {
               style={formStyles.input}
               placeholder="Email Address"
               underlineColorAndroid="transparent"
-              onChangeText={autotrim((email) => this.setState({email}))}
+              onChangeText={autotrim((email) => this.setState({ email }))}
             />
             <TextInput
               style={formStyles.input}
               secureTextEntry
               placeholder="Password"
               underlineColorAndroid="transparent"
-              onChangeText={(password) => this.setState({password})}
+              onChangeText={(password) => this.setState({ password })}
               autoCapitalize="none"
             />
 
             <BusyButton
               style={loginStyles.buttonContainer}
               onPress={this.signUp}
-              isBusy={this.state.isBusy}
+              isBusy={isBusy}
+              disabled={disableButton}
               busyContent={
                 <LinearGradient
-                  start={{x: 0, y: 0}}
-                  end={{x: 1, y: 0}}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
                   colors={['#5491CC', '#9A68B2', '#E53D96']}
                   style={loginStyles.button}
                 >
@@ -136,9 +139,9 @@ export default class SignUp extends Component {
               }
             >
               <LinearGradient
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
-                colors={['#5491CC', '#9A68B2', '#E53D96']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                colors={disableButton ? ['#d3d3d3', '#d3d3d3', '#d3d3d3'] : ['#5491CC', '#9A68B2', '#E53D96']}
                 style={loginStyles.button}
               >
                 <Text style={loginStyles.buttonText}>{"Let's Do This"}</Text>
@@ -150,7 +153,7 @@ export default class SignUp extends Component {
             <Text style={[loginStyles.mutedText, styles.textCenter]}>
               By signing up you agree to our
             </Text>
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <View style={styles.flexRowCenter}>
               <TouchableHighlight
                 onPress={() => {
                   WebBrowser.openBrowserAsync(

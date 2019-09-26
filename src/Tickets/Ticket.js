@@ -188,13 +188,13 @@ export default class Ticket extends Component {
     )
   }
 
-  get bottomRow() {
+  renderBottomRow = (status) => {
     const { activeTab } = this.props
     switch (activeTab) {
       case 'upcoming':
         return this.upcomingTabText
       case 'past':
-        return staticBottomText('This event has ended')
+        return staticBottomText(status === 'Redeemed' ? 'Redeemed' : 'This event has ended')
       case 'transfer':
         return this.transferBottomText
       default:
@@ -314,7 +314,7 @@ export default class Ticket extends Component {
           {this.qrContainer}
         </View>
 
-        <TicketBottomRow>{this.bottomRow}</TicketBottomRow>
+        <TicketBottomRow>{this.renderBottomRow(ticket.status)}</TicketBottomRow>
       </View>
     )
   }
