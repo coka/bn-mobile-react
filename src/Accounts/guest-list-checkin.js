@@ -250,15 +250,15 @@ function SearchBox({ textInput }) {
 export default class ManualCheckin extends Component {
 
   componentDidMount() {
-    this.searchGuestList('', 0)
+    this.searchGuestList('', false)
   }
 
   componentWillUnmount() {
     this.props.refreshParams()
   }
 
-  searchGuestList = (query) => {
-    this.props.searchGuestList(query)
+  searchGuestList = (query, replaceGuests) => {
+    this.props.searchGuestList(query, 0, replaceGuests)
   }
 
   unselectGuest = () => {
@@ -274,7 +274,7 @@ export default class ManualCheckin extends Component {
     } catch (error) {
       apiErrorAlert(error)
     } finally {
-      this.searchGuestList(this.props.guestListQuery) // refresh list w/ new data
+      this.searchGuestList(this.props.guestListQuery, true) // refresh list w/ new data
       this.unselectGuest()
     }
   }
@@ -332,7 +332,7 @@ export default class ManualCheckin extends Component {
                 <SearchBox
                   textInput={{
                     defaultValue: guestListQuery,
-                    onChangeText: this.searchGuestList,
+                    onChangeText: (query) => this.searchGuestList(query, true),
                     placeholder: 'Search for guests',
                   }}
                   style={doormanStyles.searchInput}

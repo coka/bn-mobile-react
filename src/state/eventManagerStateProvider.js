@@ -63,7 +63,7 @@ export class EventManagerContainer extends Container {
     this.setState({ eventToScan: event, guests: [] })
   }
 
-  searchGuestList = async (guestListQuery = '', page = this.state.page) => {
+  searchGuestList = async (guestListQuery = '', page = this.state.page, replaceGuests = false) => {
 
     await this.setState({ isFetchingGuests: true, guestListQuery })
 
@@ -77,13 +77,15 @@ export class EventManagerContainer extends Container {
         page,
       })
 
-      if (guestListQuery === '') {
-        await this.setState({ totalNumberOfGuests: data.paging.total })
-      }
+      replaceGuests ?
+        this.setState({
+          guests: data.data
+        }) :
+        this.setState({
+          totalNumberOfGuests: data.paging.total,
+          guests: guests.concat(data.data),
+        })
 
-      await this.setState({
-        guests: guests.concat(data.data),
-      })
     } catch (error) {
       apiErrorAlert(error)
     }
