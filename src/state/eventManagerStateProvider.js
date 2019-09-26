@@ -28,7 +28,7 @@ export class EventManagerContainer extends Container {
     const { totalNumberOfGuests, page } = this.state
 
     if (totalNumberOfGuests && totalNumberOfGuests > 0) {
-      return totalNumberOfGuests - (page + 1) * LIMIT > 0
+      return totalNumberOfGuests - ((page + 1) * LIMIT) > 0
     }
     return false
   }
