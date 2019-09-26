@@ -74,6 +74,9 @@ export default class LogIn extends Component {
   }
 
   render() {
+    const { isBusy, email, password } = this.state
+
+    const disableButton = !(email && password)
     return (
       <View style={loginStyles.container}>
         <View>
@@ -106,7 +109,8 @@ export default class LogIn extends Component {
           <BusyButton
             style={loginStyles.buttonContainer}
             onPress={this.logIn}
-            isBusy={this.state.isBusy}
+            isBusy={isBusy}
+            disabled={disableButton}
             busyContent={
               <LinearGradient
                 start={{x: 0, y: 0}}
@@ -121,7 +125,7 @@ export default class LogIn extends Component {
             <LinearGradient
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
-              colors={['#5491CC', '#9A68B2', '#E53D96']}
+              colors={disableButton ? ['#d3d3d3', '#d3d3d3', '#d3d3d3'] : ['#5491CC', '#9A68B2', '#E53D96']}
               style={loginStyles.button}
             >
               <Text style={loginStyles.buttonText}>{"Let's Do This"}</Text>
