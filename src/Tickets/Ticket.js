@@ -202,7 +202,7 @@ export default class Ticket extends Component {
     }
   }
 
-  get qrContainer() {
+  renderQrContainer() {
     const { ticket, activeTab } = this.props
     const { qrText } = this.state
 
@@ -216,7 +216,7 @@ export default class Ticket extends Component {
               size={200}
               fgColor="white"
               bgColor="black"
-              value={qrText}
+              value={qrText+"a"}
             />
           </View>
         )
@@ -311,7 +311,7 @@ export default class Ticket extends Component {
         </View>
 
         <View style={ticketWalletStyles.qrCodeContainer}>
-          {this.qrContainer}
+          {this.renderQrContainer()}
         </View>
 
         <TicketBottomRow>{this.renderBottomRow(ticket.status)}</TicketBottomRow>

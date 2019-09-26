@@ -15,6 +15,7 @@ import Sentry from 'sentry-expo'
 import LottieView from 'lottie-react-native'
 
 // Sentry.enableInExpoDevelopment = true // Remove this once Sentry is correctly setup.
+// Sentry.debug = true;
 Sentry.config(
   'https://c59ea227ebbb4306b332c35af91e292f@sentry.io/1407235'
 ).install()

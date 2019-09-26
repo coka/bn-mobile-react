@@ -137,7 +137,7 @@ export default class TransferTickets extends Component {
   }
 
   handleBarCodeScanned = async ({ _type, data }) => {
-    parsedScan = JSON.parse(data)
+    let parsedScan = JSON.parse(data)
     if (this.state.emailOrPhone === parsedScan.email) {
       return
     }
@@ -310,8 +310,8 @@ export default class TransferTickets extends Component {
 
   validateEmailOrPhone = () => {
     const { emailOrPhone } = this.state
-    const allDigits = /^[0-9]+$/
-    const startsWithDigit = /^\d/
+    const allDigits = /^[0-9()+ -]+$/
+    const startsWithDigit = /^[\d+]/
 
     //If contains @ - email
     if (emailOrPhone.indexOf('@') > -1) {
@@ -327,10 +327,10 @@ export default class TransferTickets extends Component {
       }
       //If starts with digit - phone number
     } else if (startsWithDigit.test(emailOrPhone)) {
-      if (emailOrPhone.length > 10) {
-        return 'Number too long!'
+      if (emailOrPhone.length < 7) {
+        return 'Number too short!'
       } else if (!allDigits.test(emailOrPhone)) {
-        return 'Number cannot contain characters!'
+        return 'Number contains invalid characters!'
       }
       //Phone numbers cannot start with +
     } else if (emailOrPhone.startsWith('+')) {
@@ -394,9 +394,9 @@ export default class TransferTickets extends Component {
                         source={qrCodeIcon}
                       />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.getContactList()}>
-                      <Icon style={{ fontSize: 24 }} name="contacts" />
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity onPress={() => this.getContactList()}>*/}
+                      {/*<Icon style={{ fontSize: 24 }} name="contacts" />*/}
+                    {/*</TouchableOpacity>*/}
                   </View>
                   <TextInput
                     keyboardType="email-address"
@@ -414,15 +414,17 @@ export default class TransferTickets extends Component {
                   showsVerticalScrollIndicator={false}
                   style={{ paddingTop: 10 }}
                 >
-                  {this.tickets.map(({ id, ticket_type_name: name }) => (
-                    <CardItem
-                      key={id}
-                      id={id}
-                      name={name}
-                      checkboxes={checkboxes}
-                      toggleCheck={this.toggleCheck}
-                    />
-                  ))}
+                  {this.tickets.map(({ id, ticket_type_name: name }) => {
+                    return (
+                        <CardItem
+                            key={id}
+                            id={id}
+                            name={name}
+                            checkboxes={checkboxes}
+                            toggleCheck={this.toggleCheck}
+                        />
+                    )
+                  })}
                 </ScrollView>
               </View>
               :
