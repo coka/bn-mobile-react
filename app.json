@@ -48,7 +48,7 @@
           "config": {
             "organization": "big-neon-5x",
             "project": "react-native-mobile-apps",
-            "authToken": "__SECRET_SENTRY_AUTH_TOKEN__"
+            "authToken": "a0fdde3bde4848928392320aca886dc71863cdc2dfb44d1fbbd2bb041d91dd48"
           }
         }
       ]
