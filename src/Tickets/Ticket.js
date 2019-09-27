@@ -216,7 +216,7 @@ export default class Ticket extends Component {
               size={200}
               fgColor="white"
               bgColor="black"
-              value={qrText+"a"}
+              value={qrText}
             />
           </View>
         )
