@@ -123,14 +123,14 @@ export default class Ticket extends Component {
       await cancelTicketTransfer(ticket);
 
       const onDismiss = () => {
-        navigation.popToTop()
+        navigation.pop()
       }
 
       Alert.alert(
         'Transfer Cancelled',
         'The transfer has been successfully cancelled!',
         [{ text: 'OK', onPress: onDismiss }],
-        { onDismiss }
+
       )
     } catch (error) {
     }
@@ -202,7 +202,7 @@ export default class Ticket extends Component {
     }
   }
 
-  get qrContainer() {
+  renderQrContainer() {
     const { ticket, activeTab } = this.props
     const { qrText } = this.state
 
@@ -311,7 +311,7 @@ export default class Ticket extends Component {
         </View>
 
         <View style={ticketWalletStyles.qrCodeContainer}>
-          {this.qrContainer}
+          {this.renderQrContainer()}
         </View>
 
         <TicketBottomRow>{this.renderBottomRow(ticket.status)}</TicketBottomRow>
