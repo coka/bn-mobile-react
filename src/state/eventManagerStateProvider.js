@@ -81,10 +81,10 @@ export class EventManagerContainer extends Container {
         this.setState({
           guests: data.data
         }) :
-        this.setState({
+        this.setState(previousState => ({
           totalNumberOfGuests: data.paging.total,
-          guests: guests.concat(data.data),
-        })
+          guests: previousState.guests.concat(data.data),
+        }))
 
     } catch (error) {
       apiErrorAlert(error)
