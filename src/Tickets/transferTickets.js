@@ -173,7 +173,11 @@ export default class TransferTickets extends Component {
       },
     } = this.props
 
-    return ticketsForEvent(activeTab, eventId).tickets
+    const ticketContainer = ticketsForEvent(activeTab, eventId)
+    if (ticketContainer && ticketContainer.tickets) {
+      return ticketContainer.tickets
+    }
+    return []
   }
 
   get firstName() {
