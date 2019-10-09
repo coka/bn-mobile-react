@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { View, ScrollView, Text, TouchableHighlight, TextInput, Image, Dimensions, Keyboard } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { price, usernameLastFirst } from '../string'
-import SharedStyles from '../styles/shared/sharedStyles'
+import SharedStyles, {
+  primaryColor,
+  globalPaddingTiny
+} from "../styles/shared/sharedStyles"
 import DoormanStyles from '../styles/account/doormanStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import TicketStyles from '../styles/tickets/ticketStyles'
@@ -12,6 +15,7 @@ import { server, apiErrorAlert } from '../constants/Server'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import { KeyboardDismisser } from '../ui'
 import { LoadingScreen } from '../constants/modals'
+import { ActivityIndicator } from 'react-native';
 
 const styles = SharedStyles.createStyles()
 const doormanStyles = DoormanStyles.createStyles()
@@ -162,31 +166,45 @@ class GuestList extends Component {
   }
 
   render() {
-    const { guests, onSelect, onCheckIn, ...rest } = this.props
+    const {
+      guests,
+      isFetchingGuests,
+      onSelect,
+      onCheckIn,
+      ...rest
+    } = this.props
 
     if (guests.length === 0) {
       return <EmptyState />
     }
 
     return (
-      <SwipeListView
-        {...rest}
-        onScroll={() => Keyboard.dismiss()}
-        useFlatList
-        data={guests}
-        keyExtractor={({ id }) => id}
-        onRowOpen={this.onRowOpen}
-        renderItem={({ item }) => (
-          <SwipeRow
-            disableLeftSwipe
-            swipeToOpenPercent={40}
-            leftOpenValue={SCREEN_WIDTH}
-          >
-            <GuestTicketCardUnderlay guest={item} />
-            <GuestTicketCard guest={item} onSelect={onSelect} />
-          </SwipeRow>
+      <View>
+        <SwipeListView
+          {...rest}
+          onScroll={() => Keyboard.dismiss()}
+          useFlatList
+          data={guests}
+          keyExtractor={({ id }) => id}
+          onRowOpen={this.onRowOpen}
+          renderItem={({ item }) => (
+            <SwipeRow
+              disableLeftSwipe
+              swipeToOpenPercent={40}
+              leftOpenValue={SCREEN_WIDTH}
+            >
+              <GuestTicketCardUnderlay guest={item} />
+              <GuestTicketCard guest={item} onSelect={onSelect} />
+            </SwipeRow>
+          )}
+        />
+        {isFetchingGuests && (
+          <ActivityIndicator
+            color={primaryColor}
+            style={{ paddingTop: globalPaddingTiny }}
+          />
         )}
-      />
+      </View>
     )
   }
 }
@@ -301,7 +319,13 @@ export default class ManualCheckin extends Component {
   }
 
   render() {
-    const { guests, guestListQuery, totalNumberOfGuests, selectedGuest } = this.props
+    const {
+      guests,
+      isFetchingGuests,
+      guestListQuery,
+      totalNumberOfGuests,
+      selectedGuest
+    } = this.props
 
     let guestText = totalNumberOfGuests === 1 ? 'guest' : 'guests'
 
@@ -352,6 +376,7 @@ export default class ManualCheckin extends Component {
             >
               <GuestList
                 guests={guests}
+                isFetchingGuests={isFetchingGuests}
                 onSelect={this.props.selectGuest}
                 onCheckIn={this.checkInGuest}
               />
