@@ -14,7 +14,6 @@ import {
 } from 'react-native'
 import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import ModalDropdown from 'react-native-modal-dropdown'
 import SharedStyles from '../styles/shared/sharedStyles'
 import NavigationStyles from '../styles/shared/navigationStyles'
 import ModalStyles from '../styles/shared/modalStyles'
