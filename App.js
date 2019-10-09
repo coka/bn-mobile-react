@@ -2,8 +2,8 @@ import React, {Component, createElement} from 'react'
 import {Provider} from 'unstated'
 import {loadFonts} from './assets/fonts'
 import {loadImages} from './assets'
-import {View} from 'react-native'
-import {AppLoading, SplashScreen} from 'expo'
+import {Platform, View} from 'react-native'
+import {AppLoading, Notifications, SplashScreen} from 'expo'
 import navigator from './src/navigators/navigator'
 import SharedStyles from './src/styles/shared/sharedStyles'
 import {EventsContainer} from './src/state/eventStateProvider'
@@ -68,6 +68,21 @@ export default class App extends Component {
   //   await AsyncStorage.clear();
   //   this.props.navigation.navigate('Auth');
   // };
+
+  componentDidMount() {
+    if (Platform.OS === 'android') {
+      Notifications.createChannelAndroidAsync('event-messages', {
+        name: 'Event messages',
+        sound: true,
+        vibrate: true
+      })
+      Notifications.createChannelAndroidAsync('transfers', {
+        name: 'Transfers',
+        sound: true,
+        vibrate: true
+      })
+    }
+  }
 
   render() {
     if (!this.state.isSplashReady) {
