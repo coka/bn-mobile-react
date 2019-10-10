@@ -93,6 +93,11 @@ function SuggestedSearches({ searchText, events, navigate }) {
 }
 
 export default class EventSearch extends Component {
+  debounce = 0;
+  state = {
+    localQuery: ''
+  };
+
   get events() {
     return this.props.store.state.events
   }
@@ -105,19 +110,23 @@ export default class EventSearch extends Component {
     }
   }
 
-  updateSearchText = async (text) => {
-    await this.props.store.setQuery(text)
-    this.searchEvents()
+  updateSearchText = (text) => {
+    clearTimeout(this.debounce);
+    this.setState({localQuery: text});
+    this.debounce = setTimeout(async() => {
+      await this.props.store.setQuery(text)
+      this.searchEvents()
+    }, 250)
   }
 
   shouldShowResults() {
-    const { query } = this.props.store.state
+    const { localQuery } = this.state
 
-    return query.length >= 3
+    return localQuery.length >= 3
   }
 
   render() {
-    const { query } = this.props.store.state
+    const { localQuery } = this.state
     const showResults = this.shouldShowResults()
 
     return (
@@ -132,7 +141,7 @@ export default class EventSearch extends Component {
             placeholder="Search artists, shows, venues..."
             searchIcon={{ size: 24 }}
             underlineColorAndroid="transparent"
-            value={query}
+            value={localQuery}
             onChangeText={this.updateSearchText}
           />
         </View>
@@ -140,12 +149,12 @@ export default class EventSearch extends Component {
         {showResults && (
           <React.Fragment>
             <SuggestedSearches
-              searchText={query}
+              searchText={localQuery}
               events={this.events}
               navigate={this.props.navigate}
             />
             <Text style={styles.sectionHeader}>
-              {`Search Results for "${query}"`}
+              {`Search Results for "${localQuery}"`}
             </Text>
           </React.Fragment>
         )}
