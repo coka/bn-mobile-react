@@ -93,7 +93,7 @@ function SuggestedSearches({ searchText, events, navigate }) {
 }
 
 export default class EventSearch extends Component {
-  debounce = false;
+  debounce = 0;
   get events() {
     return this.props.store.state.events
   }
