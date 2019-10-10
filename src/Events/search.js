@@ -93,6 +93,7 @@ function SuggestedSearches({ searchText, events, navigate }) {
 }
 
 export default class EventSearch extends Component {
+  debounce = false;
   get events() {
     return this.props.store.state.events
   }
@@ -105,9 +106,12 @@ export default class EventSearch extends Component {
     }
   }
 
-  updateSearchText = async (text) => {
-    await this.props.store.setQuery(text)
-    this.searchEvents()
+  updateSearchText = (text) => {
+    clearTimeout(this.debounce);
+    this.props.store.setQuery(text)
+    this.debounce = setTimeout(async() => {
+      this.searchEvents()
+    }, 250)
   }
 
   shouldShowResults() {
