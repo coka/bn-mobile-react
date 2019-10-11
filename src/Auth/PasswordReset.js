@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -9,18 +9,18 @@ import {
   Alert,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient'
 import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
 import LoginStyles from '../styles/login/loginStyles'
-import {server} from '../constants/Server'
+import { server } from '../constants/Server'
 
 const styles = SharedStyles.createStyles()
 const formStyles = FormStyles.createStyles()
 const loginStyles = LoginStyles.createStyles()
 
 async function doPasswordReset(email) {
-  return await server.passwordReset.create({email})
+  return await server.passwordReset.create({ email })
 }
 
 export default class PasswordReset extends Component {
@@ -31,8 +31,8 @@ export default class PasswordReset extends Component {
     }
   }
 
-  resetPassword = async() => {
-    const {email} = this.state
+  resetPassword = async () => {
+    const { email } = this.state
 
     if (!email.match(/^[^@]+@[^@]+$/)) {
       Alert.alert('Error', 'Please enter a valid email address.')
@@ -41,7 +41,7 @@ export default class PasswordReset extends Component {
 
     try {
       const {
-        data: {message},
+        data: { message },
       } = await doPasswordReset(this.state.email)
 
       Alert.alert(message)
@@ -71,10 +71,10 @@ export default class PasswordReset extends Component {
             keyboardType="email-address"
             style={formStyles.input}
             placeholder="Email Address"
-            searchIcon={{size: 24}}
+            searchIcon={{ size: 24 }}
             underlineColorAndroid="transparent"
             defaultValue={this.state.email}
-            onChangeText={(email) => this.setState({email})}
+            onChangeText={(email) => this.setState({ email })}
             autoCapitalize="none"
           />
         </View>
@@ -83,8 +83,8 @@ export default class PasswordReset extends Component {
           onPress={this.resetPassword}
         >
           <LinearGradient
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
             colors={['#5491CC', '#9A68B2', '#E53D96']}
             style={loginStyles.button}
           >

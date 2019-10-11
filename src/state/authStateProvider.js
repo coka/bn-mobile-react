@@ -1,15 +1,15 @@
-import {Container} from 'unstated'
-import {AsyncStorage} from 'react-native'
+import { Container } from 'unstated'
+import { AsyncStorage } from 'react-native'
 
-import {server, refreshWithToken, apiErrorAlert} from '../constants/Server'
-import {registerPushTokenIfPermitted} from '../notifications'
-import {identify, track} from '../constants/analytics'
-import {requestFacebookAuth, connectFacebookToBigNeon} from '../facebook'
+import { server, refreshWithToken, apiErrorAlert } from '../constants/Server'
+import { registerPushTokenIfPermitted } from '../notifications'
+import { identify, track } from '../constants/analytics'
+import { requestFacebookAuth, connectFacebookToBigNeon } from '../facebook'
 
 /* eslint-disable camelcase,space-before-function-paren */
 
 function shouldDoAdditionalSignUpStep(currentUser) {
-  const {first_name: first, last_name: last} = currentUser
+  const { first_name: first, last_name: last } = currentUser
 
   return !(first && last)
 }
@@ -33,7 +33,7 @@ class AuthContainer extends Container {
   // Can set tokens after login or signup
   async setLoginData(resp, navigate, refresh = false) {
     const {
-      data: {access_token, refresh_token},
+      data: { access_token, refresh_token },
     } = resp
 
     await AsyncStorage.multiSet([
@@ -58,10 +58,10 @@ class AuthContainer extends Container {
   logOut = async (navigate) => {
     // eslint-disable-line space-before-function-paren
     // await AsyncStorage.clear(); // This was maybe throwing errors when calling it on an empty asyncstorage.
-    await this.setState({isFetching: true})
+    await this.setState({ isFetching: true })
     await AsyncStorage.getAllKeys(async (err, keys) => {
-      await AsyncStorage.multiRemove(keys);
-    });
+      await AsyncStorage.multiRemove(keys)
+    })
 
     this.setState(this.defaultState, () => {
       navigate('AuthLoading')
@@ -74,17 +74,16 @@ class AuthContainer extends Container {
     refresh_token,
     setToken = true
   ) => {
-
     // eslint-disable-line space-before-function-paren
     try {
-      await this.setState({isFetching: true})
+      await this.setState({ isFetching: true })
 
       if (setToken) {
         await refreshWithToken(refresh_token)
       }
-      const {data: currentUser} = await server.users.current()
+      const { data: currentUser } = await server.users.current()
 
-      await this.setState({currentUser, access_token, refresh_token})
+      await this.setState({ currentUser, access_token, refresh_token })
       registerPushTokenIfPermitted()
       return currentUser.user
     } catch (error) {
@@ -92,17 +91,17 @@ class AuthContainer extends Container {
 
       this.logOut(navigate)
     } finally {
-      await this.setState({isFetching: false})
+      await this.setState({ isFetching: false })
     }
   }
 
   updateCurrentUser = async (params, onError = () => {}) => {
     try {
-      await this.setState({isFetching: true})
+      await this.setState({ isFetching: true })
 
-      const {data} = await server.users.update(params)
+      const { data } = await server.users.update(params)
 
-      await this.setState({currentUser: data})
+      await this.setState({ currentUser: data })
       return data
     } catch (error) {
       onError()
@@ -111,18 +110,18 @@ class AuthContainer extends Container {
       }, 600)
       return false
     } finally {
-      await this.setState({isFetching: false})
+      await this.setState({ isFetching: false })
     }
   }
 
   identify = async (action = '') => {
     const {
       currentUser: {
-        user: {id, first_name, last_name, email},
+        user: { id, first_name, last_name, email },
       },
     } = this.state
 
-    await identify({id, firstName: first_name, lastName: last_name, email})
+    await identify({ id, firstName: first_name, lastName: last_name, email })
 
     if (action !== '') {
       track(action)
@@ -131,7 +130,7 @@ class AuthContainer extends Container {
 
   signUp = async (formData, navigate) => {
     try {
-      await this.setState({isFetching: true})
+      await this.setState({ isFetching: true })
       const response = await server.users.createAndLogin({
         first_name: formData.first_name,
         last_name: formData.last_name,
@@ -147,14 +146,14 @@ class AuthContainer extends Container {
       apiErrorAlert(error, 'There was an error creating your account.')
       return false
     } finally {
-      await this.setState({isFetching: false})
+      await this.setState({ isFetching: false })
     }
   }
 
   logIn = async (formData, navigate) => {
     // eslint-disable-line space-before-function-paren
     try {
-      await this.setState({isFetching: true})
+      await this.setState({ isFetching: true })
       const resp = await server.auth.authenticate(formData)
 
       await this.setLoginData(resp, navigate)
@@ -166,12 +165,12 @@ class AuthContainer extends Container {
       navigate('LogIn')
       return false
     } finally {
-      await this.setState({isFetching: false})
+      await this.setState({ isFetching: false })
     }
   }
 
   facebook = async (navigate, loading = () => {}) => {
-    await this.setState({isFetching: true})
+    await this.setState({ isFetching: true })
     try {
       const facebook = await requestFacebookAuth()
 
@@ -194,12 +193,12 @@ class AuthContainer extends Container {
       return false
     } finally {
       loading(false)
-      await this.setState({isFetching: false})
+      await this.setState({ isFetching: false })
     }
   }
 
   hasScope = (key) => {
-    const {currentUser} = this.state
+    const { currentUser } = this.state
 
     if (!currentUser) {
       return false
@@ -222,4 +221,4 @@ class AuthContainer extends Container {
   isFetching = () => this.state.isFetching
 }
 
-export {AuthContainer}
+export { AuthContainer }

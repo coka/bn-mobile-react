@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -9,11 +9,11 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient'
 import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
 import LoginStyles from '../styles/login/loginStyles'
-import {autotrim} from '../string'
+import { autotrim } from '../string'
 import BusyButton from '../BusyButton'
 
 const styles = SharedStyles.createStyles()
@@ -35,7 +35,7 @@ export default class LogIn extends Component {
     screenProps: PropTypes.object.isRequired,
   }
 
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: returnToButton(navigation),
       headerStyle: loginStyles.navigationContainer,
@@ -52,23 +52,23 @@ export default class LogIn extends Component {
     }
   }
 
-  logIn = async() => {
+  logIn = async () => {
     const {
-      screenProps: {auth},
-      navigation: {navigate},
+      screenProps: { auth },
+      navigation: { navigate },
     } = this.props
-    const {email, password} = this.state
+    const { email, password } = this.state
 
     if (!auth.isFetching()) {
-      this.setState({isBusy: true})
+      this.setState({ isBusy: true })
 
-      const isLoggedIn = await auth.logIn({email, password}, navigate)
+      const isLoggedIn = await auth.logIn({ email, password }, navigate)
 
       // If there was an error, reactivate button
       // The conditional is to prevent a warning about changing state
       // after component is goes away
       if (!isLoggedIn) {
-        this.setState({isBusy: false})
+        this.setState({ isBusy: false })
       }
     }
   }
@@ -81,14 +81,14 @@ export default class LogIn extends Component {
       <View style={loginStyles.container}>
         <View>
           <Text style={loginStyles.smallText}>Access your experiences</Text>
-            <Text
-              style={[
-                styles.headerSecondary,
-                styles.textCenter,
-                styles.paddingBottom,
-              ]}
-            >
-              Log in to your account
+          <Text
+            style={[
+              styles.headerSecondary,
+              styles.textCenter,
+              styles.paddingBottom,
+            ]}
+          >
+            Log in to your account
           </Text>
           <TextInput
             keyboardType="email-address"
@@ -96,14 +96,14 @@ export default class LogIn extends Component {
             style={formStyles.input}
             placeholder="Email Address"
             underlineColorAndroid="transparent"
-            onChangeText={autotrim((email) => this.setState({email}))}
+            onChangeText={autotrim((email) => this.setState({ email }))}
           />
           <TextInput
             style={formStyles.input}
             placeholder="Password"
             underlineColorAndroid="transparent"
             secureTextEntry
-            onChangeText={(password) => this.setState({password})}
+            onChangeText={(password) => this.setState({ password })}
             autoCapitalize="none"
           />
           <BusyButton
@@ -113,8 +113,8 @@ export default class LogIn extends Component {
             disabled={disableButton}
             busyContent={
               <LinearGradient
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
                 colors={['#5491CC', '#9A68B2', '#E53D96']}
                 style={loginStyles.button}
               >
@@ -123,9 +123,13 @@ export default class LogIn extends Component {
             }
           >
             <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              colors={disableButton ? ['#d3d3d3', '#d3d3d3', '#d3d3d3'] : ['#5491CC', '#9A68B2', '#E53D96']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              colors={
+                disableButton
+                  ? ['#d3d3d3', '#d3d3d3', '#d3d3d3']
+                  : ['#5491CC', '#9A68B2', '#E53D96']
+              }
               style={loginStyles.button}
             >
               <Text style={loginStyles.buttonText}>{"Let's Do This"}</Text>
@@ -138,18 +142,32 @@ export default class LogIn extends Component {
               })
             }
           >
-            <View style={[styles.flexRowCenter,styles.paddingSmall,styles.marginBottom]}>
+            <View
+              style={[
+                styles.flexRowCenter,
+                styles.paddingSmall,
+                styles.marginBottom,
+              ]}
+            >
               <Text style={[styles.linkTextDark]}>Reset your password</Text>
               <Icon name="keyboard-arrow-right" />
             </View>
           </TouchableHighlight>
           <TouchableHighlight
-              onPress={() => this.props.navigation.navigate('SignUp')}
+            onPress={() => this.props.navigation.navigate('SignUp')}
+          >
+            <View
+              style={[
+                styles.flexRowCenter,
+                styles.paddingSmall,
+                styles.marginTop,
+              ]}
             >
-             <View style={[styles.flexRowCenter,styles.paddingSmall,styles.marginTop]}>
-              <Text style={[styles.linkTextDark]}>{"Don't have an account? "}</Text>
+              <Text style={[styles.linkTextDark]}>
+                {"Don't have an account? "}
+              </Text>
               <Text style={[styles.linkText]}>Create one</Text>
-              <Icon name="keyboard-arrow-right" style={[styles.linkText]}/>
+              <Icon name="keyboard-arrow-right" style={[styles.linkText]} />
             </View>
           </TouchableHighlight>
         </View>

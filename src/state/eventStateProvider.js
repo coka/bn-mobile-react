@@ -80,9 +80,9 @@ class EventsContainer extends Container {
 
     ticketTypes = map(ticketTypesById, (ticket, _id) => ticket)
 
-    return ticketTypes ?
-      ticketTypes.filter(ticketFilter).sort(ticketComparator) :
-      []
+    return ticketTypes
+      ? ticketTypes.filter(ticketFilter).sort(ticketComparator)
+      : []
   }
 
   get hasNextPage() {
@@ -111,7 +111,7 @@ class EventsContainer extends Container {
     if (
       this.locationsLastFetched &&
       this.locationsLastFetched.plus({ minutes: LOCATIONS_FETCH_MIN_MINUTES }) <
-      DateTime.local()
+        DateTime.local()
     ) {
       return
     }
@@ -302,7 +302,6 @@ class EventsContainer extends Container {
     ticketTypesById[ticket_type.id] = ticket_type
     await this.setState({ ticketTypesById })
   }
-
 
   clearEventState = async () => {
     this.setState({

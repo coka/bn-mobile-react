@@ -3,7 +3,6 @@ import { View, BackHandler } from 'react-native'
 import GuestList from './guest-list-checkin'
 
 export default class GuestListScreen extends Component {
-
   state = {
     selectedGuest: null,
   }
@@ -17,17 +16,17 @@ export default class GuestListScreen extends Component {
   }
 
   handleBackPress = () => {
-    const { selectedGuest } = this.state;
+    const { selectedGuest } = this.state
     if (selectedGuest) {
-      this.setState({ selectedGuest: null });
-      return true;
+      this.setState({ selectedGuest: null })
+      return true
     }
 
-    return false;
+    return false
   }
 
   selectGuest = (selectedGuest) => {
-    this.setState({ selectedGuest });
+    this.setState({ selectedGuest })
   }
 
   render() {
@@ -40,7 +39,7 @@ export default class GuestListScreen extends Component {
       updateGuestStatus,
     } = this.props.screenProps.eventManager
 
-    const { selectedGuest } = this.state;
+    const { selectedGuest } = this.state
 
     return (
       <View>

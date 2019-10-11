@@ -120,7 +120,7 @@ export default class Ticket extends Component {
   handleCancelTransferTicket = async () => {
     try {
       const { cancelTicketTransfer, ticket, navigation } = this.props
-      await cancelTicketTransfer(ticket);
+      await cancelTicketTransfer(ticket)
 
       const onDismiss = () => {
         navigation.pop()
@@ -129,11 +129,9 @@ export default class Ticket extends Component {
       Alert.alert(
         'Transfer Cancelled',
         'The transfer has been successfully cancelled!',
-        [{ text: 'OK', onPress: onDismiss }],
-
+        [{ text: 'OK', onPress: onDismiss }]
       )
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   get upcomingTabText() {
@@ -194,7 +192,9 @@ export default class Ticket extends Component {
       case 'upcoming':
         return this.upcomingTabText
       case 'past':
-        return staticBottomText(status === 'Redeemed' ? 'Redeemed' : 'This event has ended')
+        return staticBottomText(
+          status === 'Redeemed' ? 'Redeemed' : 'This event has ended'
+        )
       case 'transfer':
         return this.transferBottomText
       default:
@@ -212,18 +212,15 @@ export default class Ticket extends Component {
           // https://github.com/cssivision/react-native-qrcode/issues/68
           // Fix from https://github.com/cssivision/react-native-qrcode/issues/68#issuecomment-455791280
           <View style={{ overflow: 'hidden' }}>
-            <QRCode
-              size={200}
-              fgColor="white"
-              bgColor="black"
-              value={qrText}
-            />
+            <QRCode size={200} fgColor="white" bgColor="black" value={qrText} />
           </View>
         )
       } else {
         return (
           <View style={ticketWalletStyles.placeholderCard}>
-            <Text style={[ticketWalletStyles.placeholderText, styles.paddingBottom]}>
+            <Text
+              style={[ticketWalletStyles.placeholderText, styles.paddingBottom]}
+            >
               To protect you and your purchase against fraudulent activity the
               QR code used to grant access to the event will be hidden until
               closer to the event door time.
@@ -237,13 +234,18 @@ export default class Ticket extends Component {
     } else if (activeTab === 'transfer') {
       return (
         <View style={ticketWalletStyles.placeholderCard}>
-          <Text style={[ticketWalletStyles.placeholderText, styles.paddingBottom, styles.helpText]}>
-            Transferred to: {ticket.transferAddress || ""}
+          <Text
+            style={[
+              ticketWalletStyles.placeholderText,
+              styles.paddingBottom,
+              styles.helpText,
+            ]}
+          >
+            Transferred to: {ticket.transferAddress || ''}
           </Text>
         </View>
       )
-    }
-    else {
+    } else {
       return (
         <Image
           style={{ width: 150, height: 150 }}

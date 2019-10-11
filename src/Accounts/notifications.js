@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {Text, View, ScrollView, TouchableHighlight} from 'react-native'
+import React, { Component } from 'react'
+import { Text, View, ScrollView, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
@@ -36,7 +36,7 @@ const notificationTypes = [
   },
 ]
 
-const NotificationType = ({value, text, state, onToggle}) => (
+const NotificationType = ({ value, text, state, onToggle }) => (
   <View style={notificationStyles.notificationRow}>
     <View style={styles.cols2}>
       <Text style={accountStyles.accountHeader}>{text}</Text>
@@ -47,9 +47,9 @@ const NotificationType = ({value, text, state, onToggle}) => (
     >
       <Icon
         style={
-          state.phone ?
-            accountStyles.accountIconActive :
-            accountStyles.accountIcon
+          state.phone
+            ? accountStyles.accountIconActive
+            : accountStyles.accountIcon
         }
         name="phone-iphone"
       />
@@ -60,9 +60,9 @@ const NotificationType = ({value, text, state, onToggle}) => (
     >
       <Icon
         style={
-          state.email ?
-            accountStyles.accountIconActive :
-            accountStyles.accountIcon
+          state.email
+            ? accountStyles.accountIconActive
+            : accountStyles.accountIcon
         }
         name="mail-outline"
       />
@@ -85,9 +85,9 @@ export default class Notifications extends Component {
 
   setCurrentNotifications() {
     notificationTypes.forEach((notType) => {
-      const {value, phone, email} = notType
+      const { value, phone, email } = notType
 
-      this.setState({[value]: {phone, email}})
+      this.setState({ [value]: { phone, email } })
     })
   }
 
@@ -95,7 +95,7 @@ export default class Notifications extends Component {
     const oldSetting = this.state[notValue]
 
     this.setState({
-      [notValue]: {...oldSetting, [notMethod]: setting},
+      [notValue]: { ...oldSetting, [notMethod]: setting },
     })
   }
 

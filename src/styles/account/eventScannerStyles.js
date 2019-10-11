@@ -19,7 +19,7 @@ import {
   globalPadding,
   globalPaddingLarge,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions} from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -137,7 +137,7 @@ const EventScannerStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...EventScannerStyles, ...overrides})
+  return StyleSheet.create({ ...EventScannerStyles, ...overrides })
 }
 
 export default {

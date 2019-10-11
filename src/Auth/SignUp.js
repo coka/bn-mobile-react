@@ -10,8 +10,8 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import * as WebBrowser from 'expo-web-browser';
-import { LinearGradient } from 'expo-linear-gradient';
+import * as WebBrowser from 'expo-web-browser'
+import { LinearGradient } from 'expo-linear-gradient'
 import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
 import LoginStyles from '../styles/login/loginStyles'
@@ -141,7 +141,11 @@ export default class SignUp extends Component {
               <LinearGradient
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                colors={disableButton ? ['#d3d3d3', '#d3d3d3', '#d3d3d3'] : ['#5491CC', '#9A68B2', '#E53D96']}
+                colors={
+                  disableButton
+                    ? ['#d3d3d3', '#d3d3d3', '#d3d3d3']
+                    : ['#5491CC', '#9A68B2', '#E53D96']
+                }
                 style={loginStyles.button}
               >
                 <Text style={loginStyles.buttonText}>{"Let's Do This"}</Text>

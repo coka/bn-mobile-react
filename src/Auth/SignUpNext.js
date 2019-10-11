@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -12,15 +12,15 @@ import {
   Platform,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {Feather} from '@expo/vector-icons'
-import { LinearGradient } from 'expo-linear-gradient';
+import { Feather } from '@expo/vector-icons'
+import { LinearGradient } from 'expo-linear-gradient'
 import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
 import LoginStyles from '../styles/login/loginStyles'
 import EventScannerStyles from '../styles/account/eventScannerStyles'
-import {autotrim, username} from '../string'
-import {accessCameraRoll, selectCameraRollImage} from '../image'
-import {uploadImageToCloudinary} from '../cloudinary'
+import { autotrim, username } from '../string'
+import { accessCameraRoll, selectCameraRollImage } from '../image'
+import { uploadImageToCloudinary } from '../cloudinary'
 import BusyButton from '../BusyButton'
 
 const styles = SharedStyles.createStyles()
@@ -44,7 +44,7 @@ export default class SignUpNext extends Component {
     navigation: PropTypes.object.isRequired,
   }
 
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: returnToButton(navigation),
       headerStyle: loginStyles.navigationContainer,
@@ -67,7 +67,7 @@ export default class SignUpNext extends Component {
   }
 
   get username() {
-    return username({...this.currentUser, ...this.state})
+    return username({ ...this.currentUser, ...this.state })
   }
 
   get profilePicUrl() {
@@ -75,7 +75,7 @@ export default class SignUpNext extends Component {
   }
 
   async _buildProfileChanges() {
-    const {profile_pic_url, first_name, last_name} = this.state
+    const { profile_pic_url, first_name, last_name } = this.state
     const changes = {
       first_name: first_name || this.currentUser.first_name,
       last_name: last_name || this.currentUser.last_name,
@@ -98,21 +98,21 @@ export default class SignUpNext extends Component {
 
   updateProfile = async () => {
     const {
-      screenProps: {auth},
-      navigation: {navigate},
+      screenProps: { auth },
+      navigation: { navigate },
     } = this.props
 
     if (!auth.isFetching()) {
-      this.setState({isBusy: true})
+      this.setState({ isBusy: true })
 
       const profileChanges = await this._buildProfileChanges()
       const results = await auth.updateCurrentUser(profileChanges, () =>
-        this.setState({isBusy: false})
+        this.setState({ isBusy: false })
       )
 
       // Don't double-fire the setState
       if (results) {
-        this.setState({isBusy: false})
+        this.setState({ isBusy: false })
       }
 
       if (Platform.OS === 'ios') {
@@ -125,7 +125,7 @@ export default class SignUpNext extends Component {
 
   onPressPictureButton = async () => {
     if (await accessCameraRoll()) {
-      this.setState({profile_pic_url: await selectCameraRollImage()})
+      this.setState({ profile_pic_url: await selectCameraRollImage() })
     }
   }
 
@@ -156,7 +156,7 @@ export default class SignUpNext extends Component {
               placeholder="First Name"
               underlineColorAndroid="transparent"
               onChangeText={autotrim((first_name) =>
-                this.setState({first_name})
+                this.setState({ first_name })
               )}
             />
             <TextInput
@@ -164,7 +164,9 @@ export default class SignUpNext extends Component {
               style={formStyles.input}
               placeholder="Last Name"
               underlineColorAndroid="transparent"
-              onChangeText={autotrim((last_name) => this.setState({last_name}))}
+              onChangeText={autotrim((last_name) =>
+                this.setState({ last_name })
+              )}
             />
             <View style={loginStyles.buttonContainer}>
               <TouchableHighlight
@@ -190,8 +192,8 @@ export default class SignUpNext extends Component {
               isBusy={this.state.isBusy}
               busyContent={
                 <LinearGradient
-                  start={{x: 0, y: 0}}
-                  end={{x: 1, y: 0}}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
                   colors={['#5491CC', '#9A68B2', '#E53D96']}
                   style={loginStyles.button}
                 >
@@ -200,8 +202,8 @@ export default class SignUpNext extends Component {
               }
             >
               <LinearGradient
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
                 colors={['#5491CC', '#9A68B2', '#E53D96']}
                 style={loginStyles.button}
               >
@@ -216,7 +218,7 @@ export default class SignUpNext extends Component {
                 <View style={eventScannerStyles.pillContainer}>
                   <View style={styles.flexRowFlexStartCenter}>
                     <Image
-                      source={{uri: this.profilePicUrl}}
+                      source={{ uri: this.profilePicUrl }}
                       style={loginStyles.profileImage}
                     />
                     <View>

@@ -1,11 +1,11 @@
-import {DateTime} from 'luxon'
+import { DateTime } from 'luxon'
 
 const DEFAULT_TIME_ZONE = 'America/Los_Angeles'
 const EVENT_LENGTH_IN_HOURS = 6
 
-export function eventDateTimes({door_time, event_start, event_end}) {
+export function eventDateTimes({ door_time, event_start, event_end }) {
   const toDateTime = (iso) =>
-    iso ? DateTime.fromRFC2822(iso, {setZone: true}) : null
+    iso ? DateTime.fromRFC2822(iso, { setZone: true }) : null
 
   return {
     door_time: toDateTime(door_time),
@@ -19,11 +19,11 @@ export function eventIsInPast(event) {
 
   // if we have an event end, use that
   // otherwise add EVENT_LENGTH_IN_HOURS to start time
-  const end_time = localized_times.event_end ?
-    localized_times.event_end :
-    DateTime.fromISO(localized_times.event_start)
-      .plus({hours: EVENT_LENGTH_IN_HOURS})
-      .toISO()
+  const end_time = localized_times.event_end
+    ? localized_times.event_end
+    : DateTime.fromISO(localized_times.event_start)
+        .plus({ hours: EVENT_LENGTH_IN_HOURS })
+        .toISO()
 
   return DateTime.fromISO(end_time) < DateTime.local()
 }

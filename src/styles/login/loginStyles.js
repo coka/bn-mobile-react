@@ -23,7 +23,7 @@ import {
   globalMargin,
   globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -212,7 +212,7 @@ const LoginStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...LoginStyles, ...overrides})
+  return StyleSheet.create({ ...LoginStyles, ...overrides })
 }
 
 export default {

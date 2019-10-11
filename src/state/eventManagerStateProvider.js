@@ -16,7 +16,6 @@ export class EventManagerContainer extends Container {
       guestListQuery: '',
       totalNumberOfGuests: 0,
       page: 0,
-
     }
   }
 
@@ -28,7 +27,7 @@ export class EventManagerContainer extends Container {
     const { totalNumberOfGuests, page } = this.state
 
     if (totalNumberOfGuests && totalNumberOfGuests > 0) {
-      return totalNumberOfGuests - ((page + 1) * LIMIT) > 0
+      return totalNumberOfGuests - (page + 1) * LIMIT > 0
     }
     return false
   }
@@ -63,8 +62,11 @@ export class EventManagerContainer extends Container {
     this.setState({ eventToScan: event, guests: [] })
   }
 
-  searchGuestList = async (guestListQuery = '', page = this.state.page, replaceGuests = false) => {
-
+  searchGuestList = async (
+    guestListQuery = '',
+    page = this.state.page,
+    replaceGuests = false
+  ) => {
     await this.setState({ isFetchingGuests: true, guestListQuery })
 
     const { id } = this.state.eventToScan
@@ -77,15 +79,14 @@ export class EventManagerContainer extends Container {
         page,
       })
 
-      replaceGuests ?
-        this.setState({
-          guests: data.data
-        }) :
-        this.setState(previousState => ({
-          totalNumberOfGuests: data.paging.total,
-          guests: previousState.guests.concat(data.data),
-        }))
-
+      replaceGuests
+        ? this.setState({
+            guests: data.data,
+          })
+        : this.setState((previousState) => ({
+            totalNumberOfGuests: data.paging.total,
+            guests: previousState.guests.concat(data.data),
+          }))
     } catch (error) {
       apiErrorAlert(error)
     }

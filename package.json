@@ -8,6 +8,7 @@
     "eslint-plugin-react": "^7.13.0",
     "expo-cli": "^2.19.4",
     "jest-expo": "^34.0.0",
+    "prettier": "1.18.2",
     "react-native-testing-library": "^1.8.0",
     "react-test-renderer": "16.3.1"
   },
@@ -19,7 +20,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "test": "jest --coverage",
-    "debug": "open \"rndebugger://set-debugger-loc?host=localhost&port=19001\""
+    "debug": "open \"rndebugger://set-debugger-loc?host=localhost&port=19001\"",
+    "lint": "prettier --check \"src/**/*.js\"",
+    "format": "prettier --write \"src/**/*.js\""
   },
   "jest": {
     "preset": "jest-expo",

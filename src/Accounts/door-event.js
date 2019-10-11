@@ -1,22 +1,21 @@
-import React, {Component} from 'react'
-import {View, TouchableHighlight, Text} from 'react-native'
+import React, { Component } from 'react'
+import { View, TouchableHighlight, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {NavigationEvents} from 'react-navigation'
-import {server, apiErrorAlert} from '../constants/Server'
+import { NavigationEvents } from 'react-navigation'
+import { server, apiErrorAlert } from '../constants/Server'
 import SharedStyles from '../styles/shared/sharedStyles'
 import EventManagerStyles from '../styles/account/eventManagerStyles'
-
 
 const styles = SharedStyles.createStyles()
 const eventManagerStyles = EventManagerStyles.createStyles()
 
-function HeaderText({children}) {
+function HeaderText({ children }) {
   return (
     <Text style={[styles.headerSecondary, styles.textCenter]}>{children}</Text>
   )
 }
 
-function ScanButton({onPress}) {
+function ScanButton({ onPress }) {
   return (
     <View style={[styles.buttonContainer, styles.marginVertical]}>
       <TouchableHighlight
@@ -39,7 +38,11 @@ function ScanButton({onPress}) {
 }
 
 function DoorEventDashboard({
-  event: {tickets_redeemed: redeemed, sold_held: sold1, sold_unreserved: sold2},
+  event: {
+    tickets_redeemed: redeemed,
+    sold_held: sold1,
+    sold_unreserved: sold2,
+  },
 }) {
   return (
     <View style={eventManagerStyles.redeemedStats}>
@@ -50,7 +53,12 @@ function DoorEventDashboard({
   )
 }
 
-function DoorEventSummary({event: {name}, dashboard, onPressScan, onPressGuestList}) {
+function DoorEventSummary({
+  event: { name },
+  dashboard,
+  onPressScan,
+  onPressGuestList,
+}) {
   return (
     <View>
       <HeaderText>{name}</HeaderText>
@@ -61,7 +69,7 @@ function DoorEventSummary({event: {name}, dashboard, onPressScan, onPressGuestLi
   )
 }
 
-function GuestList({onPress}) {
+function GuestList({ onPress }) {
   return (
     <View style={styles.buttonContainer}>
       <TouchableHighlight style={styles.button} onPress={onPress}>
@@ -70,7 +78,6 @@ function GuestList({onPress}) {
     </View>
   )
 }
-
 
 export default class DoorEvent extends Component {
   state = {
@@ -89,27 +96,27 @@ export default class DoorEvent extends Component {
     return this.dashboardResponse && this.dashboardResponse.data
   }
 
-  reload = async() => {
-    const {id} = this.event
+  reload = async () => {
+    const { id } = this.event
 
-    this.setState({dashboardResponse: null})
+    this.setState({ dashboardResponse: null })
     try {
-      const dashboardResponse = await server.events.dashboard({id})
+      const dashboardResponse = await server.events.dashboard({ id })
 
-      this.setState({dashboardResponse})
+      this.setState({ dashboardResponse })
     } catch (error) {
       apiErrorAlert(error)
     }
   }
 
-  chooseEvent = async() => {
+  chooseEvent = async () => {
     await this.props.screenProps.eventManager.scanForEvent(this.event)
     this.props.navigation.navigate('EventScanner')
   }
 
-  guestListButton = async() =>{
+  guestListButton = async () => {
     await this.props.screenProps.eventManager.scanForEvent(this.event)
-    this.props.navigation.navigate('GuestList', {name: this.event.name})
+    this.props.navigation.navigate('GuestList', { name: this.event.name })
   }
 
   render() {

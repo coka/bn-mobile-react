@@ -1,5 +1,5 @@
-import {StyleSheet, Dimensions} from 'react-native'
-import {moderateScale} from 'react-native-size-matters'
+import { StyleSheet, Dimensions } from 'react-native'
+import { moderateScale } from 'react-native-size-matters'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 const smallHeight = 650
@@ -404,7 +404,7 @@ const SharedStyles = {
     borderBottomColor: borderColor,
     borderBottomWidth: 1,
     width: '100%',
-    paddingTop: 10
+    paddingTop: 10,
   },
   borderRight: {
     borderRightColor: borderColor,
@@ -568,11 +568,11 @@ const SharedStyles = {
     color: textColor,
     fontSize: globalFontSize,
     paddingRight: globalPaddingSmall,
-  }
+  },
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...SharedStyles, ...overrides})
+  return StyleSheet.create({ ...SharedStyles, ...overrides })
 }
 
 export default {

@@ -11,9 +11,9 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native'
-import * as Contacts from 'expo-contacts';
-import * as Permissions from 'expo-permissions';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Contacts from 'expo-contacts'
+import * as Permissions from 'expo-permissions'
+import { BarCodeScanner } from 'expo-barcode-scanner'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles, { primaryColor } from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
@@ -23,8 +23,8 @@ import FormStyles from '../styles/shared/formStyles'
 import { autotrim, pluralize, sortArray } from '../string'
 import qrCodeIcon from '../../assets/qr-code-small.png'
 import BusyButton from '../BusyButton'
-import ContactList from './contactList';
-import CardItem from './cardItem';
+import ContactList from './contactList'
+import CardItem from './cardItem'
 
 const styles = SharedStyles.createStyles()
 const ticketWalletStyles = TicketWalletStyles.createStyles()
@@ -66,7 +66,13 @@ const QRCodeScanner = ({ toggleModal, modalVisible, handleBarCodeScanned }) => (
   </Modal>
 )
 
-const AreYouSureModal = ({ toggleVisible, modalVisible, emailOrPhone, validationError, handleSubmit }) => (
+const AreYouSureModal = ({
+  toggleVisible,
+  modalVisible,
+  emailOrPhone,
+  validationError,
+  handleSubmit,
+}) => (
   <Modal
     onRequestClose={() => toggleVisible(false)}
     visible={modalVisible}
@@ -75,14 +81,12 @@ const AreYouSureModal = ({ toggleVisible, modalVisible, emailOrPhone, validation
     <View style={modalStyles.modalContainer}>
       <View style={modalStyles.contentWrapper}>
         <Text style={[modalStyles.headerSecondary, styles.textCenter]}>
-          {
-            validationError ?
-              validationError :
-              `You are sending this ticket to ${emailOrPhone}. Are you sure this is correct?`
-          }
+          {validationError
+            ? validationError
+            : `You are sending this ticket to ${emailOrPhone}. Are you sure this is correct?`}
         </Text>
         <View style={styles.flexRowCenter}>
-          {validationError ?
+          {validationError ? (
             <TouchableOpacity
               style={[styles.buttonSecondary, { height: 50, borderRadius: 6 }]}
               name="Cancel"
@@ -90,7 +94,7 @@ const AreYouSureModal = ({ toggleVisible, modalVisible, emailOrPhone, validation
             >
               <Text style={styles.buttonSecondaryText}>Cancel</Text>
             </TouchableOpacity>
-            :
+          ) : (
             <Fragment>
               <TouchableOpacity
                 style={[styles.button, { height: 50, borderRadius: 6 }]}
@@ -100,14 +104,18 @@ const AreYouSureModal = ({ toggleVisible, modalVisible, emailOrPhone, validation
                 <Text style={styles.buttonText}>YES</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.buttonSecondary, styles.marginLeftTiny, { borderRadius: 6 }]}
+                style={[
+                  styles.buttonSecondary,
+                  styles.marginLeftTiny,
+                  { borderRadius: 6 },
+                ]}
                 name="No"
                 onPress={() => toggleVisible(false)}
               >
                 <Text style={styles.buttonSecondaryText}>NO</Text>
               </TouchableOpacity>
             </Fragment>
-          }
+          )}
         </View>
       </View>
     </View>
@@ -145,7 +153,7 @@ export default class TransferTickets extends Component {
     this.toggleQRModal(false)
   }
 
-  toggleQRModal = visible => {
+  toggleQRModal = (visible) => {
     this.setState({
       showQRModal: visible,
       emailOrPhone: '',
@@ -155,9 +163,9 @@ export default class TransferTickets extends Component {
     }
   }
 
-  toggleAreYouSureModal = visible => {
+  toggleAreYouSureModal = (visible) => {
     this.setState({
-      showAreYouSureModal: visible
+      showAreYouSureModal: visible,
     })
   }
 
@@ -227,7 +235,7 @@ export default class TransferTickets extends Component {
     this.setState({ checkboxes })
   }
 
-  toggleCheck = id => {
+  toggleCheck = (id) => {
     return (checked) => this.setChecked(id, checked)
   }
 
@@ -249,12 +257,11 @@ export default class TransferTickets extends Component {
   contactsPermissions = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
     this.setState({ hasContactsPermission: status === 'granted' })
-
   }
 
   transfer = async () => {
-    const { isSubmitting } = this.state;
-    const { screenProps, navigation } = this.props;
+    const { isSubmitting } = this.state
+    const { screenProps, navigation } = this.props
 
     this.toggleAreYouSureModal(false)
 
@@ -266,10 +273,7 @@ export default class TransferTickets extends Component {
     const ticketIds = Object.keys(checkboxes).filter((key) => checkboxes[key])
 
     try {
-      await screenProps.store.transferTickets(
-        emailOrPhone,
-        ticketIds
-      )
+      await screenProps.store.transferTickets(emailOrPhone, ticketIds)
 
       const onDismiss = () => {
         navigation.popToTop()
@@ -288,13 +292,13 @@ export default class TransferTickets extends Component {
   }
 
   getContactList = async () => {
-    const { hasContactsPermission } = this.state;
+    const { hasContactsPermission } = this.state
 
     if (!hasContactsPermission) {
       this.contactsPermissions()
     }
 
-    const { data } = await Contacts.getContactsAsync();
+    const { data } = await Contacts.getContactsAsync()
     const sortedContacts = sortArray(data, 'name')
     this.setState({ contacts: sortedContacts, openContactList: true })
   }
@@ -305,11 +309,11 @@ export default class TransferTickets extends Component {
     })
   }
 
-  selectEmailOrPhone = emailOrPhone => {
+  selectEmailOrPhone = (emailOrPhone) => {
     this.setState({
-      emailOrPhone
+      emailOrPhone,
     })
-    this.closeContactList();
+    this.closeContactList()
   }
 
   validateEmailOrPhone = () => {
@@ -321,8 +325,7 @@ export default class TransferTickets extends Component {
     if (emailOrPhone.indexOf('@') > -1) {
       if (emailOrPhone.endsWith('.con') || emailOrPhone.endsWith('.cm')) {
         return 'Wrong domain of email!'
-      }
-      else if (
+      } else if (
         emailOrPhone.startsWith('mail:') ||
         emailOrPhone.startsWith('mailto:') ||
         emailOrPhone.endsWith('@')
@@ -344,10 +347,17 @@ export default class TransferTickets extends Component {
     }
   }
 
-
   render() {
     const { navigation } = this.props
-    const { isSubmitting, emailOrPhone, checkboxes, showQRModal, showAreYouSureModal, openContactList, contacts } = this.state
+    const {
+      isSubmitting,
+      emailOrPhone,
+      checkboxes,
+      showQRModal,
+      showAreYouSureModal,
+      openContactList,
+      contacts,
+    } = this.state
     const { hasValidRecipient, transferCount } = this
 
     let disabled = true
@@ -375,84 +385,93 @@ export default class TransferTickets extends Component {
           />
           <View style={ticketWalletStyles.closeModalContainer}>
             <Icon
-              style={[styles.iconLinkCircle, openContactList ? ticketWalletStyles.customContactListPadding : '']}
+              style={[
+                styles.iconLinkCircle,
+                openContactList
+                  ? ticketWalletStyles.customContactListPadding
+                  : '',
+              ]}
               name="close"
-              onPress={openContactList ?
-                () => this.closeContactList() :
-                () => navigation.goBack()
+              onPress={
+                openContactList
+                  ? () => this.closeContactList()
+                  : () => navigation.goBack()
               }
             />
           </View>
-          {
-            !openContactList ?
-              <View style={modalStyles.contentRoundedWrapper}>
-                <View style={styles.container}>
-                  <View style={styles.flexRowSpaceBetween}>
-                    <Text style={modalStyles.headerSecondary}>Add Recipient</Text>
-                    <TouchableOpacity onPress={() => this.toggleQRModal(true)}>
-                      <Image
-                        style={[
-                          ticketTransferStyles.qrCodeSmall,
-                          styles.marginLeftTiny,
-                        ]}
-                        source={qrCodeIcon}
-                      />
-                    </TouchableOpacity>
-                    {/*<TouchableOpacity onPress={() => this.getContactList()}>*/}
-                      {/*<Icon style={{ fontSize: 24 }} name="contacts" />*/}
-                    {/*</TouchableOpacity>*/}
-                  </View>
-                  <TextInput
-                    keyboardType="email-address"
-                    style={formStyles.input}
-                    placeholder="Recipient email or phone or scan"
-                    searchIcon={{ size: 24 }}
-                    underlineColorAndroid="transparent"
-                    value={emailOrPhone}
-                    onChangeText={autotrim((emailOrPhone) =>
-                      this.setState({ emailOrPhone })
-                    )}
-                    autoCorrect={false}
-                  />
+          {!openContactList ? (
+            <View style={modalStyles.contentRoundedWrapper}>
+              <View style={styles.container}>
+                <View style={styles.flexRowSpaceBetween}>
+                  <Text style={modalStyles.headerSecondary}>Add Recipient</Text>
+                  <TouchableOpacity onPress={() => this.toggleQRModal(true)}>
+                    <Image
+                      style={[
+                        ticketTransferStyles.qrCodeSmall,
+                        styles.marginLeftTiny,
+                      ]}
+                      source={qrCodeIcon}
+                    />
+                  </TouchableOpacity>
+                  {/*<TouchableOpacity onPress={() => this.getContactList()}>*/}
+                  {/*<Icon style={{ fontSize: 24 }} name="contacts" />*/}
+                  {/*</TouchableOpacity>*/}
                 </View>
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                  style={{ paddingTop: 10 }}
-                >
-                  {this.tickets.map(({ id, ticket_type_name: name }) => {
-                    return (
-                        <CardItem
-                            key={id}
-                            id={id}
-                            name={name}
-                            checkboxes={checkboxes}
-                            toggleCheck={this.toggleCheck}
-                        />
-                    )
-                  })}
-                </ScrollView>
+                <TextInput
+                  keyboardType="email-address"
+                  style={formStyles.input}
+                  placeholder="Recipient email or phone or scan"
+                  searchIcon={{ size: 24 }}
+                  underlineColorAndroid="transparent"
+                  value={emailOrPhone}
+                  onChangeText={autotrim((emailOrPhone) =>
+                    this.setState({ emailOrPhone })
+                  )}
+                  autoCorrect={false}
+                />
               </View>
-              :
-              <ContactList contacts={contacts} selectEmailOrPhone={this.selectEmailOrPhone} />
-          }
-          {
-            !openContactList &&
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={{ paddingTop: 10 }}
+              >
+                {this.tickets.map(({ id, ticket_type_name: name }) => {
+                  return (
+                    <CardItem
+                      key={id}
+                      id={id}
+                      name={name}
+                      checkboxes={checkboxes}
+                      toggleCheck={this.toggleCheck}
+                    />
+                  )
+                })}
+              </ScrollView>
+            </View>
+          ) : (
+            <ContactList
+              contacts={contacts}
+              selectEmailOrPhone={this.selectEmailOrPhone}
+            />
+          )}
+          {!openContactList && (
             <View style={[styles.buttonContainer, styles.marginHorizontal]}>
               <BusyButton
                 style={
-                  disabled ?
-                    [styles.buttonDisabled, modalStyles.bottomRadius] :
-                    [styles.button, modalStyles.bottomRadius]
+                  disabled
+                    ? [styles.buttonDisabled, modalStyles.bottomRadius]
+                    : [styles.button, modalStyles.bottomRadius]
                 }
                 underlayColor={primaryColor}
-                onPress={disabled ? null : () => this.toggleAreYouSureModal(true)}
+                onPress={
+                  disabled ? null : () => this.toggleAreYouSureModal(true)
+                }
                 isBusy={isSubmitting}
                 busyContent={<ActivityIndicator color="#FFF" />}
               >
                 <Text style={styles.buttonText}>{buttonText}</Text>
               </BusyButton>
             </View>
-          }
+          )}
           <AreYouSureModal
             toggleVisible={this.toggleAreYouSureModal}
             modalVisible={showAreYouSureModal}

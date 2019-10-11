@@ -8,7 +8,7 @@ export const MAIN_ROUTES = {
 
 const TicketShowRoute = {
   screen: ShowEventTickets,
-  navigationOptions: ({navigation}) => ({
+  navigationOptions: ({ navigation }) => ({
     eventId: navigation.state.params.eventId,
   }),
 }

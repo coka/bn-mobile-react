@@ -1,11 +1,11 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, TouchableHighlight} from 'react-native'
+import { Text, View, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import AccountStyles from '../styles/account/accountStyles'
 import CheckoutStyles from '../styles/event_details/checkoutStyles'
 import TicketStyles from '../styles/tickets/ticketStyles'
-import {toDollars} from '../constants/money'
+import { toDollars } from '../constants/money'
 
 const accountStyles = AccountStyles.createStyles()
 const checkoutStyles = CheckoutStyles.createStyles()
@@ -24,36 +24,36 @@ export class Ticket extends Component {
       return () => {}
     }
 
-    const {ticket, onTicketSelection} = this.props
+    const { ticket, onTicketSelection } = this.props
 
     return ticket.ticket_pricing && (() => onTicketSelection(ticket))
   }
 
   get priceContent() {
-    const {status, ticket_pricing} = this.props.ticket
+    const { status, ticket_pricing } = this.props.ticket
     switch (status) {
-    case 'SoldOut':
-      return 'SOLD OUT'
-    default:
-      return ticket_pricing ?
-        `$${toDollars(
-          ticket_pricing.price_in_cents - ticket_pricing.discount_in_cents,
-          0
-        )}` :
-        'N/A'
+      case 'SoldOut':
+        return 'SOLD OUT'
+      default:
+        return ticket_pricing
+          ? `$${toDollars(
+              ticket_pricing.price_in_cents - ticket_pricing.discount_in_cents,
+              0
+            )}`
+          : 'N/A'
     }
   }
 
   get subHeaderContent() {
-    const {description, status, ticket_pricing} = this.props.ticket
+    const { description, status, ticket_pricing } = this.props.ticket
 
     switch (status) {
-    case 'SoldOut':
-      return 'SOLD OUT'
-    case 'Published':
-      return description ? description : ticket_pricing.name
-    default:
-      return null
+      case 'SoldOut':
+        return 'SOLD OUT'
+      case 'Published':
+        return description ? description : ticket_pricing.name
+      default:
+        return null
     }
   }
 
@@ -78,9 +78,9 @@ export class Ticket extends Component {
           <View style={[checkoutStyles.row, ticketStyles.ticketHolderWrapper]}>
             <Text
               style={
-                isSoldOut ?
-                  checkoutStyles.soldOutTicketPrice :
-                  checkoutStyles.ticketPrice
+                isSoldOut
+                  ? checkoutStyles.soldOutTicketPrice
+                  : checkoutStyles.ticketPrice
               }
             >
               {price}

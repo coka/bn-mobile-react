@@ -16,7 +16,7 @@ import {
   globalPaddingLarge,
   globalPaddingLarger,
 } from './sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -90,7 +90,7 @@ const NavigationStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...NavigationStyles, ...overrides})
+  return StyleSheet.create({ ...NavigationStyles, ...overrides })
 }
 
 export default {

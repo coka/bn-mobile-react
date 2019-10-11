@@ -1,20 +1,20 @@
-import React, {Component, Fragment} from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, TouchableHighlight, Image, StyleSheet} from 'react-native'
-import { BlurView } from 'expo-blur';
-import * as Permissions from 'expo-permissions';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import {MaterialIcons, EvilIcons} from '@expo/vector-icons'
+import { Text, View, TouchableHighlight, Image, StyleSheet } from 'react-native'
+import { BlurView } from 'expo-blur'
+import * as Permissions from 'expo-permissions'
+import { BarCodeScanner } from 'expo-barcode-scanner'
+import { MaterialIcons, EvilIcons } from '@expo/vector-icons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
 import EventScannerStyles from '../styles/account/eventScannerStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
 import * as vibe from '../vibe'
-import {username} from '../string'
-import {imageSourceUrl} from '../image'
+import { username } from '../string'
+import { imageSourceUrl } from '../image'
 import ticketScanLog from '../ticket-scan-log'
-import {DateTime} from 'luxon'
-import {NavigationEvents} from 'react-navigation'
+import { DateTime } from 'luxon'
+import { NavigationEvents } from 'react-navigation'
 
 const styles = SharedStyles.createStyles()
 const eventDetailsStyles = EventDetailsStyles.createStyles()
@@ -56,20 +56,20 @@ function getStatusMessageConfig(error) {
       return {
         text: 'Already redeemed.',
         doorperson: redeemedBy,
-        time: DateTime.fromISO(redeemedAt, {zone: 'utc'}).toRelative(),
+        time: DateTime.fromISO(redeemedAt, { zone: 'utc' }).toRelative(),
         icon: 'close-o',
         style: eventScannerStyles.messageIconCancel,
       }
     }
 
-    return {...SCAN_ALERT_CONFIG.error, text}
+    return { ...SCAN_ALERT_CONFIG.error, text }
   }
 
   if (error.name === 'SyntaxError') {
-    return {...SCAN_ALERT_CONFIG.error, text: 'QR code is not valid.'}
+    return { ...SCAN_ALERT_CONFIG.error, text: 'QR code is not valid.' }
   }
 
-  const {message} = error
+  const { message } = error
 
   if (message === 'missing_redeem_key') {
     return {
@@ -79,11 +79,11 @@ function getStatusMessageConfig(error) {
     }
   }
 
-  return {...SCAN_ALERT_CONFIG.error, text: error.message}
+  return { ...SCAN_ALERT_CONFIG.error, text: error.message }
 }
 
 // The little UI bit that toggles between scan modes
-function ModeControl({mode, toggle}) {
+function ModeControl({ mode, toggle }) {
   return (
     <TouchableHighlight
       style={eventScannerStyles.pillContainer}
@@ -103,12 +103,12 @@ function ModeControl({mode, toggle}) {
   )
 }
 
-function BottomTab({children}) {
+function BottomTab({ children }) {
   return <View style={eventScannerStyles.mainBody}>{children}</View>
 }
 
 // The default bottom tab that lets you bounce over to the guest list
-function GuestListTab({onPress}) {
+function GuestListTab({ onPress }) {
   return (
     <View style={styles.buttonContainer}>
       <TouchableHighlight style={styles.button} onPress={onPress}>
@@ -119,7 +119,7 @@ function GuestListTab({onPress}) {
 }
 
 // The alternative bottom tab that displays your scanned ticket details when you've done a manual mode scan
-function TicketDetailsTab({isBusy, cancel, checkIn}) {
+function TicketDetailsTab({ isBusy, cancel, checkIn }) {
   return (
     <View
       style={[eventDetailsStyles.mainBodyContent, styles.paddingBottomLarge]}
@@ -159,13 +159,13 @@ function TicketDetailsTab({isBusy, cancel, checkIn}) {
   )
 }
 
-function TicketDetailsPill({user, ticket, redeemedAt, onPress}) {
+function TicketDetailsPill({ user, ticket, redeemedAt, onPress }) {
   let redeemedText = ''
 
   if (ticket.status === 'Redeemed') {
-    redeemedText = redeemedAt ?
-      `You checked them in ${DateTime.fromJSDate(redeemedAt).toRelative()}` :
-      'Redeemed'
+    redeemedText = redeemedAt
+      ? `You checked them in ${DateTime.fromJSDate(redeemedAt).toRelative()}`
+      : 'Redeemed'
   }
 
   const redeemedContent = redeemedText ? (
@@ -203,14 +203,19 @@ function TicketDetailsPill({user, ticket, redeemedAt, onPress}) {
 }
 
 // Displays error and success
-function StatusMessage({text, icon, style, doorperson, time}) {
+function StatusMessage({ text, icon, style, doorperson, time }) {
   if (doorperson) {
     return (
       <View style={eventScannerStyles.messageContainer}>
         <EvilIcons style={style} name={icon} />
         <Text style={eventScannerStyles.messageText}>{text}</Text>
-        <Text style={eventScannerStyles.messageFooter}>Checked-in by <Text style={{ fontWeight: 'bold' }}>{doorperson}</Text></Text>
-        <Text style={eventScannerStyles.messageFooter}> <Text style={{ fontWeight: 'bold' }}>{time}</Text></Text>
+        <Text style={eventScannerStyles.messageFooter}>
+          Checked-in by <Text style={{ fontWeight: 'bold' }}>{doorperson}</Text>
+        </Text>
+        <Text style={eventScannerStyles.messageFooter}>
+          {' '}
+          <Text style={{ fontWeight: 'bold' }}>{time}</Text>
+        </Text>
       </View>
     )
   }
@@ -251,12 +256,12 @@ export default class EventScanner extends Component {
   }
 
   async componentWillMount() {
-    const {status} = await Permissions.askAsync(Permissions.CAMERA)
+    const { status } = await Permissions.askAsync(Permissions.CAMERA)
 
-    this.setState({hasCameraPermission: status === 'granted'})
+    this.setState({ hasCameraPermission: status === 'granted' })
   }
 
-  onBarCodeScanned = async(scanResult) => {
+  onBarCodeScanned = async (scanResult) => {
     // don't scan while we're mid-checkin
     if (this.isScanningDisabled) {
       return
@@ -268,10 +273,10 @@ export default class EventScanner extends Component {
       const code = this.props.screenProps.eventManager.readCode(scanResult)
 
       switch (this.state.checkInMode) {
-      case 'automatic':
-        return await this._redeem(code)
-      case 'manual':
-        return await this._startManual(code)
+        case 'automatic':
+          return await this._redeem(code)
+        case 'manual':
+          return await this._startManual(code)
       }
     } catch (error) {
       this._finishCheckIn(error)
@@ -291,7 +296,7 @@ export default class EventScanner extends Component {
     let delay
 
     if (error) {
-      this.setState({error})
+      this.setState({ error })
       vibe.sad()
       delay = DELAY_SLOW
     } else {
@@ -299,7 +304,7 @@ export default class EventScanner extends Component {
       delay = this.state.checkInMode === 'automatic' ? DELAY_SLOW : DELAY_FAST
     }
 
-    this.setState({showStatusMessage: true})
+    this.setState({ showStatusMessage: true })
     this.resetTimer = setTimeout(() => this._reset(), delay)
   }
 
@@ -319,13 +324,13 @@ export default class EventScanner extends Component {
     // decorate with info from our scan log
     ticketDetails.redeemedAt = ticketScanLog.getRedeemedAt(ticketDetails.ticket)
 
-    this.setState({ticketDetails})
+    this.setState({ ticketDetails })
     return ticketDetails
   }
 
   // fetch ticket details and redeem the code simultaneously
   async _startAutomatic(scannedCode) {
-    this.setState({scannedCode, ticketDetails: null}) // previous ticketDetails should get cleared out while we're waiting to reduce confusion
+    this.setState({ scannedCode, ticketDetails: null }) // previous ticketDetails should get cleared out while we're waiting to reduce confusion
     await Promise.all([
       this._getTicketDetails(scannedCode),
       this._redeem(scannedCode),
@@ -335,7 +340,7 @@ export default class EventScanner extends Component {
   // pull up the ticket info and the UI for letting the door person confirm check-in
   async _startManual(scannedCode) {
     await this._getTicketDetails(scannedCode)
-    this.setState({scannedCode, isWaitingToConfirmManualCheckIn: true})
+    this.setState({ scannedCode, isWaitingToConfirmManualCheckIn: true })
     vibe.happy()
   }
 
@@ -345,9 +350,9 @@ export default class EventScanner extends Component {
   }
 
   // take the current manual-mode-scanned ticket and redeem it
-  commitManual = async() => {
+  commitManual = async () => {
     try {
-      this.setState({isCommittingManualCheckIn: true})
+      this.setState({ isCommittingManualCheckIn: true })
       await this._redeem(this.state.scannedCode)
     } catch (error) {
       this._finishCheckIn(error)
@@ -355,7 +360,7 @@ export default class EventScanner extends Component {
   }
 
   get statusMessage() {
-    const {showStatusMessage, error} = this.state
+    const { showStatusMessage, error } = this.state
 
     return showStatusMessage ? (
       <StatusMessage {...getStatusMessageConfig(error)} />
@@ -368,7 +373,7 @@ export default class EventScanner extends Component {
 
   setCheckInMode = (checkInMode) => {
     this._reset() // don't forget to reset everything when doing a mode switch
-    this.setState({checkInMode})
+    this.setState({ checkInMode })
   }
 
   toggleCheckInMode = () => {
@@ -406,21 +411,21 @@ export default class EventScanner extends Component {
   }
 
   onDidFocus = () => {
-    this.setState({isFocused: true})
+    this.setState({ isFocused: true })
   }
 
   onDidBlur = () => {
-    this.setState({isFocused: false})
+    this.setState({ isFocused: false })
   }
 
   get ticketDetailsPill() {
-    const {ticketDetails} = this.state
+    const { ticketDetails } = this.state
 
     return ticketDetails ? <TicketDetailsPill {...ticketDetails} /> : null
   }
 
   render() {
-    const {statusMessage, event} = this
+    const { statusMessage, event } = this
     const {
       hasCameraPermission,
       checkInMode,
@@ -442,7 +447,7 @@ export default class EventScanner extends Component {
 
         {this.state.isFocused && (
           <BarCodeScanner
-              onBarCodeScanned={this.onBarCodeScanned}
+            onBarCodeScanned={this.onBarCodeScanned}
             style={StyleSheet.absoluteFill}
           />
         )}
@@ -462,7 +467,7 @@ export default class EventScanner extends Component {
                 style={eventDetailsStyles.backArrow}
                 name="close"
                 onPress={() => {
-                  this.props.navigation.navigate('DoorEvent', {event})
+                  this.props.navigation.navigate('DoorEvent', { event })
                 }}
               />
             </View>

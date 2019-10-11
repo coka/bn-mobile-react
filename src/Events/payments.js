@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
@@ -13,8 +13,8 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import CheckoutStyles from '../styles/event_details/checkoutStyles'
-import {isEmpty} from 'lodash'
-import {stripeFormURL} from '../constants/config'
+import { isEmpty } from 'lodash'
+import { stripeFormURL } from '../constants/config'
 
 const styles = SharedStyles.createStyles()
 const checkoutStyles = CheckoutStyles.createStyles()
@@ -63,20 +63,20 @@ export default class PaymentTypes extends Component {
   }
 
   changeScreen = (screen) => {
-    this.setState({currentScreen: screen})
+    this.setState({ currentScreen: screen })
   }
 
   get currentDetails() {
-    const {selectedPaymentDetails} = this.props
+    const { selectedPaymentDetails } = this.props
 
     /* eslint-disable-next-line complexity */
     if (isEmpty(selectedPaymentDetails)) {
       return null
     }
 
-    const icon = cardIcons[selectedPaymentDetails.brand] ?
-      cardIcons[selectedPaymentDetails.brand] :
-      cardIcons.default
+    const icon = cardIcons[selectedPaymentDetails.brand]
+      ? cardIcons[selectedPaymentDetails.brand]
+      : cardIcons.default
 
     return (
       <TouchableHighlight
@@ -106,18 +106,18 @@ export default class PaymentTypes extends Component {
 
   parseMessage = (event) => {
     const {
-      nativeEvent: {data},
+      nativeEvent: { data },
     } = event
 
     try {
-      let jsonString = '';
-      if(Platform.OS === "ios"){
+      let jsonString = ''
+      if (Platform.OS === 'ios') {
         // IOS returns the data url encoded/percent-encoding twice
         // unescape('%257B') -> %7B
         // unescape(%7B) -> {
-        jsonString = decodeURI(decodeURI(data));
+        jsonString = decodeURI(decodeURI(data))
       } else {
-        jsonString = data;
+        jsonString = data
       }
 
       const payment = JSON.parse(jsonString)
@@ -134,22 +134,22 @@ export default class PaymentTypes extends Component {
 
   setIsLoading(isLoading) {
     return () => {
-      this.setState({isLoading})
+      this.setState({ isLoading })
     }
   }
 
   get changeDetails() {
-    const {access_token, refresh_token} = this.props
+    const { access_token, refresh_token } = this.props
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Spinner
           visible={this.state.isLoading}
           textContent={'Loading...'}
-          textStyle={{color: '#FFF'}}
+          textStyle={{ color: '#FFF' }}
         />
         <WebView
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           injectedJavaScript={patchPostMessageJsCode}
           source={{
             uri: `${stripeFormURL}/mobile_stripe_token_auth/${encodeURIComponent(
@@ -166,13 +166,13 @@ export default class PaymentTypes extends Component {
   }
 
   get showScreen() {
-    const {currentScreen} = this.state
+    const { currentScreen } = this.state
 
     switch (currentScreen) {
-    case 'show':
-      return this.currentDetails
-    default:
-      return this.changeDetails
+      case 'show':
+        return this.currentDetails
+      default:
+        return this.changeDetails
     }
   }
 

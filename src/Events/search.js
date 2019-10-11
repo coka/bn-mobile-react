@@ -77,7 +77,10 @@ function SuggestedSearches({ searchText, events, navigate }) {
           <TouchableHighlight
             style={[styles.rowContainer, styles.paddingVerticalSmall]}
             onPress={() =>
-              navigate('EventsShow', { eventId: item.eventId, event: item.event })
+              navigate('EventsShow', {
+                eventId: item.eventId,
+                event: item.event,
+              })
             }
             onShowUnderlay={separators.highlight}
             onHideUnderlay={separators.unhighlight}
@@ -93,10 +96,10 @@ function SuggestedSearches({ searchText, events, navigate }) {
 }
 
 export default class EventSearch extends Component {
-  debounce = 0;
+  debounce = 0
   state = {
-    localQuery: ''
-  };
+    localQuery: '',
+  }
 
   get events() {
     return this.props.store.state.events
@@ -111,9 +114,9 @@ export default class EventSearch extends Component {
   }
 
   updateSearchText = (text) => {
-    clearTimeout(this.debounce);
-    this.setState({localQuery: text});
-    this.debounce = setTimeout(async() => {
+    clearTimeout(this.debounce)
+    this.setState({ localQuery: text })
+    this.debounce = setTimeout(async () => {
       await this.props.store.setQuery(text)
       this.searchEvents()
     }, 250)

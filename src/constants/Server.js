@@ -1,14 +1,14 @@
 import 'proxy-polyfill'
 import Bigneon from 'bn-api-node'
-import {AsyncStorage, Alert} from 'react-native'
+import { AsyncStorage, Alert } from 'react-native'
 // import mocker from './mocker'
-import {apiURL, timeout} from './config'
+import { apiURL, timeout } from './config'
 import Base64 from './base64'
-import Constants from 'expo-constants';
+import Constants from 'expo-constants'
 
 const DEFAULT_ERROR_MSG = 'There was a problem.'
 
-function buildErrorMessage({error, fields}) {
+function buildErrorMessage({ error, fields }) {
   let msg = error
 
   if (typeof fields === 'object') {
@@ -24,7 +24,6 @@ function buildErrorMessage({error, fields}) {
 
 /* eslint-disable-next-line complexity */
 export function apiErrorAlert(error = {}, msg = DEFAULT_ERROR_MSG) {
-
   if (error.message === 'Network Error') {
     return Alert.alert(
       'Error',
@@ -32,13 +31,13 @@ export function apiErrorAlert(error = {}, msg = DEFAULT_ERROR_MSG) {
     )
   }
 
-  const {response, message} = error
+  const { response, message } = error
 
   if (!response && !message) {
     throw error
   }
 
-  const {data} = (response || {})
+  const { data } = response || {}
 
   return Alert.alert(
     'Error',
@@ -55,24 +54,24 @@ export async function retrieveTokens() {
   const user = userToken[1] ? userToken[1] : false
   const refresh = refreshToken[1] ? refreshToken[1] : false
 
-  return {userToken: user, refreshToken: refresh}
+  return { userToken: user, refreshToken: refresh }
 }
 
 function getDeviceHeaders() {
   const headers = {
-    'x-bn-platform-name': Constants.platform.ios ?
-      'ios' :
-      Constants.platform.android ?
-        'android' :
-        'unknown',
-    'x-bn-device-model-year': Constants.platform.ios ?
-      Constants.platform.ios.model :
-      Constants.deviceYearClass,
-    'x-bn-app-build': Constants.platform.ios ?
-      Constants.platform.ios.buildNumber :
-      Constants.platform.android ?
-        Constants.platform.android.versionCode :
-        'unknown',
+    'x-bn-platform-name': Constants.platform.ios
+      ? 'ios'
+      : Constants.platform.android
+      ? 'android'
+      : 'unknown',
+    'x-bn-device-model-year': Constants.platform.ios
+      ? Constants.platform.ios.model
+      : Constants.deviceYearClass,
+    'x-bn-app-build': Constants.platform.ios
+      ? Constants.platform.ios.buildNumber
+      : Constants.platform.android
+      ? Constants.platform.android.versionCode
+      : 'unknown',
     'x-bn-install-id': Constants.installationId,
   }
 
@@ -80,8 +79,8 @@ function getDeviceHeaders() {
 }
 
 export const bigneonServer = new Bigneon.Server(
-  {prefix: apiURL, timeout},
-  {headers: getDeviceHeaders()}
+  { prefix: apiURL, timeout },
+  { headers: getDeviceHeaders() }
 ) // , {}, mocker)
 
 function parseJwt(token) {
@@ -103,9 +102,9 @@ function needsRefresh(token) {
 
 /* eslint-disable camelcase */
 export async function refreshWithToken(token) {
-  const resp = await bigneonServer.auth.refresh({refresh_token: token})
+  const resp = await bigneonServer.auth.refresh({ refresh_token: token })
   const {
-    data: {access_token, refresh_token},
+    data: { access_token, refresh_token },
   } = resp
 
   const _setTokens = await AsyncStorage.multiSet([
@@ -116,7 +115,7 @@ export async function refreshWithToken(token) {
 }
 
 async function refresher() {
-  const {userToken, refreshToken} = await retrieveTokens()
+  const { userToken, refreshToken } = await retrieveTokens()
 
   // if expired, refresh
   if (userToken && needsRefresh(userToken)) {
@@ -125,7 +124,7 @@ async function refresher() {
 }
 
 function wrapInTokenRefresher(fn) {
-  return async(...args) => {
+  return async (...args) => {
     await refresher()
     return await fn(...args)
   }
@@ -143,14 +142,14 @@ function proxyGet(server, prop) {
   }
 
   if (typeof value === 'object') {
-    return new Proxy(value, {get: proxyGet})
+    return new Proxy(value, { get: proxyGet })
   }
 
   return value
 }
 
-export const server = new Proxy(bigneonServer, {get: proxyGet})
+export const server = new Proxy(bigneonServer, { get: proxyGet })
 
 // NOTE: As of when this was written, the capital A in "Asc" is intentional.
 // API server sends a 400 response if you try to use "asc" instead.
-export const defaultEventSort = {sort: 'event_start', dir: 'Asc'}
+export const defaultEventSort = { sort: 'event_start', dir: 'Asc' }

@@ -1,4 +1,4 @@
-import {cloudinaryCloud, cloudinaryUploadPreset} from './constants/config'
+import { cloudinaryCloud, cloudinaryUploadPreset } from './constants/config'
 
 const uploadURL = `https://api.cloudinary.com/v1_1/${cloudinaryCloud}/image/upload`
 

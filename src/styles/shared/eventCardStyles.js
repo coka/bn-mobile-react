@@ -10,7 +10,7 @@ import {
   globalPaddingSmall,
   globalPaddingTiny,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -55,7 +55,7 @@ const EventCardStyles = {
     paddingTop: 1,
     width: 28,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   iconLinkCircleSmall: {
     color: white,
@@ -70,7 +70,6 @@ const EventCardStyles = {
     width: 28,
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   iconLinkCircleSmallActive: {
     color: primaryColor,
@@ -86,7 +85,7 @@ const EventCardStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...EventCardStyles, ...overrides})
+  return StyleSheet.create({ ...EventCardStyles, ...overrides })
 }
 
 export default {

@@ -1,12 +1,12 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, Image, TouchableHighlight} from 'react-native'
+import { Text, View, Image, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import CheckoutStyles from '../styles/event_details/checkoutStyles'
-import {eventDateTimes} from '../time'
-import {toDollars} from '../constants/money'
+import { eventDateTimes } from '../time'
+import { toDollars } from '../constants/money'
 
 const styles = SharedStyles.createStyles()
 const accountStyles = AccountStyles.createStyles()
@@ -52,24 +52,24 @@ export default class Checkout extends Component {
   }
 
   get incrementButton() {
-    const increment = this.ticketType.increment || 1;
+    const increment = this.ticketType.increment || 1
     return this.createQuantityButton(increment, 'add-circle')
   }
 
   get decrementButton() {
-    const increment = (this.ticketType.increment || 1) * -1;
+    const increment = (this.ticketType.increment || 1) * -1
     return this.createQuantityButton(increment, 'remove-circle')
   }
 
   get ticketType() {
     return this.props.eventTickets.find(
-      ({id}) => id === this.props.cart.selectedTicket.ticket_type_id
+      ({ id }) => id === this.props.cart.selectedTicket.ticket_type_id
     )
   }
 
   get paymentSelected() {
     const {
-      cart: {payment},
+      cart: { payment },
     } = this.props
 
     if (payment) {
@@ -96,7 +96,7 @@ export default class Checkout extends Component {
   }
 
   get promoDetails() {
-    const {cart} = this.props
+    const { cart } = this.props
 
     if (cart.usedPromo) {
       const promoTickets = cart.promoTickets
@@ -126,8 +126,8 @@ export default class Checkout extends Component {
   }
 
   render() {
-    const {event, cart} = this.props
-    const {ticketsCents, feesCents, discountCents, totalCents} = cart
+    const { event, cart } = this.props
+    const { ticketsCents, feesCents, discountCents, totalCents } = cart
     const eventTime = eventDateTimes(event.localized_times).event_start
 
     return (
@@ -227,11 +227,9 @@ export default class Checkout extends Component {
                 >
                   Sub Total
                 </Text>
-                {
-                  discountCents ? (
-                      <Text style={checkoutStyles.ticketHeader}>Discount</Text>
-                  ) : null
-                }
+                {discountCents ? (
+                  <Text style={checkoutStyles.ticketHeader}>Discount</Text>
+                ) : null}
                 <Text style={checkoutStyles.ticketHeader}>Fees</Text>
               </View>
             </View>
@@ -245,18 +243,16 @@ export default class Checkout extends Component {
                 >
                   ${toDollars(ticketsCents)} USD
                 </Text>
-                {
-                  discountCents ? (
-                      <Text
-                          style={[
-                            checkoutStyles.ticketSubHeader,
-                            styles.marginBottomSmall,
-                          ]}
-                      >
-                        ${toDollars(discountCents)} USD
-                      </Text>
-                  ) : null
-                }
+                {discountCents ? (
+                  <Text
+                    style={[
+                      checkoutStyles.ticketSubHeader,
+                      styles.marginBottomSmall,
+                    ]}
+                  >
+                    ${toDollars(discountCents)} USD
+                  </Text>
+                ) : null}
                 <Text style={checkoutStyles.ticketSubHeader}>
                   ${toDollars(feesCents)} USD
                 </Text>

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, TouchableHighlight} from 'react-native'
+import { Text, View, TouchableHighlight } from 'react-native'
 import Account from './index'
 import AccountDetails from './account'
 import Notifications from './notifications'
@@ -15,7 +15,7 @@ import GuestList from './guest-list-screen'
 
 const navigationStyles = NavigationStyles.createStyles()
 
-function Back({navigate, text, route}) {
+function Back({ navigate, text, route }) {
   return (
     <TouchableHighlight
       underlayColor="rgba(0, 0, 0, 0)"
@@ -37,8 +37,8 @@ const STYLE_OPTIONS = {
   headerBackTitleStyle: navigationStyles.headerBackTitle,
 }
 
-function _configureNav({navigate}, {title, back}) {
-  const backProps = {...(back || {}), navigate}
+function _configureNav({ navigate }, { title, back }) {
+  const backProps = { ...(back || {}), navigate }
 
   return {
     title,
@@ -48,11 +48,11 @@ function _configureNav({navigate}, {title, back}) {
 }
 
 function navOptions(opts = {}) {
-  return ({navigation}) => _configureNav(navigation, opts)
+  return ({ navigation }) => _configureNav(navigation, opts)
 }
 
 function defaultNavOptions(title, navigation) {
-  return _configureNav(navigation, {title})
+  return _configureNav(navigation, { title })
 }
 
 function guestOptions(opts = {}) {
@@ -61,7 +61,8 @@ function guestOptions(opts = {}) {
     return options
   }
 
-  return ({navigation}) => _configureNav(navigation, makeGuestOpts(navigation, opts))
+  return ({ navigation }) =>
+    _configureNav(navigation, makeGuestOpts(navigation, opts))
 }
 
 const ROUTES = {
@@ -73,7 +74,7 @@ const ROUTES = {
   },
   AccountDetails: {
     screen: AccountDetails,
-    navigationOptions: ({navigation}) =>
+    navigationOptions: ({ navigation }) =>
       defaultNavOptions('Account', navigation),
   },
   SignedOut: {
@@ -84,28 +85,28 @@ const ROUTES = {
   },
   Notifications: {
     screen: Notifications,
-    navigationOptions: ({navigation}) =>
+    navigationOptions: ({ navigation }) =>
       defaultNavOptions('Notifications', navigation),
   },
   Billing: {
     screen: Billing,
-    navigationOptions: ({navigation}) =>
+    navigationOptions: ({ navigation }) =>
       defaultNavOptions('Billing', navigation),
   },
   OrderHistory: {
     screen: OrderHistory,
-    navigationOptions: ({navigation}) =>
+    navigationOptions: ({ navigation }) =>
       defaultNavOptions('Order History', navigation),
   },
   ManageEvents: {
     screen: EventManager,
-    navigationOptions: ({navigation}) =>
+    navigationOptions: ({ navigation }) =>
       defaultNavOptions('Manage Events', navigation),
   },
   DoorEvent: {
     screen: DoorEvent,
     navigationOptions: navOptions({
-      back: {route: 'ManageEvents', text: 'Manage Events'},
+      back: { route: 'ManageEvents', text: 'Manage Events' },
     }),
   },
   EventScanner: {
@@ -117,7 +118,7 @@ const ROUTES = {
   GuestList: {
     screen: GuestList,
     navigationOptions: guestOptions({
-      back: {route: 'DoorEvent'},
+      back: { route: 'DoorEvent' },
     }),
   },
 }

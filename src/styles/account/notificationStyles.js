@@ -8,7 +8,7 @@ import {
   globalPaddingSmall,
   globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions} from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -40,7 +40,7 @@ const NotificationStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...NotificationStyles, ...overrides})
+  return StyleSheet.create({ ...NotificationStyles, ...overrides })
 }
 
 export default {
