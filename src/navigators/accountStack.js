@@ -61,7 +61,7 @@ export default class accountsStackWithStore extends Component {
               store: eventStore,
               eventManager,
               network,
-              orderHistory
+              orderHistory,
             }}
           />
         )}

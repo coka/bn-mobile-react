@@ -1,14 +1,14 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {ActivityIndicator, StatusBar, View} from 'react-native'
-import {Subscribe} from 'unstated'
-import {AuthContainer} from '../state/authStateProvider'
-import {retrieveTokens} from '../constants/Server'
-import SharedStyles, {primaryColor} from '../styles/shared/sharedStyles'
+import { ActivityIndicator, StatusBar, View } from 'react-native'
+import { Subscribe } from 'unstated'
+import { AuthContainer } from '../state/authStateProvider'
+import { retrieveTokens } from '../constants/Server'
+import SharedStyles, { primaryColor } from '../styles/shared/sharedStyles'
 
 const styles = SharedStyles.createStyles()
 
-function shouldDoNextSignUpStep({first_name: first, last_name: last}) {
+function shouldDoNextSignUpStep({ first_name: first, last_name: last }) {
   return !(first || last)
 }
 
@@ -25,15 +25,15 @@ class AuthStore extends Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   // eslint-disable-next-line complexity
-  _bootstrapAsync = async() => {
+  _bootstrapAsync = async () => {
     // eslint-disable-line complexity,space-before-function-paren
     const {
-      navigation: {navigate},
+      navigation: { navigate },
       auth,
     } = this.props
 
     try {
-      const {userToken, refreshToken} = await retrieveTokens()
+      const { userToken, refreshToken } = await retrieveTokens()
 
       if (userToken && refreshToken) {
         if (!auth.state.currentUser.user) {
@@ -50,12 +50,11 @@ class AuthStore extends Component {
     } catch {
       navigate('Auth')
     }
-
   }
 
   render() {
     return (
-      <View  style={[styles.flex1, styles.flexRowCenter]}>
+      <View style={[styles.flex1, styles.flexRowCenter]}>
         <ActivityIndicator size="large" color={primaryColor} />
         <StatusBar barStyle="default" />
       </View>

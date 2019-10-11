@@ -13,11 +13,11 @@
 class TicketScanLog {
   _redeemedAtById = {}
 
-  logRedeemedAt({id}) {
+  logRedeemedAt({ id }) {
     this._redeemedAtById[id] = new Date()
   }
 
-  getRedeemedAt({id}) {
+  getRedeemedAt({ id }) {
     return this._redeemedAtById[id] || null
   }
 }

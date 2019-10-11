@@ -1,7 +1,7 @@
-import {server} from './constants/Server'
-import { Notifications } from 'expo';
+import { server } from './constants/Server'
+import { Notifications } from 'expo'
 
-import * as Permissions from 'expo-permissions';
+import * as Permissions from 'expo-permissions'
 
 /*
 
@@ -15,7 +15,7 @@ regardless of whether you choose to allow or not."
 
 */
 
-function isGranted({status}) {
+function isGranted({ status }) {
   return status === 'granted'
 }
 
@@ -31,14 +31,14 @@ export async function accessPushNotifications() {
 // Returns the push token if access is granted.
 // Returns null if not.
 export async function getPushToken() {
-  return (await accessPushNotifications()) ?
-    await Notifications.getExpoPushTokenAsync() :
-    null
+  return (await accessPushNotifications())
+    ? await Notifications.getExpoPushTokenAsync()
+    : null
 }
 
 // TODO: save to API server
 export async function savePushToken(token) {
-  await server.users.deviceTokens.create({token, token_source: 'expo'})
+  await server.users.deviceTokens.create({ token, token_source: 'expo' })
 }
 
 export async function registerPushTokenIfPermitted() {
@@ -50,7 +50,7 @@ export async function registerPushTokenIfPermitted() {
     }
   } catch (error) {
     if (error && error.response && error.response.status === 409) {
-      console.log(`This device has already stored the token.`);
+      console.log(`This device has already stored the token.`)
     } else {
       console.warn(`Unable to get notification token. Error: ${error.message}`)
     }

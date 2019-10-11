@@ -13,17 +13,17 @@ import { shareEvent } from '../sharing'
 const styles = SharedStyles.createStyles()
 const eventDetailsStyles = EventDetailsStyles.createStyles()
 const interestedStylesForEvent = (user_is_interested) =>
-  user_is_interested ?
-    {
-      button: eventDetailsStyles.buttonRoundedActive,
-      icon: eventDetailsStyles.buttonRoundedActiveIcon,
-      text: eventDetailsStyles.buttonRoundedActiveText,
-    } :
-    {
-      button: eventDetailsStyles.buttonRounded,
-      icon: eventDetailsStyles.buttonRoundedIcon,
-      text: eventDetailsStyles.buttonRoundedText,
-    }
+  user_is_interested
+    ? {
+        button: eventDetailsStyles.buttonRoundedActive,
+        icon: eventDetailsStyles.buttonRoundedActiveIcon,
+        text: eventDetailsStyles.buttonRoundedActiveText,
+      }
+    : {
+        button: eventDetailsStyles.buttonRounded,
+        icon: eventDetailsStyles.buttonRoundedIcon,
+        text: eventDetailsStyles.buttonRoundedText,
+      }
 
 function toSentence(arr) {
   return (
@@ -78,7 +78,6 @@ export default class Details extends Component {
     const {
       event: { age_limit },
     } = this.props
-
 
     //Specifically using weak typing here for backwards compatibility
     if (!age_limit || age_limit == 0) {
@@ -146,8 +145,13 @@ export default class Details extends Component {
               disabled={loading}
             >
               <View style={styles.flexRowCenter}>
-                <Icon style={interestedStyles.icon} name={!loading ? 'star' : 'autorenew'} />
-                <Text style={interestedStyles.text}>{!loading ? 'I\'m Interested' : 'Please wait'}</Text>
+                <Icon
+                  style={interestedStyles.icon}
+                  name={!loading ? 'star' : 'autorenew'}
+                />
+                <Text style={interestedStyles.text}>
+                  {!loading ? "I'm Interested" : 'Please wait'}
+                </Text>
               </View>
             </TouchableHighlight>
             <TouchableHighlight

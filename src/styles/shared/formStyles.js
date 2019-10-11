@@ -13,7 +13,7 @@ import {
   globalMargin,
   globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions} from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
 const FormStyles = {
   // CONTAINER STYLES
@@ -156,7 +156,7 @@ const FormStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...FormStyles, ...overrides})
+  return StyleSheet.create({ ...FormStyles, ...overrides })
 }
 
 export default {

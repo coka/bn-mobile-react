@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, Image, TouchableHighlight} from 'react-native'
-import * as WebBrowser from 'expo-web-browser';
-import { LinearGradient } from 'expo-linear-gradient';
-import {LoadingScreen} from '../constants/modals'
+import { Text, View, Image, TouchableHighlight } from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
+import { LinearGradient } from 'expo-linear-gradient'
+import { LoadingScreen } from '../constants/modals'
 import LoginStyles from '../styles/login/loginStyles'
 import SharedStyles from '../styles/shared/sharedStyles'
 
@@ -32,19 +32,19 @@ export default class AuthIndex extends Component {
 
   componentWillUnmount() {
     this.mounted = false
-    this.setState({displayLoading: false})
+    this.setState({ displayLoading: false })
   }
 
   showModal = (displayLoading) => {
     // Don't setState on an unmounted component
     if (this.mounted) {
-      this.setState({displayLoading})
+      this.setState({ displayLoading })
     }
   }
 
   render() {
-    const {facebook} = this.props.screenProps.auth
-    const {navigate} = this.props.navigation
+    const { facebook } = this.props.screenProps.auth
+    const { navigate } = this.props.navigation
 
     return (
       <View style={loginStyles.signupBkgdContainer}>
@@ -77,8 +77,8 @@ export default class AuthIndex extends Component {
               onPress={() => navigate('LogIn')}
             >
               <LinearGradient
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
                 colors={['#5491CC', '#9A68B2', '#E53D96']}
                 style={loginStyles.button}
               >
@@ -90,7 +90,7 @@ export default class AuthIndex extends Component {
               <Text style={[loginStyles.mutedText, styles.textCenter]}>
                 By continuing you agree to our
               </Text>
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <TouchableHighlight
                   onPress={() => {
                     WebBrowser.openBrowserAsync(

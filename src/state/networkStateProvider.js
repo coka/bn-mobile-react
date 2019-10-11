@@ -1,5 +1,5 @@
-import {Container} from 'unstated'
-import {NetInfo} from 'react-native'
+import { Container } from 'unstated'
+import { NetInfo } from 'react-native'
 
 class NetworkContainer extends Container {
   constructor(props = {}) {
@@ -15,13 +15,13 @@ class NetworkContainer extends Container {
     )
 
     NetInfo.isConnected.fetch().then((isConnected) => {
-      this.setState({isConnected})
+      this.setState({ isConnected })
     })
   }
 
   handleConnectivityChange = (isConnected) => {
-    this.setState({isConnected})
+    this.setState({ isConnected })
   }
 }
 
-export {NetworkContainer}
+export { NetworkContainer }

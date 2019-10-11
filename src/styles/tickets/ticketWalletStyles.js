@@ -180,7 +180,7 @@ const TicketWalletStyles = {
   customContactListPadding: {
     paddingTop: 45,
     paddingBottom: 10,
-  }
+  },
 }
 
 function createStyles(overrides = {}) {

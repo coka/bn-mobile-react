@@ -11,7 +11,7 @@ import ModalStyles from '../styles/shared/modalStyles'
 const styles = SharedStyles.createStyles()
 const modalStyles = ModalStyles.createStyles()
 
-function ModalContainer({children, style, ...props}) {
+function ModalContainer({ children, style, ...props }) {
   return (
     <View style={[modalStyles.modalContainer, style]} {...props}>
       {children}
@@ -19,7 +19,7 @@ function ModalContainer({children, style, ...props}) {
   )
 }
 
-function ModalActivityIndicator({children, style, ...props}) {
+function ModalActivityIndicator({ children, style, ...props }) {
   return (
     <View style={[modalStyles.activityIndicator, style]} {...props}>
       {children}
@@ -27,7 +27,7 @@ function ModalActivityIndicator({children, style, ...props}) {
   )
 }
 
-function FlexRowCenter({children, style, ...props}) {
+function FlexRowCenter({ children, style, ...props }) {
   return (
     <View style={[styles.flexRowCenter, style]} {...props}>
       {children}
@@ -35,7 +35,7 @@ function FlexRowCenter({children, style, ...props}) {
   )
 }
 
-function ActivityModal({children, ...props}) {
+function ActivityModal({ children, ...props }) {
   return (
     <NativeModal transparent {...props}>
       <ModalContainer>
@@ -61,7 +61,7 @@ function EmojiActivity(props) {
   )
 }
 
-export function LoadingScreen({children: _, ...props}) {
+export function LoadingScreen({ children: _, ...props }) {
   return (
     <ActivityModal {...props}>
       <SpinnerActivity />
@@ -69,7 +69,7 @@ export function LoadingScreen({children: _, ...props}) {
   )
 }
 
-export function SuccessScreen({children: _, ...props}) {
+export function SuccessScreen({ children: _, ...props }) {
   return (
     <ActivityModal {...props}>
       <EmojiActivity />

@@ -8,7 +8,7 @@ import {
   globalPaddingSmall,
   globalPaddingTiny,
 } from '../shared/sharedStyles'
-import {StyleSheet} from 'react-native'
+import { StyleSheet } from 'react-native'
 
 const OrderHistoryStyles = {
   row: {
@@ -39,7 +39,7 @@ const OrderHistoryStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...OrderHistoryStyles, ...overrides})
+  return StyleSheet.create({ ...OrderHistoryStyles, ...overrides })
 }
 
 export default {

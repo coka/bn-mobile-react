@@ -1,11 +1,11 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {createStackNavigator} from 'react-navigation'
-import {Subscribe} from 'unstated'
-import {MAIN_ROUTES, MODAL_ROUTES} from '../Tickets/routes'
-import {TicketsContainer} from '../state/ticketStateProvider'
-import {AuthContainer} from '../state/authStateProvider'
-import {NetworkContainer} from '../state/networkStateProvider'
+import { createStackNavigator } from 'react-navigation'
+import { Subscribe } from 'unstated'
+import { MAIN_ROUTES, MODAL_ROUTES } from '../Tickets/routes'
+import { TicketsContainer } from '../state/ticketStateProvider'
+import { AuthContainer } from '../state/authStateProvider'
+import { NetworkContainer } from '../state/networkStateProvider'
 
 const TicketsStack = createStackNavigator(
   {
@@ -41,7 +41,7 @@ export default class ticketStackWithStore extends Component {
     navigation: PropTypes.object.isRequired,
   }
 
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     let tabBarVisible = true
 
     if (navigation.state.index > 0) {
@@ -59,7 +59,7 @@ export default class ticketStackWithStore extends Component {
         {(ticketStore, authStore, network) => (
           <FullTicketStack
             navigation={this.props.navigation}
-            screenProps={{store: ticketStore, auth: authStore, network}}
+            screenProps={{ store: ticketStore, auth: authStore, network }}
           />
         )}
       </Subscribe>

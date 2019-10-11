@@ -1,4 +1,4 @@
-import Constants from 'expo-constants';
+import Constants from 'expo-constants'
 
 const RELEASE_CHANNEL = Constants.manifest.releaseChannel || 'dev'
 const WEB_STAGING = 'https://beta.bigneon.com'
@@ -43,9 +43,9 @@ const production = {
 }
 
 if (RELEASE_CHANNEL.indexOf('prod') === 0) {
-  module.exports = production;
+  module.exports = production
 } else if (RELEASE_CHANNEL.indexOf('staging') === 0) {
-  module.exports = staging;
+  module.exports = staging
 } else {
-  module.exports = dev;
+  module.exports = dev
 }

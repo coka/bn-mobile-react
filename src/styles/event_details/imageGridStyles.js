@@ -1,5 +1,5 @@
-import {globalPaddingSmall, globalPaddingTiny} from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import { globalPaddingSmall, globalPaddingTiny } from '../shared/sharedStyles'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -20,7 +20,7 @@ const ImageGridStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...ImageGridStyles, ...overrides})
+  return StyleSheet.create({ ...ImageGridStyles, ...overrides })
 }
 
 export default {

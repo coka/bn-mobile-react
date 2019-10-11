@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
@@ -8,17 +8,17 @@ import {
   TextInput,
   Alert,
 } from 'react-native'
-import {MaterialIcons} from '@expo/vector-icons'
-import {Ticket} from './event_ticket'
+import { MaterialIcons } from '@expo/vector-icons'
+import { Ticket } from './event_ticket'
 import CheckoutStyles from '../styles/event_details/checkoutStyles'
 import TicketStyles from '../styles/tickets/ticketStyles'
 import FormStyles from '../styles/shared/formStyles'
 import SharedStyles from '../styles/shared/sharedStyles'
 import emptyState from '../../assets/icon-empty-state.png'
-import {server, apiErrorAlert} from '../constants/Server'
-import {LoadingScreen} from '../constants/modals'
-import {autotrim} from '../string'
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import { server, apiErrorAlert } from '../constants/Server'
+import { LoadingScreen } from '../constants/modals'
+import { autotrim } from '../string'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const styles = SharedStyles.createStyles()
 const formStyles = FormStyles.createStyles()
@@ -47,8 +47,8 @@ export default class GetTickets extends Component {
     }
 
     try {
-      this.setState({applyingPromo: true})
-      const response = await server.redemptionCodes.read({code})
+      this.setState({ applyingPromo: true })
+      const response = await server.redemptionCodes.read({ code })
       const {
         data: {
           // @deprecated
@@ -56,7 +56,7 @@ export default class GetTickets extends Component {
           ticket_types = [],
         },
       } = response
-      const {event, store} = this.props
+      const { event, store } = this.props
 
       // This can be replaced by ticket_types once we are at parity with the server
       const ticket_types_to_process = ticket_types
@@ -82,13 +82,13 @@ export default class GetTickets extends Component {
         )
       }, 600)
     } finally {
-      this.setState({applyingPromo: false})
+      this.setState({ applyingPromo: false })
     }
   }
 
   onPromoRemove = async (eventId) => {
     try {
-      this.setState({applyingPromo: true, promoCode: ''})
+      this.setState({ applyingPromo: true, promoCode: '' })
       await this.props.store.getEvent(eventId)
     } catch (error) {
       setTimeout(() => {
@@ -98,7 +98,7 @@ export default class GetTickets extends Component {
         )
       }, 600)
     } finally {
-      this.setState({applyingPromo: false})
+      this.setState({ applyingPromo: false })
     }
   }
 
@@ -115,7 +115,7 @@ export default class GetTickets extends Component {
   }
 
   get ticketList() {
-    const {ticketsToDisplay, onTicketSelection} = this.props;
+    const { ticketsToDisplay, onTicketSelection } = this.props
     return ticketsToDisplay.map((ticket) => (
       <Ticket
         key={ticket.id}
@@ -173,7 +173,7 @@ export default class GetTickets extends Component {
             keyboardShouldPersistTaps="always"
             style={[formStyles.input, styles.marginTop]}
             placeholder="Enter a Promo Code"
-            onChangeText={autotrim((promoCode) => this.setState({promoCode}))}
+            onChangeText={autotrim((promoCode) => this.setState({ promoCode }))}
           />
         )}
 
@@ -182,9 +182,9 @@ export default class GetTickets extends Component {
             underlayColor="rgba(255, 34, 178, 0.2)"
             keyboardShouldPersistTaps="always"
             onPress={
-              isPromoCodeApplied ?
-                this.handleRemovePromoSubmit :
-                this.handlePromoSubmit
+              isPromoCodeApplied
+                ? this.handleRemovePromoSubmit
+                : this.handlePromoSubmit
             }
             style={checkoutStyles.buttonSecondary}
           >
@@ -200,11 +200,11 @@ export default class GetTickets extends Component {
   get hasTicketDisplay() {
     return (
       <KeyboardAwareScrollView extraScrollHeight={200}>
-          <View style={checkoutStyles.headerWrapper}>
-            <Text style={checkoutStyles.header}>Select Ticket Type</Text>
-          </View>
-          {this.ticketList}
-          {this.promoCode}
+        <View style={checkoutStyles.headerWrapper}>
+          <Text style={checkoutStyles.header}>Select Ticket Type</Text>
+        </View>
+        {this.ticketList}
+        {this.promoCode}
       </KeyboardAwareScrollView>
     )
   }

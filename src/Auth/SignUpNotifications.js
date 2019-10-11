@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -10,18 +10,18 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient'
 import SharedStyles from '../styles/shared/sharedStyles'
 import LoginStyles from '../styles/login/loginStyles'
 import BusyButton from '../BusyButton'
-import {registerPushTokenIfPermitted} from '../notifications'
+import { registerPushTokenIfPermitted } from '../notifications'
 
 const styles = SharedStyles.createStyles()
 const loginStyles = LoginStyles.createStyles()
 
 /* eslint-disable camelcase,space-before-function-paren */
 
-function ReturnToButton({navigation}) {
+function ReturnToButton({ navigation }) {
   return (
     <TouchableHighlight
       onPress={() => navigation.goBack()}
@@ -37,7 +37,7 @@ export default class SignUpNotifications extends Component {
     navigation: PropTypes.object.isRequired,
   }
 
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: <ReturnToButton navigation={navigation} />,
       headerStyle: loginStyles.navigationContainer,
@@ -54,10 +54,10 @@ export default class SignUpNotifications extends Component {
 
   setupNotifications = async () => {
     const {
-      navigation: {navigate},
+      navigation: { navigate },
     } = this.props
 
-    this.setState({isBusy: true})
+    this.setState({ isBusy: true })
     await registerPushTokenIfPermitted()
 
     navigate('AuthLoading')
@@ -65,10 +65,10 @@ export default class SignUpNotifications extends Component {
 
   skipNotificationsSetup = async () => {
     const {
-      navigation: {navigate},
+      navigation: { navigate },
     } = this.props
 
-    this.setState({isBusy: true})
+    this.setState({ isBusy: true })
     navigate('AuthLoading')
   }
 
@@ -110,8 +110,8 @@ export default class SignUpNotifications extends Component {
               isBusy={this.state.isBusy}
               busyContent={
                 <LinearGradient
-                  start={{x: 0, y: 0}}
-                  end={{x: 1, y: 0}}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
                   colors={['#5491CC', '#9A68B2', '#E53D96']}
                   style={loginStyles.button}
                 >
@@ -120,8 +120,8 @@ export default class SignUpNotifications extends Component {
               }
             >
               <LinearGradient
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
                 colors={['#5491CC', '#9A68B2', '#E53D96']}
                 style={[loginStyles.button, styles.marginVertical]}
               >

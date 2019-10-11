@@ -1,17 +1,17 @@
-import React, {Component} from 'react'
-import {Text, View, Image, ScrollView, TouchableHighlight} from 'react-native'
-import {NavigationEvents} from 'react-navigation'
+import React, { Component } from 'react'
+import { Text, View, Image, ScrollView, TouchableHighlight } from 'react-native'
+import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import EventManagerStyles from '../styles/account/eventManagerStyles'
-import {optimizeCloudinaryImage} from '../cloudinary'
+import { optimizeCloudinaryImage } from '../cloudinary'
 
 const styles = SharedStyles.createStyles()
 const accountStyles = AccountStyles.createStyles()
 const eventManagerStyles = EventManagerStyles.createStyles()
 
-function DoorEventCard({event, onPress}) {
+function DoorEventCard({ event, onPress }) {
   return (
     <TouchableHighlight
       underlayColor="rgba(0, 0, 0, 0)"
@@ -22,7 +22,7 @@ function DoorEventCard({event, onPress}) {
         <View style={eventManagerStyles.cardImageWrapper}>
           <Image
             style={eventManagerStyles.cardImage}
-            source={{uri: optimizeCloudinaryImage(event.promo_image_url)}}
+            source={{ uri: optimizeCloudinaryImage(event.promo_image_url) }}
           />
         </View>
         <View style={eventManagerStyles.textWrapper}>
@@ -40,7 +40,8 @@ function DoorEventCard({event, onPress}) {
 }
 
 export default class EventManager extends Component {
-  chooseEvent = (event) => this.props.navigation.navigate('DoorEvent', {event})
+  chooseEvent = (event) =>
+    this.props.navigation.navigate('DoorEvent', { event })
 
   loadEvents = () => this.props.screenProps.eventManager.getEvents()
 

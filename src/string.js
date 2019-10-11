@@ -25,11 +25,15 @@ function buildName(parts, joiner, email) {
   )
 }
 
-export function username({first_name: first, last_name: last, email}) {
+export function username({ first_name: first, last_name: last, email }) {
   return buildName([first, last], ' ', email)
 }
 
-export function usernameLastFirst({first_name: first, last_name: last, email}) {
+export function usernameLastFirst({
+  first_name: first,
+  last_name: last,
+  email,
+}) {
   return buildName([last, first], ', ', email)
 }
 
@@ -48,5 +52,5 @@ export function price(cents) {
 }
 
 export function sortArray(data, type) {
-  return data.sort((a,b) => a[type].localeCompare(b[type]))
+  return data.sort((a, b) => a[type].localeCompare(b[type]))
 }

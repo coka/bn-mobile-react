@@ -314,9 +314,7 @@ export default class EventsIndex extends Component {
     const {
       navigation: { navigate },
       screenProps: {
-        store: {
-          setQuery
-        }
+        store: { setQuery },
       },
     } = this.props
     setQuery('')
@@ -398,7 +396,10 @@ export default class EventsIndex extends Component {
         <Animated.View
           style={[
             navigationStyles.scrollHeaderContainer,
-            { height: headerHeight, transform: [{ translateY: headerTranslate }] },
+            {
+              height: headerHeight,
+              transform: [{ translateY: headerTranslate }],
+            },
           ]}
         >
           <View style={navigationStyles.scrollHeader}>

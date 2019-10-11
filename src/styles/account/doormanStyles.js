@@ -15,7 +15,7 @@ import {
   globalPaddingTiny,
   globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions} from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
@@ -117,7 +117,7 @@ const DoormanStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...DoormanStyles, ...overrides})
+  return StyleSheet.create({ ...DoormanStyles, ...overrides })
 }
 
 export default {

@@ -40,14 +40,18 @@ class TicketsContainer extends Container {
         }
 
         tix.forEach((ticket) => {
-          categories[ticket.pending_transfer ? 'transfer' : untransferredCategory].push(ticket)
+          categories[
+            ticket.pending_transfer ? 'transfer' : untransferredCategory
+          ].push(ticket)
         })
 
         Object.keys(categories).forEach((key) => {
           let tickets = categories[key]
           if (key === 'upcoming') {
-            let redeemedTickets = tickets.filter(item => item.status === 'Redeemed')
-            tickets = tickets.filter(item => item.status !== 'Redeemed')
+            let redeemedTickets = tickets.filter(
+              (item) => item.status === 'Redeemed'
+            )
+            tickets = tickets.filter((item) => item.status !== 'Redeemed')
             if (redeemedTickets.length > 0) {
               tabData['past'].push({ event, tickets: redeemedTickets })
             }

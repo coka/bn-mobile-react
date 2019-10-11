@@ -4,7 +4,7 @@ import {
   globalPaddingMedium,
   globalMargin,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 
@@ -17,7 +17,7 @@ const TicketTransferStyles = {
     marginBottom: globalMargin,
     padding: globalPaddingMedium,
     shadowColor: boxShadowColor,
-    shadowOffset: {width: 2, height: 2},
+    shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.7,
     shadowRadius: 3,
     width: fullWidth - 90,
@@ -29,7 +29,7 @@ const TicketTransferStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...TicketTransferStyles, ...overrides})
+  return StyleSheet.create({ ...TicketTransferStyles, ...overrides })
 }
 
 export default {

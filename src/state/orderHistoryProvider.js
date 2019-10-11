@@ -1,5 +1,5 @@
-import {Container} from 'unstated'
-import {server, apiErrorAlert} from '../constants/Server'
+import { Container } from 'unstated'
+import { server, apiErrorAlert } from '../constants/Server'
 
 class OrderHistoryContainer extends Container {
   constructor(props = {}) {
@@ -11,15 +11,15 @@ class OrderHistoryContainer extends Container {
     }
   }
 
-  fetchOrderHistoryForUser = async() => {
+  fetchOrderHistoryForUser = async () => {
     try {
-      this.setState({isFetching: true})
+      this.setState({ isFetching: true })
       const response = await server.orders.index()
-      const {data, _paging} = response.data // @TODO: pagination
+      const { data, _paging } = response.data // @TODO: pagination
 
-      this.setState({orders: data, isFetching: false})
+      this.setState({ orders: data, isFetching: false })
     } catch (error) {
-      this.setState({isFetching: false})
+      this.setState({ isFetching: false })
       apiErrorAlert(error, 'Loading order history failed.')
     }
   }
@@ -33,4 +33,4 @@ class OrderHistoryContainer extends Container {
   }
 }
 
-export {OrderHistoryContainer}
+export { OrderHistoryContainer }

@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
   ScrollView,
@@ -10,7 +10,7 @@ import {
   Button,
   Linking,
 } from 'react-native'
-import Constants from 'expo-constants';
+import Constants from 'expo-constants'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
@@ -18,16 +18,17 @@ import ModalStyles from '../styles/shared/modalStyles'
 import coverPhotoPlaceholder from '../../assets/account-placeholder-bkgd.png'
 import qrCodeIcon from '../../assets/qr-code-small.png'
 import ReactQRCode from 'react-native-qrcode'
-import {username} from '../string'
-import {optimizeCloudinaryImage} from '../cloudinary'
+import { username } from '../string'
+import { optimizeCloudinaryImage } from '../cloudinary'
 
 const styles = SharedStyles.createStyles()
 const accountStyles = AccountStyles.createStyles()
 const modalStyles = ModalStyles.createStyles()
 
-const FAN_SUPPORT_LINK = 'https://support.bigneon.com/hc/en-us/categories/360001444351-Fan-Support'
+const FAN_SUPPORT_LINK =
+  'https://support.bigneon.com/hc/en-us/categories/360001444351-Fan-Support'
 
-const QRCode = ({_qrCode, toggleModal, modalVisible}) => (
+const QRCode = ({ _qrCode, toggleModal, modalVisible }) => (
   <Modal
     onRequestClose={() => {
       toggleModal(!modalVisible)
@@ -47,9 +48,9 @@ const QRCode = ({_qrCode, toggleModal, modalVisible}) => (
           This code can be scanned to receive ticket transfers, upgrades, and
           more!
         </Text>
-        <View style={[styles.buttonContainer, {borderRadius: 6}]}>
+        <View style={[styles.buttonContainer, { borderRadius: 6 }]}>
           <TouchableHighlight
-            style={[styles.button, {borderRadius: 6}]}
+            style={[styles.button, { borderRadius: 6 }]}
             name="close"
             onPress={() => {
               toggleModal(!modalVisible)
@@ -91,18 +92,18 @@ export default class Account extends Component {
   }
 
   toggleQRModal = (visible) => {
-    this.setState({showQRModal: visible})
+    this.setState({ showQRModal: visible })
   }
 
   render() {
     const {
       props: {
-        navigation: {navigate},
+        navigation: { navigate },
         screenProps: {
-          auth: {canScanTickets},
+          auth: { canScanTickets },
         },
       },
-      state: {user, showQRModal},
+      state: { user, showQRModal },
     } = this
 
     return (
@@ -111,7 +112,7 @@ export default class Account extends Component {
         style={styles.containerDark}
       >
         <QRCode
-          _qrCode={JSON.stringify({email: user.email, id: user.id})}
+          _qrCode={JSON.stringify({ email: user.email, id: user.id })}
           toggleModal={this.toggleQRModal}
           modalVisible={showQRModal}
         />

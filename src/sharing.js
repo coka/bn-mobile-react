@@ -1,11 +1,11 @@
-import {Platform, Share} from 'react-native'
-import {baseURL} from './constants/config'
+import { Platform, Share } from 'react-native'
+import { baseURL } from './constants/config'
 
 function appendForAndroid(message, url) {
   return Platform.OS === 'android' ? `${message} ${url}` : message
 }
 
-export function shareEvent({id, name, venue}) {
+export function shareEvent({ id, name, venue }) {
   const url = `${baseURL}/events/${id}`
   const title = `${name} is at ${venue.name}`
   const message = appendForAndroid(

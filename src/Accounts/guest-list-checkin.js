@@ -1,11 +1,20 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, TouchableHighlight, TextInput, Image, Dimensions, Keyboard } from 'react-native'
+import {
+  View,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  TextInput,
+  Image,
+  Dimensions,
+  Keyboard,
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { price, usernameLastFirst } from '../string'
 import SharedStyles, {
   primaryColor,
-  globalPaddingTiny
-} from "../styles/shared/sharedStyles"
+  globalPaddingTiny,
+} from '../styles/shared/sharedStyles'
 import DoormanStyles from '../styles/account/doormanStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import TicketStyles from '../styles/tickets/ticketStyles'
@@ -15,7 +24,7 @@ import { server, apiErrorAlert } from '../constants/Server'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import { KeyboardDismisser } from '../ui'
 import { LoadingScreen } from '../constants/modals'
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator } from 'react-native'
 
 const styles = SharedStyles.createStyles()
 const doormanStyles = DoormanStyles.createStyles()
@@ -239,17 +248,17 @@ function GuestToCheckIn({ guest, onCancel, onCheckIn }) {
               </Text>
             </TouchableHighlight>
           ) : (
-              <View
-                style={[
-                  eventDetailsStyles.buttonRoundedActive,
-                  styles.marginLeftTiny,
-                ]}
-              >
-                <Text style={eventDetailsStyles.buttonRoundedActiveText}>
-                  Already Checked-In
+            <View
+              style={[
+                eventDetailsStyles.buttonRoundedActive,
+                styles.marginLeftTiny,
+              ]}
+            >
+              <Text style={eventDetailsStyles.buttonRoundedActiveText}>
+                Already Checked-In
               </Text>
-              </View>
-            )}
+            </View>
+          )}
         </View>
         <View style={[styles.flexRowSpaceBetween, styles.paddingTop]}>
           {guest.redeem_key ? null : (
@@ -266,7 +275,6 @@ function SearchBox({ textInput }) {
 }
 
 export default class ManualCheckin extends Component {
-
   componentDidMount() {
     this.searchGuestList('', false)
   }
@@ -315,7 +323,7 @@ export default class ManualCheckin extends Component {
   }
 
   isCloseToBottom({ layoutMeasurement, contentOffset, contentSize }) {
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 50
   }
 
   render() {
@@ -324,7 +332,7 @@ export default class ManualCheckin extends Component {
       isFetchingGuests,
       guestListQuery,
       totalNumberOfGuests,
-      selectedGuest
+      selectedGuest,
     } = this.props
 
     let guestText = totalNumberOfGuests === 1 ? 'guest' : 'guests'

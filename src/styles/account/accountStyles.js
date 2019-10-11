@@ -17,7 +17,7 @@ import {
   globalPaddingTiny,
   globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 const fullWidth = Dimensions.get('window').width
 
 export const whiteTransparent = 'rgba(255, 255, 255, 0.8)'
@@ -174,7 +174,7 @@ const AccountStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...AccountStyles, ...overrides})
+  return StyleSheet.create({ ...AccountStyles, ...overrides })
 }
 
 export default {

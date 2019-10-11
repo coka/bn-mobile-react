@@ -91,13 +91,13 @@ export default class AccountDetails extends Component {
         store: { clearEventState },
       },
       navigation: { navigate },
-    } = this.props;
-    await clearEventState();
+    } = this.props
+    await clearEventState()
     logOut(navigate)
   }
 
   render() {
-    const { user } = this.state;
+    const { user } = this.state
 
     return (
       <KeyboardAwareScrollView

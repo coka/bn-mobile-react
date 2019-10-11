@@ -30,12 +30,8 @@ const CardItem = ({ id, name, checkboxes, toggleCheck }) => (
         styleCheckboxContainer={styles.marginRight}
       />
       <View>
-        <Text style={ticketStyles.ticketHolderHeader}>
-          {name}
-        </Text>
-        <Text style={ticketStyles.ticketHolderSubheader}>
-          #{id.slice(-8)}
-        </Text>
+        <Text style={ticketStyles.ticketHolderHeader}>{name}</Text>
+        <Text style={ticketStyles.ticketHolderSubheader}>#{id.slice(-8)}</Text>
       </View>
     </View>
   </Card>
@@ -47,4 +43,4 @@ CardItem.propTypes = {
   checkboxes: PropTypes.isRequired,
 }
 
-export default CardItem;
+export default CardItem

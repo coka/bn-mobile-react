@@ -202,23 +202,23 @@ class TicketsView extends React.Component {
             item.tickets,
             ({ order_id }) => order_id === purchasedTicket
           ) ? (
-              <AnimatedTicket
-                navigate={navigate}
-                ticket={item}
-                activeTab={activeTab}
-                springValue={springValue}
-                setPurchasedTicket={setPurchasedTicket}
-                requestScrollToTicket={this.requestScrollToTicket}
-                index={index}
-              />
-            ) : (
-              <Ticket
-                navigate={navigate}
-                activeTab={activeTab}
-                ticket={item}
-                setPurchasedTicket={setPurchasedTicket}
-              />
-            )
+            <AnimatedTicket
+              navigate={navigate}
+              ticket={item}
+              activeTab={activeTab}
+              springValue={springValue}
+              setPurchasedTicket={setPurchasedTicket}
+              requestScrollToTicket={this.requestScrollToTicket}
+              index={index}
+            />
+          ) : (
+            <Ticket
+              navigate={navigate}
+              activeTab={activeTab}
+              ticket={item}
+              setPurchasedTicket={setPurchasedTicket}
+            />
+          )
         }}
       />
     )
@@ -248,7 +248,7 @@ export default class MyTickets extends Component {
   }
 
   static navigationOptions = {
-    header: null
+    header: null,
   }
 
   get activeTab() {
@@ -269,9 +269,9 @@ export default class MyTickets extends Component {
   }
 
   tabStyle(viewType) {
-    return viewType === this.activeTab ?
-      styles.subnavHeaderActive :
-      styles.subnavHeader
+    return viewType === this.activeTab
+      ? styles.subnavHeaderActive
+      : styles.subnavHeader
   }
 
   tabWrapperStyle(viewType) {

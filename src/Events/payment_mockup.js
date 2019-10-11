@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Text, View, Image, TouchableHighlight} from 'react-native'
+import { Text, View, Image, TouchableHighlight } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import CheckoutStyles from '../styles/event_details/checkoutStyles'
@@ -16,7 +16,7 @@ export default class PaymentTypes extends Component {
   }
 
   get options() {
-    const {paymentOptions, selectedPaymentId, selectPayment} = this.props
+    const { paymentOptions, selectedPaymentId, selectPayment } = this.props
 
     /* eslint-disable-next-line complexity */
     return paymentOptions.map((payment) => {
@@ -32,9 +32,9 @@ export default class PaymentTypes extends Component {
         >
           <View
             style={
-              selected ?
-                checkoutStyles.rowContainerActive :
-                checkoutStyles.rowContainer
+              selected
+                ? checkoutStyles.rowContainerActive
+                : checkoutStyles.rowContainer
             }
           >
             <View style={checkoutStyles.row}>

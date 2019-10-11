@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   Text,
   View,
@@ -7,14 +7,14 @@ import {
   ScrollView,
   TouchableHighlight,
 } from 'react-native'
-import {NavigationEvents} from 'react-navigation'
+import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import SharedStyles from '../styles/shared/sharedStyles'
 import AccountStyles from '../styles/account/accountStyles'
 import BillingStyles from '../styles/account/billingStyles'
 import OrderHistoryStyles from '../styles/account/orderHistoryStyles'
-import {toDollars} from '../constants/money'
-import {toMonthAndDate} from '../time'
+import { toDollars } from '../constants/money'
+import { toMonthAndDate } from '../time'
 
 const styles = SharedStyles.createStyles()
 const accountStyles = AccountStyles.createStyles()
@@ -24,7 +24,7 @@ const orderHistoryStyles = OrderHistoryStyles.createStyles()
 export default class OrderHistory extends Component {
   loadOrderHistory() {
     const {
-      screenProps: {orderHistory},
+      screenProps: { orderHistory },
     } = this.props
 
     if (orderHistory.orders.length === 0) {
@@ -54,7 +54,7 @@ export default class OrderHistory extends Component {
 
   render() {
     const {
-      screenProps: {orderHistory},
+      screenProps: { orderHistory },
     } = this.props
 
     if (orderHistory.isFetching) {

@@ -22,7 +22,7 @@ export default class EventsIndex extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      favorite: props.event.user_is_interested
+      favorite: props.event.user_is_interested,
     }
   }
 
@@ -37,7 +37,7 @@ export default class EventsIndex extends Component {
     e.stopPropagation()
     const { onInterested, event } = this.props
     onInterested(event, true)
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       favorite: !prevState.favorite,
     }))
   }
@@ -98,16 +98,16 @@ export default class EventsIndex extends Component {
                 >
                   <View
                     style={
-                      favorite ?
-                        eventCardStyles.iconLinkCircleContainerSmallActive :
-                        eventCardStyles.iconLinkCircleContainerSmall
+                      favorite
+                        ? eventCardStyles.iconLinkCircleContainerSmallActive
+                        : eventCardStyles.iconLinkCircleContainerSmall
                     }
                   >
                     <Icon
                       style={
-                        favorite ?
-                          eventCardStyles.iconLinkCircleSmallActive :
-                          eventCardStyles.iconLinkCircleSmall
+                        favorite
+                          ? eventCardStyles.iconLinkCircleSmallActive
+                          : eventCardStyles.iconLinkCircleSmall
                       }
                       name="star"
                     />

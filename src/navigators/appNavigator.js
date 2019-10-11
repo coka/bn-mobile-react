@@ -1,6 +1,6 @@
 import React from 'react'
-import {createBottomTabNavigator} from 'react-navigation'
-import {Image} from 'react-native'
+import { createBottomTabNavigator } from 'react-navigation'
+import { Image } from 'react-native'
 import NavigationStyles from '../styles/shared/navigationStyles'
 import EventStack from './eventStack'
 import TicketStack from './ticketStack'
@@ -13,11 +13,11 @@ export default createBottomTabNavigator(
   {
     Explore: {
       screen: EventStack,
-      navigationOptions: ({_navigation}) => ({
-        tabBarIcon: ({focused}) => {
-          const imageName = focused ?
-            require('../../assets/icon-explore-active.png') :
-            require('../../assets/icon-explore.png')
+      navigationOptions: ({ _navigation }) => ({
+        tabBarIcon: ({ focused }) => {
+          const imageName = focused
+            ? require('../../assets/icon-explore-active.png')
+            : require('../../assets/icon-explore.png')
 
           return (
             <Image
@@ -32,10 +32,10 @@ export default createBottomTabNavigator(
     MyTickets: {
       screen: TicketStack,
       navigationOptions: {
-        tabBarIcon: ({focused}) => {
-          const imageName = focused ?
-            require('../../assets/icon-ticket-active.png') :
-            require('../../assets/icon-ticket.png')
+        tabBarIcon: ({ focused }) => {
+          const imageName = focused
+            ? require('../../assets/icon-ticket-active.png')
+            : require('../../assets/icon-ticket.png')
 
           return (
             <Image
@@ -50,10 +50,10 @@ export default createBottomTabNavigator(
     Account: {
       screen: AccountsStack,
       navigationOptions: {
-        tabBarIcon: ({focused}) => {
-          const imageName = focused ?
-            require('../../assets/icon-account-active.png') :
-            require('../../assets/icon-account.png')
+        tabBarIcon: ({ focused }) => {
+          const imageName = focused
+            ? require('../../assets/icon-account-active.png')
+            : require('../../assets/icon-account.png')
 
           return (
             <Image

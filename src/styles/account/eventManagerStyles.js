@@ -14,8 +14,7 @@ import {
   globalMargin,
   globalMarginSmall,
 } from '../shared/sharedStyles'
-import {StyleSheet} from 'react-native'
-
+import { StyleSheet } from 'react-native'
 
 const EventManagerStyles = {
   // ROW STYLES
@@ -96,7 +95,7 @@ const EventManagerStyles = {
 }
 
 function createStyles(overrides = {}) {
-  return StyleSheet.create({...EventManagerStyles, ...overrides})
+  return StyleSheet.create({ ...EventManagerStyles, ...overrides })
 }
 
 export default {
