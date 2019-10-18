@@ -119,6 +119,10 @@ const EventDetailsStyles = {
   },
 
   // TEXT STYLES
+  descriptionBodyContainer: {
+    paddingBottom: globalPaddingSmall,
+    paddingLeft: globalPadding + globalPaddingTiny,
+  },
   descriptionHeader: {
     color: textColor,
     fontFamily: globalFontSemiBold,

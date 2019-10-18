@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Text, Platform, View, Linking, TouchableHighlight } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import SharedStyles from '../styles/shared/sharedStyles'
-import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
-import { eventDateTimes } from '../time'
 import { map } from 'lodash'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { Linking, Platform, Text, TouchableHighlight, View } from 'react-native'
+import HTML from 'react-native-render-html'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { shareEvent } from '../sharing'
+import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
+import SharedStyles from '../styles/shared/sharedStyles'
+import { eventDateTimes } from '../time'
 
 /*  eslint-disable camelcase */
 
@@ -219,7 +220,6 @@ export default class Details extends Component {
               </Text>
             </View>
             <Text style={eventDetailsStyles.bodyText}>{this.ageLimit}</Text>
-
             <View style={eventDetailsStyles.eventDescriptionHeaderWrapper}>
               <Icon
                 style={eventDetailsStyles.iconEventDescription}
@@ -229,13 +229,74 @@ export default class Details extends Component {
                 EVENT DESCRIPTION
               </Text>
             </View>
-            <Text style={eventDetailsStyles.bodyText}>
-              {event.additional_info}
-            </Text>
+            <View style={eventDetailsStyles.descriptionBodyContainer}>
+              <HTML
+                baseFontStyle={baseFontStyle}
+                listsPrefixesRenderers={listsPrefixesRenderers}
+                onLinkPress={(_, href) => Linking.openURL(href)}
+                tagsStyles={tagsStyles}
+                html={event.additional_info}
+              />
+            </View>
           </View>
         </View>
         <View style={eventDetailsStyles.spacerFooter} />
       </View>
     )
   }
+}
+
+const listsPrefixesRenderers = {
+  ul: () => (
+    <View
+      style={{
+        backgroundColor: '#9da3b4',
+        borderRadius: 4,
+        height: 8,
+        marginRight: 18,
+        marginTop: 8,
+        width: 8,
+      }}
+    />
+  ),
+}
+
+const baseHeaderStyle = {
+  color: '#2c3136',
+  fontFamily: 'tt_commons_demibold',
+  marginTop: 35,
+  marginBottom: 20,
+}
+
+const baseFontStyle = {
+  color: '#3c383f',
+  fontFamily: 'tt_commons_regular',
+  fontSize: 17,
+}
+
+const boldStyle = {
+  fontFamily: 'tt_commons_bold',
+}
+
+const tagsStyles = {
+  a: {
+    ...boldStyle,
+    color: '#ff22b2',
+    textDecorationLine: 'none',
+  },
+  h1: {
+    ...baseHeaderStyle,
+    fontSize: 30,
+  },
+  h2: {
+    ...baseHeaderStyle,
+    fontSize: 24,
+  },
+  strong: {
+    ...boldStyle,
+  },
+  u: {
+    ...boldStyle,
+    textDecorationLine: 'none',
+  },
 }
