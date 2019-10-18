@@ -233,6 +233,7 @@ export default class Details extends Component {
               <HTML
                 baseFontStyle={baseFontStyle}
                 listsPrefixesRenderers={listsPrefixesRenderers}
+                onLinkPress={(_, href) => Linking.openURL(href)}
                 tagsStyles={tagsStyles}
                 html={event.additional_info}
               />
@@ -278,6 +279,11 @@ const boldStyle = {
 }
 
 const tagsStyles = {
+  a: {
+    ...boldStyle,
+    color: '#ff22b2',
+    textDecorationLine: 'none',
+  },
   h1: {
     ...baseHeaderStyle,
     fontSize: 30,
