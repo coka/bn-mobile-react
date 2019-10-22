@@ -1,29 +1,30 @@
+import { openBrowserAsync } from 'expo-web-browser'
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  TouchableHighlight,
   Alert,
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
 } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import { LinearGradient } from 'expo-linear-gradient'
-import SharedStyles from '../styles/shared/sharedStyles'
-import FormStyles from '../styles/shared/formStyles'
-import LoginStyles from '../styles/login/loginStyles'
+import Button from '../components/Button'
+import { default as Input } from '../components/Input'
+import Link from '../components/Link'
 import { server } from '../constants/Server'
-
-const styles = SharedStyles.createStyles()
-const formStyles = FormStyles.createStyles()
-const loginStyles = LoginStyles.createStyles()
+import { colors, fonts } from '../styles/shared/sharedStyles'
 
 async function doPasswordReset(email) {
   return await server.passwordReset.create({ email })
 }
 
 export default class PasswordReset extends Component {
+  static navigationOptions = {
+    header: null,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -55,43 +56,98 @@ export default class PasswordReset extends Component {
   }
 
   render() {
+    const { navigation } = this.props
+    const { email } = this.state
+
     return (
-      <View style={loginStyles.container}>
-        <View>
-          <Text
-            style={[
-              styles.headerSecondary,
-              styles.textCenter,
-              styles.paddingBottomJumbo,
-            ]}
-          >
-            Welcome back!
-          </Text>
-          <TextInput
-            keyboardType="email-address"
-            style={formStyles.input}
-            placeholder="Email Address"
-            searchIcon={{ size: 24 }}
-            underlineColorAndroid="transparent"
-            defaultValue={this.state.email}
-            onChangeText={(email) => this.setState({ email })}
-            autoCapitalize="none"
-          />
+      <ScrollView bounces={false} keyboardShouldPersistTaps="handled">
+        <View style={customStyles.container}>
+          <View>
+            <View>
+              <Text style={customStyles.title}>Forgot password?</Text>
+              <TouchableHighlight
+                style={customStyles.x}
+                onPress={() => navigation.goBack()}
+                underlayColor="none"
+              >
+                <Image
+                  style={{ width: 16, height: 16 }}
+                  source={require('../../assets/x.png')}
+                />
+              </TouchableHighlight>
+            </View>
+            <Text style={customStyles.helperText}>
+              No prob! Enter your email address to recieve your password reset
+              instructions.
+            </Text>
+            <Input
+              keyboardType="email-address"
+              onChangeText={(email) => this.setState({ email })}
+              placeholder="Email Address"
+              value={email}
+            />
+            <View style={customStyles.buttonContainer}>
+              <Button
+                disabled={!email}
+                label="Reset Password"
+                onPress={this.resetPassword}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={customStyles.footer}>
+              Need help?{' '}
+              <Link
+                onPress={() =>
+                  openBrowserAsync('https://support.bigneon.com/hc/en-us')
+                }
+              >
+                Contact Support
+              </Link>
+            </Text>
+          </View>
         </View>
-        <TouchableHighlight
-          style={loginStyles.buttonContainer}
-          onPress={this.resetPassword}
-        >
-          <LinearGradient
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            colors={['#5491CC', '#9A68B2', '#E53D96']}
-            style={loginStyles.button}
-          >
-            <Text style={loginStyles.buttonText}>Reset your password</Text>
-          </LinearGradient>
-        </TouchableHighlight>
-      </View>
+      </ScrollView>
     )
   }
 }
+
+const customStyles = StyleSheet.create({
+  buttonContainer: {
+    marginTop: 14,
+  },
+  container: {
+    height: Dimensions.get('window').height,
+    justifyContent: 'space-between',
+    paddingBottom: 33,
+    paddingHorizontal: 20,
+    paddingTop: 44,
+  },
+  footer: {
+    color: colors.text,
+    fontFamily: fonts.medium,
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  helperText: {
+    color: '#9da3b4',
+    fontFamily: fonts.medium,
+    fontSize: 17,
+    lineHeight: 18,
+    marginBottom: 39,
+    textAlign: 'center',
+  },
+  title: {
+    color: colors.text,
+    fontFamily: fonts.semiBold,
+    fontSize: 17,
+    marginBottom: 34,
+    marginTop: 14,
+    textAlign: 'center',
+  },
+  x: {
+    position: 'absolute',
+    right: 0,
+    top: 10,
+  },
+})
