@@ -24,6 +24,7 @@ class LogIn extends React.Component {
       email: '',
       password: '',
       submitting: false,
+      submittingFacebook: false,
     }
   }
 
@@ -44,7 +45,8 @@ class LogIn extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
+    const { facebook } = this.props.screenProps.auth
+    const { navigate } = this.props.navigation
     const { email, password, submitting } = this.state
 
     const shouldDisableSubmission = !email || !password
@@ -88,7 +90,7 @@ class LogIn extends React.Component {
               <Text
                 style={styles.forgotLink}
                 onPress={() =>
-                  navigation.navigate('PasswordReset', {
+                  navigate('PasswordReset', {
                     defaultEmail: email,
                   })
                 }
@@ -101,20 +103,25 @@ class LogIn extends React.Component {
               disabled={shouldDisableSubmission}
               label="Log In"
               onPress={this.logIn}
-            >
-              Log In
-            </Button>
+            />
             <View style={styles.orContainer}>
               <View style={styles.orDash} />
               <Text style={styles.orText}>or</Text>
               <View style={styles.orDash} />
             </View>
-            <Button label="Continue with Facebook" disabled></Button>
+            <Button
+              label="Continue with Facebook"
+              onPress={() =>
+                facebook(navigate, (loading) =>
+                  this.setState({ submittingFacebook: loading })
+                )
+              }
+            />
           </View>
           <View>
             <Text style={styles.footer}>
               New to Big Neon?{' '}
-              <Link onPress={() => navigation.navigate('SignUp')}>Sign Up</Link>
+              <Link onPress={() => navigate('SignUp')}>Sign Up</Link>
             </Text>
           </View>
         </View>
