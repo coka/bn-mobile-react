@@ -110,14 +110,23 @@ class LogIn extends React.Component {
               <Text style={styles.orText}>or</Text>
               <View style={styles.orDash} />
             </View>
-            <Button
-              label="Continue with Facebook"
-              onPress={() =>
-                facebook(navigate, (loading) =>
-                  this.setState({ submittingFacebook: loading })
-                )
-              }
-            />
+            <View style={styles.facebookButtonContainer}>
+              <TouchableHighlight
+                style={styles.facebookButton}
+                onPress={() => facebook(navigate)}
+                underlayColor={colors.tint}
+              >
+                <View style={styles.facebookButtonContent}>
+                  <Image
+                    style={{ width: 20, height: 20 }}
+                    source={require('../../assets/facebook.png')}
+                  />
+                  <Text style={styles.facebookButtonLabel}>
+                    Continue with Facebook
+                  </Text>
+                </View>
+              </TouchableHighlight>
+            </View>
           </View>
           <View>
             <Text style={styles.footer}>
@@ -144,6 +153,28 @@ const styles = StyleSheet.create({
     paddingBottom: 33,
     paddingHorizontal: 20,
     paddingTop: 44,
+  },
+  facebookButton: {
+    borderRadius: 5,
+    flex: 1,
+  },
+  facebookButtonContainer: {
+    backgroundColor: colors.facebook,
+    borderRadius: 5,
+    height: 55,
+  },
+  facebookButtonContent: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  facebookButtonLabel: {
+    color: colors.white,
+    fontFamily: fonts.semiBold,
+    fontSize: 17,
+    letterSpacing: 0.5,
+    paddingLeft: 10,
   },
   footer: {
     color: colors.text,

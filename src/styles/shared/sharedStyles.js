@@ -8,6 +8,7 @@ export const isSmallDevice = fullHeight < smallHeight
 
 export const colors = {
   brand: '#ff22b2',
+  facebook: '#4267b2',
   text: '#3c383f',
   tint: 'rgba(0, 0, 0, 0.1)',
   white: '#ffffff',
