@@ -85,6 +85,7 @@ class LogIn extends React.Component {
               <Input
                 onChangeText={(password) => this.setState({ password })}
                 placeholder="Password"
+                secureTextEntry
                 value={password}
               />
               <Text
