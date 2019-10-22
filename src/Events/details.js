@@ -230,13 +230,15 @@ export default class Details extends Component {
               </Text>
             </View>
             <View style={eventDetailsStyles.descriptionBodyContainer}>
-              <HTML
-                baseFontStyle={baseFontStyle}
-                listsPrefixesRenderers={listsPrefixesRenderers}
-                onLinkPress={(_, href) => Linking.openURL(href)}
-                tagsStyles={tagsStyles}
-                html={event.additional_info}
-              />
+              {event.additional_info ? 
+                <HTML
+                  baseFontStyle={baseFontStyle}
+                  listsPrefixesRenderers={listsPrefixesRenderers}
+                  onLinkPress={(_, href) => Linking.openURL(href)}
+                  tagsStyles={tagsStyles}
+                  html={event.additional_info}
+                />
+                : null}
             </View>
           </View>
         </View>
