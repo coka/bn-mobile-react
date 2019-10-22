@@ -1,7 +1,9 @@
-import {Image} from 'expo'
-import {Asset} from 'expo-asset'
+import { Image } from 'expo'
+import { Asset } from 'expo-asset'
 
 const IMAGES = [
+  require('./back.png'),
+  require('./logo.png'),
   require('./account-placeholder-bkgd.png'),
   require('./big-neon-logo.png'),
   require('./event-img-overlay.png'),

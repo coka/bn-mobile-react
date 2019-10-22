@@ -1,54 +1,29 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import {
-  View,
-  Text,
+  Dimensions,
   Image,
-  TextInput,
+  StyleSheet,
+  Text,
   TouchableHighlight,
-  ActivityIndicator,
+  View,
 } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import { LinearGradient } from 'expo-linear-gradient'
-import SharedStyles from '../styles/shared/sharedStyles'
-import FormStyles from '../styles/shared/formStyles'
-import LoginStyles from '../styles/login/loginStyles'
-import { autotrim } from '../string'
-import BusyButton from '../BusyButton'
+import { ScrollView } from 'react-native-gesture-handler'
+import Button from '../components/Button'
+import Input from '../components/Input'
+import Link from '../components/Link'
+import { colors, fonts } from '../styles/shared/sharedStyles'
 
-const styles = SharedStyles.createStyles()
-const formStyles = FormStyles.createStyles()
-const loginStyles = LoginStyles.createStyles()
-
-const returnToButton = (navigation) => (
-  <TouchableHighlight
-    onPress={() => navigation.goBack()}
-    underlayColor="rgba(0, 0, 0, 0)"
-  >
-    <Icon style={loginStyles.backButton} name="arrow-back" />
-  </TouchableHighlight>
-)
-
-export default class LogIn extends Component {
-  static propTypes = {
-    navigation: PropTypes.object.isRequired,
-    screenProps: PropTypes.object.isRequired,
-  }
-
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerLeft: returnToButton(navigation),
-      headerStyle: loginStyles.navigationContainer,
-    }
+class LogIn extends React.Component {
+  static navigationOptions = {
+    header: null,
   }
 
   constructor(props) {
     super(props)
-
     this.state = {
       email: '',
       password: '',
-      isBusy: false,
+      submitting: false,
     }
   }
 
@@ -60,146 +35,169 @@ export default class LogIn extends Component {
     const { email, password } = this.state
 
     if (!auth.isFetching()) {
-      this.setState({ isBusy: true })
-
+      this.setState({ submitting: true })
       const isLoggedIn = await auth.logIn({ email, password }, navigate)
-
-      // If there was an error, reactivate button
-      // The conditional is to prevent a warning about changing state
-      // after component is goes away
       if (!isLoggedIn) {
-        this.setState({ isBusy: false })
+        this.setState({ submitting: false })
       }
     }
   }
 
   render() {
-    const { isBusy, email, password } = this.state
+    const { navigation } = this.props
+    const { email, password, submitting } = this.state
 
-    const disableButton = !(email && password)
+    const shouldDisableSubmission = !email || !password
+
     return (
-      <View style={loginStyles.container}>
-        <View>
-          <Text style={loginStyles.smallText}>Access your experiences</Text>
-          <Text
-            style={[
-              styles.headerSecondary,
-              styles.textCenter,
-              styles.paddingBottom,
-            ]}
-          >
-            Log in to your account
-          </Text>
-          <TextInput
-            keyboardType="email-address"
-            autoCapitalize="none"
-            style={formStyles.input}
-            placeholder="Email Address"
-            underlineColorAndroid="transparent"
-            onChangeText={autotrim((email) => this.setState({ email }))}
-          />
-          <TextInput
-            style={formStyles.input}
-            placeholder="Password"
-            underlineColorAndroid="transparent"
-            secureTextEntry
-            onChangeText={(password) => this.setState({ password })}
-            autoCapitalize="none"
-          />
-          <BusyButton
-            style={loginStyles.buttonContainer}
-            onPress={this.logIn}
-            isBusy={isBusy}
-            disabled={disableButton}
-            busyContent={
-              <LinearGradient
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                colors={['#5491CC', '#9A68B2', '#E53D96']}
-                style={loginStyles.button}
-              >
-                <ActivityIndicator color="#FFF" />
-              </LinearGradient>
-            }
-          >
-            <LinearGradient
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              colors={
-                disableButton
-                  ? ['#d3d3d3', '#d3d3d3', '#d3d3d3']
-                  : ['#5491CC', '#9A68B2', '#E53D96']
-              }
-              style={loginStyles.button}
-            >
-              <Text style={loginStyles.buttonText}>{"Let's Do This"}</Text>
-            </LinearGradient>
-          </BusyButton>
-          <TouchableHighlight
-            onPress={() =>
-              this.props.navigation.navigate('PasswordReset', {
-                defaultEmail: this.state.email,
-              })
-            }
-          >
-            <View
-              style={[
-                styles.flexRowCenter,
-                styles.paddingSmall,
-                styles.marginBottom,
-              ]}
-            >
-              <Text style={[styles.linkTextDark]}>Reset your password</Text>
-              <Icon name="keyboard-arrow-right" />
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => this.props.navigation.navigate('SignUp')}
-          >
-            <View
-              style={[
-                styles.flexRowCenter,
-                styles.paddingSmall,
-                styles.marginTop,
-              ]}
-            >
-              <Text style={[styles.linkTextDark]}>
-                {"Don't have an account? "}
-              </Text>
-              <Text style={[styles.linkText]}>Create one</Text>
-              <Icon name="keyboard-arrow-right" style={[styles.linkText]} />
-            </View>
-          </TouchableHighlight>
-        </View>
-
-        {false && ( // TODO: Re-enable when functionality is implemented.
+      <ScrollView bounces={false} keyboardShouldPersistTaps="handled">
+        <View style={styles.container}>
           <View>
-            <TouchableHighlight>
-              <View style={styles.flexRowCenter}>
+            <View style={styles.navigationContainer}>
+              <TouchableHighlight
+                style={styles.backWrapper}
+                onPress={() => navigation.goBack()}
+                underlayColor="#d3d3d3"
+              >
                 <Image
-                  style={loginStyles.facebookIcon}
-                  source={require('../../assets/icon-facebook.png')}
+                  style={{ width: 22, height: 18 }}
+                  source={require('../../assets/back.png')}
                 />
-                <Text style={loginStyles.linkTextBlue}>
-                  Login with Facebook
-                </Text>
-                <Icon
-                  style={loginStyles.arrowIconBlue}
-                  name="keyboard-arrow-right"
+              </TouchableHighlight>
+              <View style={styles.logoWrapper}>
+                <Image
+                  style={{ width: 25, height: 26 }}
+                  source={require('../../assets/logo.png')}
                 />
               </View>
-            </TouchableHighlight>
-
-            <TouchableHighlight style={styles.paddingTopSmall}>
-              <View style={styles.flexRowCenter}>
-                <Icon style={loginStyles.phoneIcon} name="phone-iphone" />
-                <Text style={styles.linkTextDark}>Login with SMS</Text>
-                <Icon name="keyboard-arrow-right" />
-              </View>
-            </TouchableHighlight>
+            </View>
+            <Text style={styles.subtitle}>Access your experiences</Text>
+            <Text style={styles.title}>Log In to Your Account</Text>
+            <Input
+              keyboardType="email-address"
+              onChangeText={(email) => this.setState({ email })}
+              placeholder="Email Address"
+              value={email}
+            />
+            <View style={styles.passwordInputContainer}>
+              <Input
+                onChangeText={(password) => this.setState({ password })}
+                placeholder="Password"
+                value={password}
+              />
+              <Text
+                style={styles.forgotLink}
+                onPress={() =>
+                  navigation.navigate('PasswordReset', {
+                    defaultEmail: email,
+                  })
+                }
+              >
+                Forgot?
+              </Text>
+            </View>
+            <Button
+              busy={submitting}
+              disabled={shouldDisableSubmission}
+              label="Log In"
+              onPress={this.logIn}
+            >
+              Log In
+            </Button>
+            <View style={styles.orContainer}>
+              <View style={styles.orDash} />
+              <Text style={styles.orText}>or</Text>
+              <View style={styles.orDash} />
+            </View>
+            <Button label="Continue with Facebook" disabled></Button>
           </View>
-        )}
-      </View>
+          <View>
+            <Text style={styles.footer}>
+              New to Big Neon?{' '}
+              <Link onPress={() => navigation.navigate('SignUp')}>Sign Up</Link>
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  backWrapper: {
+    alignItems: 'center',
+    height: 32,
+    justifyContent: 'center',
+    width: 32,
+  },
+  container: {
+    height: Dimensions.get('window').height,
+    justifyContent: 'space-between',
+    paddingBottom: 33,
+    paddingHorizontal: 20,
+    paddingTop: 44,
+  },
+  footer: {
+    color: colors.text,
+    fontFamily: fonts.medium,
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  forgotLink: {
+    color: colors.brand,
+    fontFamily: fonts.semiBold,
+    fontSize: 15,
+    position: 'absolute',
+    right: 21,
+    top: 16,
+  },
+  logoWrapper: {
+    alignItems: 'center',
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  navigationContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 6,
+  },
+  orContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 18,
+    marginTop: 25,
+  },
+  orDash: {
+    backgroundColor: '#e7e8ed',
+    height: 1,
+    width: 25,
+  },
+  orText: {
+    color: '#9da3b4',
+    fontFamily: fonts.medium,
+    fontSize: 16,
+    paddingHorizontal: 11,
+  },
+  passwordInputContainer: {
+    marginVertical: 15,
+  },
+  subtitle: {
+    color: colors.text,
+    fontFamily: fonts.medium,
+    fontSize: 15,
+    marginVertical: 15,
+    textAlign: 'center',
+  },
+  title: {
+    color: colors.text,
+    fontFamily: fonts.bold,
+    fontSize: 30,
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+})
+
+export default LogIn
