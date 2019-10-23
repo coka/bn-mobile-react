@@ -77,6 +77,10 @@ export default class EventShow extends Component {
     screenProps: PropTypes.object.isRequired,
   }
 
+  static navigationOptions = {
+    header: null,
+  }
+
   constructor(props) {
     super(props)
 
