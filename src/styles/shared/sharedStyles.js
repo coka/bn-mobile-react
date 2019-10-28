@@ -1,10 +1,25 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import { moderateScale } from 'react-native-size-matters'
 const fullHeight = Dimensions.get('window').height
 const fullWidth = Dimensions.get('window').width
 const smallHeight = 650
 
 export const isSmallDevice = fullHeight < smallHeight
+
+export const colors = {
+  brand: '#ff22b2',
+  facebook: '#4267b2',
+  text: '#3c383f',
+  tint: 'rgba(0, 0, 0, 0.1)',
+  white: '#ffffff',
+}
+
+export const fonts = {
+  bold: 'tt_commons_bold',
+  medium: 'tt_commons_medium',
+  regular: 'tt_commons_regular',
+  semiBold: 'tt_commons_demibold',
+}
 
 export const primaryColor = '#FF20B1'
 export const secondaryColor = '#707CED'
