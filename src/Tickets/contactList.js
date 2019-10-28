@@ -1,17 +1,17 @@
-import React, { PureComponent } from 'react'
 import { PropTypes } from 'prop-types'
+import React, { PureComponent } from 'react'
 import {
-  View,
+  FlatList,
+  Modal,
   Text,
   TextInput,
-  FlatList,
   TouchableOpacity,
-  Modal,
+  View,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import SharedStyles from '../styles/shared/sharedStyles'
 import FormStyles from '../styles/shared/formStyles'
 import ModalStyles from '../styles/shared/modalStyles'
+import SharedStyles from '../styles/shared/sharedStyles'
 import TicketTransferStyles from '../styles/tickets/ticketTransferStyles'
 
 const styles = SharedStyles.createStyles()
@@ -75,9 +75,11 @@ class ContactList extends PureComponent {
   searchList = (keyword) => {
     const { contacts } = this.props
     let { filteredContacts } = this.state
-    filteredContacts = contacts.filter((item) =>
-      item.name.toUpperCase().includes(keyword.toUpperCase())
-    )
+    filteredContacts = contacts.filter((item) => {
+      if (item.name) {
+        return item.name.toUpperCase().includes(keyword.toUpperCase())
+      }
+    })
     this.setState({ filteredContacts })
   }
 
