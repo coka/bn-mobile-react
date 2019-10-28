@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, BackHandler } from 'react-native'
+import { BackHandler, View } from 'react-native'
 import GuestList from './guest-list-checkin'
 
 export default class GuestListScreen extends Component {
@@ -33,10 +33,10 @@ export default class GuestListScreen extends Component {
     const {
       state: managerState,
       hasNextPage,
+      fetchGuestList,
       fetchNextPage,
-      refreshParams,
-      searchGuestList,
       updateGuestStatus,
+      updateSearchQuery,
     } = this.props.screenProps.eventManager
 
     const { selectedGuest } = this.state
@@ -45,13 +45,13 @@ export default class GuestListScreen extends Component {
       <View>
         <GuestList
           {...managerState}
-          searchGuestList={searchGuestList}
           updateGuestStatus={updateGuestStatus}
           selectGuest={this.selectGuest}
           selectedGuest={selectedGuest}
           hasNextPage={hasNextPage}
+          fetchGuestList={fetchGuestList}
           fetchNextPage={fetchNextPage}
-          refreshParams={refreshParams}
+          updateSearchQuery={updateSearchQuery}
         />
       </View>
     )

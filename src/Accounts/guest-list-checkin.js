@@ -1,30 +1,30 @@
 import React, { Component } from 'react'
 import {
-  View,
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  Keyboard,
   ScrollView,
   Text,
-  TouchableHighlight,
   TextInput,
-  Image,
-  Dimensions,
-  Keyboard,
+  TouchableHighlight,
+  View,
 } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import { price, usernameLastFirst } from '../string'
-import SharedStyles, {
-  primaryColor,
-  globalPaddingTiny,
-} from '../styles/shared/sharedStyles'
-import DoormanStyles from '../styles/account/doormanStyles'
-import AccountStyles from '../styles/account/accountStyles'
-import TicketStyles from '../styles/tickets/ticketStyles'
-import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
-import emptyState from '../../assets/icon-empty-state.png'
-import { server, apiErrorAlert } from '../constants/Server'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import emptyState from '../../assets/icon-empty-state.png'
+import { SpinnerActivity } from '../constants/modals'
+import { apiErrorAlert, server } from '../constants/Server'
+import { price, usernameLastFirst } from '../string'
+import AccountStyles from '../styles/account/accountStyles'
+import DoormanStyles from '../styles/account/doormanStyles'
+import EventDetailsStyles from '../styles/event_details/eventDetailsStyles'
+import SharedStyles, {
+  globalPaddingTiny,
+  primaryColor,
+} from '../styles/shared/sharedStyles'
+import TicketStyles from '../styles/tickets/ticketStyles'
 import { KeyboardDismisser } from '../ui'
-import { LoadingScreen } from '../constants/modals'
-import { ActivityIndicator } from 'react-native'
 
 const styles = SharedStyles.createStyles()
 const doormanStyles = DoormanStyles.createStyles()
@@ -175,13 +175,7 @@ class GuestList extends Component {
   }
 
   render() {
-    const {
-      guests,
-      isFetchingGuests,
-      onSelect,
-      onCheckIn,
-      ...rest
-    } = this.props
+    const { guests, isFetchingPage, onSelect, onCheckIn, ...rest } = this.props
 
     if (guests.length === 0) {
       return <EmptyState />
@@ -207,7 +201,7 @@ class GuestList extends Component {
             </SwipeRow>
           )}
         />
-        {isFetchingGuests && (
+        {isFetchingPage && (
           <ActivityIndicator
             color={primaryColor}
             style={{ paddingTop: globalPaddingTiny }}
@@ -270,21 +264,9 @@ function GuestToCheckIn({ guest, onCancel, onCheckIn }) {
   )
 }
 
-function SearchBox({ textInput }) {
-  return <TextInput {...textInput} />
-}
-
 export default class ManualCheckin extends Component {
   componentDidMount() {
-    this.searchGuestList('', false)
-  }
-
-  componentWillUnmount() {
-    this.props.refreshParams()
-  }
-
-  searchGuestList = (query, replaceGuests) => {
-    this.props.searchGuestList(query, 0, replaceGuests)
+    this.props.fetchGuestList()
   }
 
   unselectGuest = () => {
@@ -300,26 +282,9 @@ export default class ManualCheckin extends Component {
     } catch (error) {
       apiErrorAlert(error)
     } finally {
-      this.searchGuestList(this.props.guestListQuery, true) // refresh list w/ new data
+      this.props.fetchGuestList()
       this.unselectGuest()
     }
-  }
-
-  get shouldShowLoadingScreen() {
-    const { isFetchingGuests, guests, guestListQuery } = this.props
-
-    return (
-      isFetchingGuests && guests.length === 0 && guestListQuery.length === 0
-    )
-  }
-
-  loadMoreGuests = () => {
-    const { hasNextPage, fetchNextPage } = this.props
-
-    if (hasNextPage) {
-      fetchNextPage()
-    }
-    return null
   }
 
   isCloseToBottom({ layoutMeasurement, contentOffset, contentSize }) {
@@ -328,11 +293,14 @@ export default class ManualCheckin extends Component {
 
   render() {
     const {
+      fetchNextPage,
       guests,
       isFetchingGuests,
+      isFetchingPage,
       guestListQuery,
       totalNumberOfGuests,
       selectedGuest,
+      updateSearchQuery,
     } = this.props
 
     let guestText = totalNumberOfGuests === 1 ? 'guest' : 'guests'
@@ -361,33 +329,33 @@ export default class ManualCheckin extends Component {
                 style={doormanStyles.bodyText}
               >{`${totalNumberOfGuests} ${guestText}`}</Text>
               <View style={doormanStyles.searchContainer}>
-                <SearchBox
-                  textInput={{
-                    defaultValue: guestListQuery,
-                    onChangeText: (query) => this.searchGuestList(query, true),
-                    placeholder: 'Search for guests',
-                  }}
+                <TextInput
                   style={doormanStyles.searchInput}
+                  onChangeText={(query) => updateSearchQuery(query)}
+                  placeholder={'Search for guests'}
+                  value={guestListQuery}
                 />
               </View>
             </View>
-
-            <LoadingScreen visible={this.shouldShowLoadingScreen} />
             <ScrollView
               style={styles.flex1}
               scrollEventThrottle={16}
               onScroll={({ nativeEvent }) => {
                 if (this.isCloseToBottom(nativeEvent)) {
-                  this.loadMoreGuests()
+                  fetchNextPage()
                 }
               }}
             >
-              <GuestList
-                guests={guests}
-                isFetchingGuests={isFetchingGuests}
-                onSelect={this.props.selectGuest}
-                onCheckIn={this.checkInGuest}
-              />
+              {isFetchingGuests ? (
+                <SpinnerActivity />
+              ) : (
+                <GuestList
+                  guests={guests}
+                  isFetchingPage={isFetchingPage}
+                  onSelect={this.props.selectGuest}
+                  onCheckIn={this.checkInGuest}
+                />
+              )}
             </ScrollView>
           </View>
         </View>

@@ -1,12 +1,12 @@
 import React from 'react'
 import {
-  View,
-  Modal as NativeModal,
   ActivityIndicator,
   Image,
+  Modal as NativeModal,
+  View,
 } from 'react-native'
-import SharedStyles from '../styles/shared/sharedStyles'
 import ModalStyles from '../styles/shared/modalStyles'
+import SharedStyles from '../styles/shared/sharedStyles'
 
 const styles = SharedStyles.createStyles()
 const modalStyles = ModalStyles.createStyles()
@@ -47,7 +47,7 @@ function ActivityModal({ children, ...props }) {
   )
 }
 
-function SpinnerActivity(props) {
+export function SpinnerActivity(props) {
   return <ActivityIndicator size="large" color="#FF20B1" {...props} />
 }
 

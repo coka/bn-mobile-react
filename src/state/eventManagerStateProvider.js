@@ -1,22 +1,22 @@
 import { Container } from 'unstated'
-import { server, apiErrorAlert, defaultEventSort } from '../constants/Server'
+import { apiErrorAlert, defaultEventSort, server } from '../constants/Server'
 
-/* eslint-disable camelcase,space-before-function-paren */
 const LIMIT = 50
 
-export class EventManagerContainer extends Container {
-  constructor(props = {}) {
-    super(props)
+const hasMoreItems = (page, itemsPerPage, totalItems) =>
+  totalItems - (page + 1) * itemsPerPage > 0
 
-    this.state = {
-      events: [],
-      eventToScan: {},
-      guests: [],
-      isFetchingGuests: false,
-      guestListQuery: '',
-      totalNumberOfGuests: 0,
-      page: 0,
-    }
+export class EventManagerContainer extends Container {
+  debounce = 0
+  state = {
+    events: [],
+    eventToScan: {},
+    guests: [],
+    isFetchingGuests: false,
+    isFetchingPage: false,
+    guestListQuery: '',
+    totalNumberOfGuests: 0,
+    page: 0,
   }
 
   get events() {
@@ -32,15 +32,65 @@ export class EventManagerContainer extends Container {
     return false
   }
 
-  fetchNextPage = async () => {
-    await this.setState((state) => {
-      return { page: state.page + 1 }
-    })
-    this.searchGuestList()
+  fetchGuestList = async () => {
+    const { eventToScan, guestListQuery } = this.state
+    this.setState({ isFetchingGuests: true })
+    try {
+      const { data } = await server.events.guests.index({
+        event_id: eventToScan.id,
+        query: guestListQuery,
+        limit: LIMIT,
+        page: 0,
+      })
+      if (this.state.guestListQuery === guestListQuery) {
+        this.setState({
+          guests: data.data,
+          isFetchingGuests: false,
+          totalNumberOfGuests: data.paging.total,
+          page: 0,
+        })
+      }
+    } catch {
+      apiErrorAlert(error)
+    }
   }
 
-  refreshParams = () => {
-    this.setState({ page: 0 })
+  fetchNextPage = async () => {
+    const {
+      eventToScan,
+      guestListQuery,
+      isFetchingPage,
+      page,
+      totalNumberOfGuests,
+    } = this.state
+    if (hasMoreItems(page, LIMIT, totalNumberOfGuests) && !isFetchingPage) {
+      this.setState({ isFetchingPage: true })
+      const nextPage = page + 1
+      try {
+        const { data } = await server.events.guests.index({
+          event_id: eventToScan.id,
+          query: guestListQuery,
+          limit: LIMIT,
+          page: nextPage,
+        })
+        if (this.state.guestListQuery === guestListQuery) {
+          this.setState(({ guests }) => ({
+            guests: guests.concat(data.data),
+            isFetchingPage: false,
+            totalNumberOfGuests: data.paging.total,
+            page: nextPage,
+          }))
+        }
+      } catch {
+        apiErrorAlert(error)
+      }
+    }
+  }
+
+  updateSearchQuery = (query) => {
+    this.setState({ guestListQuery: query })
+    clearTimeout(this.debounce)
+    this.debounce = setTimeout(() => this.fetchGuestList(), 250)
   }
 
   // TODO: filter by live vs upcoming?
@@ -60,38 +110,6 @@ export class EventManagerContainer extends Container {
 
   scanForEvent = async (event) => {
     this.setState({ eventToScan: event, guests: [] })
-  }
-
-  searchGuestList = async (
-    guestListQuery = '',
-    page = this.state.page,
-    replaceGuests = false
-  ) => {
-    await this.setState({ isFetchingGuests: true, guestListQuery })
-
-    const { id } = this.state.eventToScan
-    const { guests } = this.state
-    try {
-      const { data } = await server.events.guests.index({
-        event_id: id,
-        query: guestListQuery,
-        limit: LIMIT,
-        page,
-      })
-
-      replaceGuests
-        ? this.setState({
-            guests: data.data,
-          })
-        : this.setState((previousState) => ({
-            totalNumberOfGuests: data.paging.total,
-            guests: previousState.guests.concat(data.data),
-          }))
-    } catch (error) {
-      apiErrorAlert(error)
-    }
-
-    await this.setState({ isFetchingGuests: false })
   }
 
   updateGuestStatus = (guestId, newStatus) => {
