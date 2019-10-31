@@ -1,30 +1,30 @@
-import React, { Component, Fragment } from 'react'
+import { BarCodeScanner } from 'expo-barcode-scanner'
+import * as Contacts from 'expo-contacts'
+import * as Permissions from 'expo-permissions'
 import { PropTypes } from 'prop-types'
+import React, { Component, Fragment } from 'react'
 import {
+  ActivityIndicator,
+  Alert,
+  Image,
   Modal,
   ScrollView,
   Text,
-  View,
-  Image,
-  TouchableOpacity,
   TextInput,
-  Alert,
-  ActivityIndicator,
+  TouchableOpacity,
+  View,
 } from 'react-native'
-import * as Contacts from 'expo-contacts'
-import * as Permissions from 'expo-permissions'
-import { BarCodeScanner } from 'expo-barcode-scanner'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import SharedStyles, { primaryColor } from '../styles/shared/sharedStyles'
-import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
-import TicketTransferStyles from '../styles/tickets/ticketTransferStyles'
-import ModalStyles from '../styles/shared/modalStyles'
-import FormStyles from '../styles/shared/formStyles'
-import { autotrim, pluralize, sortArray } from '../string'
 import qrCodeIcon from '../../assets/qr-code-small.png'
 import BusyButton from '../BusyButton'
-import ContactList from './contactList'
+import { autotrim, pluralize } from '../string'
+import FormStyles from '../styles/shared/formStyles'
+import ModalStyles from '../styles/shared/modalStyles'
+import SharedStyles, { primaryColor } from '../styles/shared/sharedStyles'
+import TicketTransferStyles from '../styles/tickets/ticketTransferStyles'
+import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
 import CardItem from './cardItem'
+import ContactList from './contactList'
 
 const styles = SharedStyles.createStyles()
 const ticketWalletStyles = TicketWalletStyles.createStyles()
@@ -298,8 +298,16 @@ export default class TransferTickets extends Component {
       this.contactsPermissions()
     }
 
-    const { data } = await Contacts.getContactsAsync()
-    const sortedContacts = sortArray(data, 'name')
+    const { data } = await Contacts.getContactsAsync({
+      fields: [Contacts.Fields.Emails, Contacts.Fields.PhoneNumbers],
+    })
+    const sortedContacts = data.sort((a, b) => {
+      if (!a.name) {
+        return 1
+      }
+
+      return a.name.localeCompare(b.name)
+    })
     this.setState({ contacts: sortedContacts, openContactList: true })
   }
 
@@ -413,9 +421,9 @@ export default class TransferTickets extends Component {
                       source={qrCodeIcon}
                     />
                   </TouchableOpacity>
-                  {/*<TouchableOpacity onPress={() => this.getContactList()}>*/}
-                  {/*<Icon style={{ fontSize: 24 }} name="contacts" />*/}
-                  {/*</TouchableOpacity>*/}
+                  <TouchableOpacity onPress={() => this.getContactList()}>
+                    <Icon style={{ fontSize: 24 }} name="contacts" />
+                  </TouchableOpacity>
                 </View>
                 <TextInput
                   keyboardType="email-address"
