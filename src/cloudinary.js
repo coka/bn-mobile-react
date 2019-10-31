@@ -30,33 +30,33 @@ export const imageQuality = {
   BEST: 'best',
 }
 
-export function optimizeCloudinaryImage(url, quality = imageQuality.LOW, size = "f_auto") {
-  if (!url || typeof url !== "string") {
-    return url;
+export function optimizeCloudinaryImage(url, quality = imageQuality.LOW, size = 'f_auto') {
+  if (!url || typeof url !== 'string') {
+    return url
   }
 
   //Only manipulate urls served from cloudinary and ones that have not already been manipulated
   if (
-      url.indexOf("res.cloudinary.com") === -1 ||
-      url.indexOf("/q_auto:") > -1
+    url.indexOf('res.cloudinary.com') === -1 ||
+    url.indexOf('/q_auto:') > -1
   ) {
-    return url;
+    return url
   }
 
-  const insertAfterString = "/image/upload/";
-  const index = url.indexOf(insertAfterString);
+  const insertAfterString = '/image/upload/'
+  const index = url.indexOf(insertAfterString)
   if (index === -1) {
-    return url;
+    return url
   }
 
-  const qualityParams = `${size}/q_auto:${quality}/`;
-  const indexToInsert = index + insertAfterString.length;
+  const qualityParams = `${size}/q_auto:${quality}/`
+  const indexToInsert = index + insertAfterString.length
 
   return [
     url.slice(0, indexToInsert),
     qualityParams,
-    url.slice(indexToInsert)
-  ].join("");
+    url.slice(indexToInsert),
+  ].join('')
 }
 
 // So you can do optimizeCoudinaryImage.LOW, optimizeCloudinaryImage.BEST, etc.
