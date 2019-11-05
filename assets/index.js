@@ -25,6 +25,8 @@ const IMAGES = [
   require('./qr-code-placeholder.png'),
   require('./qr-code-small.png'),
   require('./event-placeholder.png'),
+  require('./star-active.png'),
+  require('./star-inactive.png'),
 ]
 
 function cacheImages(images) {
