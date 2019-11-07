@@ -1,27 +1,27 @@
-import React, { Component } from 'react'
+import { DateTime } from 'luxon'
 import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import {
-  Text,
-  View,
-  Image,
-  TouchableHighlight,
+  ActivityIndicator,
   Animated,
-  Platform,
-  RefreshControl,
   Easing,
   FlatList,
-  ActivityIndicator,
+  Image,
+  Platform,
+  RefreshControl,
+  Text,
+  TouchableHighlight,
+  View,
 } from 'react-native'
-import { NavigationEvents } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import SharedStyles from '../styles/shared/sharedStyles'
-import NavigationStyles from '../styles/shared/navigationStyles'
-import ModalStyles from '../styles/shared/modalStyles'
-import EventItemView from './event_card'
-import EventSearch from './search'
-import { DateTime } from 'luxon'
-import TicketStyles from '../styles/tickets/ticketStyles'
+import { NavigationEvents } from 'react-navigation'
 import emptyState from '../../assets/icon-empty-state.png'
+import EventCard from '../components/EventCard'
+import ModalStyles from '../styles/shared/modalStyles'
+import NavigationStyles from '../styles/shared/navigationStyles'
+import SharedStyles from '../styles/shared/sharedStyles'
+import TicketStyles from '../styles/tickets/ticketStyles'
+import EventSearch from './search'
 
 const styles = SharedStyles.createStyles()
 const navigationStyles = NavigationStyles.createStyles()
@@ -382,11 +382,12 @@ export default class EventsIndex extends Component {
           ListEmptyComponent={
             <EmptyEvents locationName={this.currentLocationDisplayName} />
           }
-          renderItem={({ item }) => (
-            <EventItemView
-              onPress={() => this.goToEventDetails(item.id, item)}
+          renderItem={({ item, index }) => (
+            <EventCard
               event={item}
-              onInterested={toggleInterest}
+              favorite={toggleInterest}
+              goToEvent={() => this.goToEventDetails(item.id, item)}
+              isFirst={index === 0}
             />
           )}
           onEndReached={this._handleLoadMore}
