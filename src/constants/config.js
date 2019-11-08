@@ -1,7 +1,7 @@
 import Constants from 'expo-constants'
 
 const RELEASE_CHANNEL = Constants.manifest.releaseChannel || 'dev'
-const WEB_STAGING = 'https://beta.bigneon.com'
+const WEB_STAGING = 'https://bigneon:bigneon!@beta.bigneon.com'
 const API_STAGING = 'https://api.staging.bigneon.com'
 const CLOUDINARY_CLOUD_STAGING = 'bigneon-dev'
 const CLOUDINARY_UPLOAD_PRESET_STAGING = 'dthcf8uc'

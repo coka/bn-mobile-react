@@ -27,7 +27,7 @@ jobs:
     - bundle update
     - bundle install
     before_script: "./bin/increment_version_number.sh"
-    script: ./bin/deploy.sh "prod-v1"
+    script: ./bin/deploy.sh "prod-v2"
   - stage: deploy-beta
     node_js: 10.15.3
     if: branch = develop
@@ -39,4 +39,4 @@ jobs:
     - bundle update
     - bundle install
     before_script: "./bin/increment_version_number.sh"
-    script: ./bin/deploy.sh "staging-v1"
+    script: ./bin/deploy.sh "staging-v2"
