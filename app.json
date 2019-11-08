@@ -38,7 +38,8 @@
         "LOCATION",
         "ACCESS_NETWORK_STATE",
         "VIBRATE",
-        "CONTACTS"
+        "CONTACTS",
+        "READ_CONTACTS"
       ]
     },
     "hooks": {
