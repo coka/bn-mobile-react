@@ -55,6 +55,10 @@ export default class MyTickets extends Component {
   }
 
   get ticketsForActiveView() {
+    if (this.activeTab === 'transfer') {
+      return this.props.screenProps.transfers.state
+    }
+
     return this.props.screenProps.store.state.tickets[this.activeTab] || []
   }
 

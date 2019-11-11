@@ -5,6 +5,7 @@ import { Subscribe } from 'unstated'
 import { AuthContainer } from '../state/authStateProvider'
 import { NetworkContainer } from '../state/networkStateProvider'
 import { TicketsContainer } from '../state/ticketStateProvider'
+import TicketTransfersContainer from '../state/ticketTransfersStateProvider'
 import { MAIN_ROUTES, MODAL_ROUTES } from '../Tickets/routes'
 
 const TicketsStack = createStackNavigator(
@@ -55,11 +56,23 @@ export default class ticketStackWithStore extends Component {
 
   render() {
     return (
-      <Subscribe to={[TicketsContainer, AuthContainer, NetworkContainer]}>
-        {(ticketStore, authStore, network) => (
+      <Subscribe
+        to={[
+          TicketsContainer,
+          TicketTransfersContainer,
+          AuthContainer,
+          NetworkContainer,
+        ]}
+      >
+        {(ticketStore, transfers, authStore, network) => (
           <FullTicketStack
             navigation={this.props.navigation}
-            screenProps={{ store: ticketStore, auth: authStore, network }}
+            screenProps={{
+              store: ticketStore,
+              transfers,
+              auth: authStore,
+              network,
+            }}
           />
         )}
       </Subscribe>
