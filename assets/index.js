@@ -27,6 +27,10 @@ const IMAGES = [
   require('./event-placeholder.png'),
   require('./star-active.png'),
   require('./star-inactive.png'),
+  require('./transfer.png'),
+  require('./transfer-dashes.png'),
+  require('./transfer-green.png'),
+  require('./transfer-red.png'),
 ]
 
 function cacheImages(images) {
