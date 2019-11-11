@@ -4,11 +4,23 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
+  TouchableHighlightProps,
   View,
 } from 'react-native'
 import { colors, fonts } from '../styles/shared/sharedStyles'
 
-const Button = ({ busy, disabled, label, ...touchableHighlightProps }) => (
+interface Props extends TouchableHighlightProps {
+  busy?: boolean
+  disabled?: boolean
+  label: string
+}
+
+const Button = ({
+  busy,
+  disabled,
+  label,
+  ...touchableHighlightProps
+}: Props) => (
   <View style={[styles.container, disabled ? styles.containerDisabled : {}]}>
     <TouchableHighlight
       style={[styles.button, busy ? styles.buttonBusy : {}]}
