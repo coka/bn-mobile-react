@@ -27,7 +27,11 @@ const TicketComponent = ({
   activeTab,
   setPurchasedTicket,
 }: Props) => {
-  const { event, tickets } = ticket
+  const { event } = ticket
+  const numberOfTickets =
+    activeTab === 'transfer'
+      ? Object.keys(ticket.ticket_activity_items).length
+      : ticket.tickets.length
 
   return (
     <View>
@@ -49,7 +53,7 @@ const TicketComponent = ({
               <View style={styles.iconLinkContainer}>
                 <Icon style={ticketStyles.iconTicket} name="local-activity" />
                 <Text style={ticketStyles.iconTicketText}>
-                  x {tickets.length}
+                  x {numberOfTickets}
                 </Text>
               </View>
             </View>
