@@ -1,23 +1,23 @@
-import React, { Component } from 'react'
+import { some } from 'lodash'
 import { PropTypes } from 'prop-types'
+import React, { Component } from 'react'
 import {
-  Text,
-  View,
   Animated,
-  TouchableHighlight,
   FlatList,
   Image,
+  Text,
+  TouchableHighlight,
+  View,
 } from 'react-native'
+import { Image as CachedImage } from 'react-native-expo-image-cache'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { NavigationEvents } from 'react-navigation'
+import imageOverlay from '../../assets/event-img-overlay.png'
+import emptyState from '../../assets/icon-empty-state.png'
+import { optimizeCloudinaryImage } from '../cloudinary'
 import SharedStyles from '../styles/shared/sharedStyles'
 import SlideShowStyles from '../styles/shared/slideshowStyles'
 import TicketStyles from '../styles/tickets/ticketStyles'
-import emptyState from '../../assets/icon-empty-state.png'
-import imageOverlay from '../../assets/event-img-overlay.png'
-import { some } from 'lodash'
-import { NavigationEvents } from 'react-navigation'
-import { optimizeCloudinaryImage } from '../cloudinary'
-import { Image as CachedImage } from 'react-native-expo-image-cache'
 
 const styles = SharedStyles.createStyles()
 const slideshowStyles = SlideShowStyles.createStyles()
