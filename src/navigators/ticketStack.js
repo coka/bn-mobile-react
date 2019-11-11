@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { createStackNavigator } from 'react-navigation'
 import { Subscribe } from 'unstated'
-import { MAIN_ROUTES, MODAL_ROUTES } from '../Tickets/routes'
-import { TicketsContainer } from '../state/ticketStateProvider'
 import { AuthContainer } from '../state/authStateProvider'
 import { NetworkContainer } from '../state/networkStateProvider'
+import { TicketsContainer } from '../state/ticketStateProvider'
+import { MAIN_ROUTES, MODAL_ROUTES } from '../Tickets/routes'
 
 const TicketsStack = createStackNavigator(
   {
