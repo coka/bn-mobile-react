@@ -1,8 +1,6 @@
-// TODO: Rename this file so that it doesn't clash with Ticket.js.
 import React from 'react'
 import { Image, Text, TouchableHighlight, View } from 'react-native'
 import { Image as CachedImage } from 'react-native-expo-image-cache'
-// TODO: Fix this import error.
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { optimizeCloudinaryImage } from '../cloudinary'
 import SharedStyles from '../styles/shared/sharedStyles'
