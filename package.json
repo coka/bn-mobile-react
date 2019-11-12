@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "big.js": "^5.2.2",
-    "bn-api-node": "^2.0.9",
+    "bn-api-node": "2.1.0",
     "expo": "^35.0.0",
     "expo-analytics-segment": "^6.0.0",
     "expo-asset": "^6.0.0",
