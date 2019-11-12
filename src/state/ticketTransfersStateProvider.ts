@@ -1,4 +1,5 @@
 import { Container } from 'unstated'
+import { apiErrorAlert, server } from '../constants/Server'
 import mockTransferActivityData from '../mockTransferActivityData'
 import { eventDateTimes } from '../time'
 
@@ -9,6 +10,14 @@ type State = Array<{
 
 class TicketTransfersContainer extends Container<State> {
   state = transformTransferActivityData(mockTransferActivityData.data)
+
+  cancelTransfer = async (transferId: string) => {
+    try {
+      await server.transfers.cancel({ id: transferId })
+    } catch (error) {
+      apiErrorAlert(error, 'Failed to transfer ticket.')
+    }
+  }
 }
 
 const transformTransferActivityData = (data: State): State => {

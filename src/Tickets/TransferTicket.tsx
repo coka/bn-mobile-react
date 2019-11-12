@@ -19,6 +19,7 @@ import TransferActivityEvent from './TransferActivityEvent'
 
 interface Props {
   event: Event
+  cancelTransfer(transferId: string): void
   transferActivities: Array<TransferActivity>
 }
 
@@ -26,12 +27,11 @@ const sharedStyles = SharedStyles.createStyles()
 const ticketStyles = TicketStyles.createStyles()
 const ticketWalletStyles = TicketWalletStyles.createStyles()
 
-// TODO
-const handleCancelTransferTicket = () => {
-  console.log('Cancelling transfer...')
-}
-
-const TransferTicket = ({ event, transferActivities }: Props) => (
+const TransferTicket = ({
+  event,
+  cancelTransfer,
+  transferActivities,
+}: Props) => (
   <View>
     <View style={ticketStyles.ticketContainer}>
       <View style={ticketWalletStyles.eventImageWrapper}>
@@ -103,7 +103,7 @@ const TransferTicket = ({ event, transferActivities }: Props) => (
       <View>
         <TouchableHighlight
           underlayColor="rgba(0, 0, 0, 0)"
-          onPress={handleCancelTransferTicket}
+          onPress={() => cancelTransfer(transferActivities[0].transfer_id)}
         >
           <View style={ticketWalletStyles.bottomNavLinkContainer}>
             <Text style={ticketWalletStyles.bottomNavLinkText}>
