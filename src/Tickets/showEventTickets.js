@@ -89,7 +89,7 @@ export default class EventsTicket extends Component {
 
     if (activeTab === 'transfer') {
       return (
-        transfers.state.find(
+        transfers.state.data.find(
           (transferItem) => transferItem.event.id === eventId
         ) || {}
       )

@@ -1,15 +1,22 @@
 import { Container } from 'unstated'
 import { apiErrorAlert, server } from '../constants/Server'
-import mockTransferActivityData from '../mockTransferActivityData'
 import { eventDateTimes } from '../time'
 
-type State = Array<{
-  event: any
-  ticket_activity_items: any
-}>
+interface State {
+  // because Unstated won't allow states which are arrays at the root
+  data: Array<{
+    event: any
+    ticket_activity_items: any
+  }>
+}
 
 class TicketTransfersContainer extends Container<State> {
-  state = transformTransferActivityData(mockTransferActivityData.data)
+  state = { data: [] }
+
+  fetchTransfers = async () => {
+    const response = await server.transfers.activity()
+    this.setState(transformTransferActivityData({ data: response.data.data }))
+  }
 
   cancelTransfer = async (transferId: string) => {
     try {
@@ -20,8 +27,8 @@ class TicketTransfersContainer extends Container<State> {
   }
 }
 
-const transformTransferActivityData = (data: State): State => {
-  data.forEach(({ event }) => {
+const transformTransferActivityData = (state: State): State => {
+  state.data.forEach(({ event }) => {
     const { event_start, door_time } = eventDateTimes(event.localized_times)
 
     event.formattedDate = event_start.toFormat('EEE, MMMM d')
@@ -29,7 +36,7 @@ const transformTransferActivityData = (data: State): State => {
     event.formattedStart = event_start.toFormat('t')
   })
 
-  return data
+  return state
 }
 
 export default TicketTransfersContainer

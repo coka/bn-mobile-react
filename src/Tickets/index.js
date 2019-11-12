@@ -23,6 +23,14 @@ export default class MyTickets extends Component {
     this.springValue = new Animated.Value(0.3)
   }
 
+  componentDidUpdate(prevProps) {
+    const prevActiveTab = prevProps.navigation.getParam('activeTab')
+    const activeTab = this.props.navigation.getParam('activeTab')
+    if (prevActiveTab !== activeTab && activeTab === 'transfer') {
+      this.props.screenProps.transfers.fetchTransfers()
+    }
+  }
+
   static navigationOptions = {
     header: null,
   }
@@ -56,7 +64,7 @@ export default class MyTickets extends Component {
 
   get ticketsForActiveView() {
     if (this.activeTab === 'transfer') {
-      return this.props.screenProps.transfers.state
+      return this.props.screenProps.transfers.state.data
     }
 
     return this.props.screenProps.store.state.tickets[this.activeTab] || []
