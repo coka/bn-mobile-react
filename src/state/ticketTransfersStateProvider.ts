@@ -18,11 +18,12 @@ class TicketTransfersContainer extends Container<State> {
     this.setState({ data: transformTransferActivityData(response.data.data) })
   }
 
-  cancelTransfer = async (transferId: string) => {
+  cancelTransfer = async (transferId: string, onCompleted: () => void) => {
     try {
       await this.setState({ isCancelling: true })
       await server.transfers.cancel({ id: transferId })
       await this.setState({ isCancelling: false })
+      onCompleted()
     } catch (error) {
       await this.setState({ isCancelling: false })
       apiErrorAlert(error, 'Failed to transfer ticket.')

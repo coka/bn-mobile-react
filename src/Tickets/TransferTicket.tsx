@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -20,8 +21,9 @@ import TransferActivityEvent from './TransferActivityEvent'
 
 interface Props {
   event: Event
-  cancelTransfer(transferId: string): void
+  cancelTransfer(transferId: string, onCompleted: () => void): void
   isCancelling: boolean
+  navigation: any
   transferActivities: Array<TransferActivity>
 }
 
@@ -33,6 +35,7 @@ const TransferTicket = ({
   event,
   cancelTransfer,
   isCancelling,
+  navigation,
   transferActivities,
 }: Props) => (
   <View>
@@ -110,6 +113,7 @@ const TransferTicket = ({
         <BottomNavContent
           cancelTransfer={cancelTransfer}
           isCancelling={isCancelling}
+          navigation={navigation}
           transferActivities={transferActivities}
         />
       </View>
@@ -118,14 +122,16 @@ const TransferTicket = ({
 )
 
 interface BottomNavContentProps {
-  cancelTransfer(transferId: string): void
+  cancelTransfer(transferId: string, onCompleted: () => void): void
   isCancelling: boolean
+  navigation: any
   transferActivities: Array<TransferActivity>
 }
 
 const BottomNavContent = ({
   cancelTransfer,
   isCancelling,
+  navigation,
   transferActivities,
 }: BottomNavContentProps): JSX.Element => {
   if (isCancelling) {
@@ -158,7 +164,15 @@ const BottomNavContent = ({
       return (
         <TouchableHighlight
           underlayColor="rgba(0, 0, 0, 0)"
-          onPress={() => cancelTransfer(transferActivities[0].transfer_id)}
+          onPress={() =>
+            cancelTransfer(transferActivities[0].transfer_id, () => {
+              Alert.alert(
+                'Transfer Cancelled',
+                'The transfer has been cancelled successfully!',
+                [{ text: 'OK', onPress: () => navigation.goBack() }]
+              )
+            })
+          }
         >
           <View style={ticketWalletStyles.bottomNavLinkContainer}>
             <Text style={ticketWalletStyles.bottomNavLinkText}>

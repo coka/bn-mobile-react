@@ -160,6 +160,7 @@ export default class EventsTicket extends Component {
         event={item.event}
         cancelTransfer={cancelTransfer}
         isCancelling={isCancelling}
+        navigation={navigation}
         transferActivities={item.ticketActivityItem}
       />
     ) : (
