@@ -77,10 +77,10 @@ const TransferTicket = ({
                       root of the model. */}
             {transferActivities[0].initiated_by.full_name}
           </Text>
-          <Text style={ticketStyles.ticketHolderSubheader}>
-            {/* TODO: Display the correct ticket data (?) here. */}
+          {/* TODO: Display the correct ticket data (?) here. */}
+          {/* <Text style={ticketStyles.ticketHolderSubheader}>
             GENERAL ADMISSION
-          </Text>
+          </Text> */}
         </View>
       </View>
     </View>
