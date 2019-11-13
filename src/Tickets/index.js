@@ -1,235 +1,11 @@
-import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
-import {
-  Text,
-  View,
-  Animated,
-  TouchableHighlight,
-  FlatList,
-  Image,
-} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import SharedStyles from '../styles/shared/sharedStyles'
-import SlideShowStyles from '../styles/shared/slideshowStyles'
-import TicketStyles from '../styles/tickets/ticketStyles'
-import emptyState from '../../assets/icon-empty-state.png'
-import imageOverlay from '../../assets/event-img-overlay.png'
-import { some } from 'lodash'
+import React, { Component } from 'react'
+import { Animated, Image, Text, View } from 'react-native'
 import { NavigationEvents } from 'react-navigation'
-import { optimizeCloudinaryImage } from '../cloudinary'
-import { Image as CachedImage } from 'react-native-expo-image-cache'
+import SharedStyles from '../styles/shared/sharedStyles'
+import TicketsView from './TicketsView'
 
 const styles = SharedStyles.createStyles()
-const slideshowStyles = SlideShowStyles.createStyles()
-const ticketStyles = TicketStyles.createStyles()
-
-// The height of one ticket. Used for determining scroll position
-const TICKET_HEIGHT = 265
-
-function EmptyTickets({ text }) {
-  return (
-    <View style={ticketStyles.emptyStateContainer}>
-      <Image style={ticketStyles.emptyStateIcon} source={emptyState} />
-      <Text style={ticketStyles.emptyStateText}>{text}</Text>
-    </View>
-  )
-}
-
-class AnimatedTicket extends React.Component {
-  componentDidMount() {
-    this.props.requestScrollToTicket(this.props.index)
-  }
-
-  render() {
-    return (
-      <Animated.View style={{ transform: [{ scale: this.props.springValue }] }}>
-        <Ticket
-          navigate={this.props.navigate}
-          ticket={this.props.ticket}
-          activeTab={this.props.activeTab}
-          setPurchasedTicket={this.props.setPurchasedTicket}
-        />
-      </Animated.View>
-    )
-  }
-}
-
-AnimatedTicket.propTypes = {
-  navigate: PropTypes.func.isRequired,
-  ticket: PropTypes.object.isRequired,
-  springValue: PropTypes.object.isRequired,
-  requestScrollToTicket: PropTypes.func.isRequired,
-}
-
-const Ticket = ({ navigate, ticket, activeTab, setPurchasedTicket }) => {
-  const { event, tickets } = ticket
-
-  return (
-    <View>
-      <TouchableHighlight
-        underlayColor={styles.underlayColor}
-        onPress={() => {
-          setPurchasedTicket(null)
-          navigate('EventTickets', { eventId: event.id, activeTab })
-        }}
-      >
-        <View style={ticketStyles.ticketContainer}>
-          <CachedImage
-            style={ticketStyles.eventImage}
-            uri={optimizeCloudinaryImage(event.promo_image_url)}
-          />
-          <Image style={ticketStyles.eventImageOverlay} source={imageOverlay} />
-          <View style={ticketStyles.detailsContainer}>
-            <View>
-              <View style={styles.iconLinkContainer}>
-                <Icon style={ticketStyles.iconTicket} name="local-activity" />
-                <Text style={ticketStyles.iconTicketText}>
-                  x {tickets.length}
-                </Text>
-              </View>
-            </View>
-            <View>
-              <Text numberOfLines={1} style={ticketStyles.header}>
-                {event.name}
-              </Text>
-              <Text numberOfLines={1} style={slideshowStyles.details}>
-                {event.venue.name} | {event.venue.city}, {event.venue.state}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </TouchableHighlight>
-
-      <View
-        style={[ticketStyles.ticketContainerBottom, styles.borderBottomRadius]}
-      >
-        <View style={ticketStyles.detailsContainerBottom}>
-          <View>
-            <Text style={ticketStyles.detailsBottomHeader}>DATE</Text>
-            <Text style={ticketStyles.detailsBottomText}>
-              {event.formattedDate}
-            </Text>
-          </View>
-          <View>
-            <Text style={ticketStyles.detailsBottomHeader}>DOORS</Text>
-            <Text style={ticketStyles.detailsBottomText}>
-              {event.formattedDoors}
-            </Text>
-          </View>
-          <View>
-            <Text
-              style={[
-                ticketStyles.detailsBottomHeader,
-                ticketStyles.detailsLast,
-              ]}
-            >
-              SHOW
-            </Text>
-            <Text
-              style={[ticketStyles.detailsBottomText, ticketStyles.detailsLast]}
-            >
-              {event.formattedStart}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </View>
-  )
-}
-
-Ticket.propTypes = {
-  navigate: PropTypes.func.isRequired,
-  ticket: PropTypes.object.isRequired,
-}
-
-class TicketsView extends React.Component {
-  componentDidMount() {
-    // Capturing if we scrolled to a ticket
-    this.animatedTicketIndex = null
-    this.scrolled = false
-  }
-
-  requestScrollToTicket = (index) => {
-    this.animatedTicketIndex = index
-    this.scrolled = false
-  }
-
-  maybeScrollToTicket(ref) {
-    if (
-      ref != null &&
-      this.scrolled === false &&
-      this.animatedTicketIndex !== null
-    ) {
-      ref.scrollToIndex({
-        animated: true,
-        index: this.animatedTicketIndex,
-      })
-
-      this.scrolled = true
-    }
-  }
-
-  render() {
-    const {
-      activeTab,
-      emptyText,
-      tickets,
-      navigate,
-      springValue,
-      purchasedTicket,
-      setPurchasedTicket,
-    } = this.props
-
-    if (!tickets.length) {
-      return <EmptyTickets text={emptyText} />
-    }
-
-    return (
-      <FlatList
-        {...this.props}
-        ref={(ref) => {
-          this.maybeScrollToTicket(ref)
-        }}
-        keyExtractor={(item, _) => item.event.id}
-        getItemLayout={(_data, index) => ({
-          length: TICKET_HEIGHT,
-          offset: TICKET_HEIGHT * index,
-          index,
-        })}
-        data={tickets}
-        renderItem={({ item, index }) => {
-          return some(
-            item.tickets,
-            ({ order_id }) => order_id === purchasedTicket
-          ) ? (
-            <AnimatedTicket
-              navigate={navigate}
-              ticket={item}
-              activeTab={activeTab}
-              springValue={springValue}
-              setPurchasedTicket={setPurchasedTicket}
-              requestScrollToTicket={this.requestScrollToTicket}
-              index={index}
-            />
-          ) : (
-            <Ticket
-              navigate={navigate}
-              activeTab={activeTab}
-              ticket={item}
-              setPurchasedTicket={setPurchasedTicket}
-            />
-          )
-        }}
-      />
-    )
-  }
-}
-
-TicketsView.propTypes = {
-  navigate: PropTypes.func.isRequired,
-  tickets: PropTypes.array.isRequired,
-  springValue: PropTypes.object.isRequired,
-}
 
 const EMPTY_TEXT_FOR_ACTIVE_TAB = {
   upcoming:
@@ -245,6 +21,14 @@ export default class MyTickets extends Component {
     super(props)
     this.props.screenProps.auth.identify()
     this.springValue = new Animated.Value(0.3)
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevActiveTab = prevProps.navigation.getParam('activeTab')
+    const activeTab = this.props.navigation.getParam('activeTab')
+    if (prevActiveTab !== activeTab && activeTab === 'transfer') {
+      this.props.screenProps.transfers.fetchTransfers()
+    }
   }
 
   static navigationOptions = {
@@ -279,6 +63,10 @@ export default class MyTickets extends Component {
   }
 
   get ticketsForActiveView() {
+    if (this.activeTab === 'transfer') {
+      return this.props.screenProps.transfers.state.data
+    }
+
     return this.props.screenProps.store.state.tickets[this.activeTab] || []
   }
 
@@ -304,8 +92,16 @@ export default class MyTickets extends Component {
           setPurchasedTicket,
           state: { purchasedTicket },
         },
+        transfers: {
+          fetchTransfers,
+          state: { shouldRefresh },
+        },
       },
     } = this.props
+
+    if (shouldRefresh) {
+      fetchTransfers()
+    }
 
     return (
       <View style={styles.containerDark}>

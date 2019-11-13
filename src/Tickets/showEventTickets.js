@@ -1,13 +1,15 @@
-import React, { Component } from 'react'
+import * as Brightness from 'expo-brightness'
+import { includes } from 'lodash'
 import PropTypes from 'prop-types'
-import { Text, View, ScrollView, Image } from 'react-native'
+import React, { Component } from 'react'
+import { Image, ScrollView, Text, View } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import Ticket from './Ticket'
+import { optimizeCloudinaryImage } from '../cloudinary'
 import SharedStyles from '../styles/shared/sharedStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
-import * as Brightness from 'expo-brightness'
-import { optimizeCloudinaryImage } from '../cloudinary'
+import Ticket from './Ticket'
+import TransferTicket from './TransferTicket'
 
 // In case we cannot get a value for the brightness from
 // Brightness.getBrightnessAsync()
@@ -77,6 +79,7 @@ export default class EventsTicket extends Component {
     const {
       screenProps: {
         store: { ticketsForEvent },
+        transfers,
       },
       navigation: {
         state: {
@@ -84,6 +87,14 @@ export default class EventsTicket extends Component {
         },
       },
     } = this.props
+
+    if (activeTab === 'transfer') {
+      return (
+        transfers.state.data.find(
+          (transferItem) => transferItem.event.id === eventId
+        ) || {}
+      )
+    }
 
     return ticketsForEvent(activeTab, eventId)
   }
@@ -139,10 +150,21 @@ export default class EventsTicket extends Component {
       },
       screenProps: {
         store: { redeemTicketInfo, cancelTicketTransfer },
+        transfers: {
+          cancelTransfer,
+          state: { isCancelling },
+        },
       },
     } = this.props
-
-    return (
+    return activeTab === 'transfer' ? (
+      <TransferTicket
+        event={item.event}
+        cancelTransfer={cancelTransfer}
+        isCancelling={isCancelling}
+        navigation={navigation}
+        transferActivities={item.ticketActivityItem}
+      />
+    ) : (
       <Ticket
         activeTab={activeTab}
         ticket={item}
@@ -157,7 +179,27 @@ export default class EventsTicket extends Component {
     const { navigation } = this.props
     const { fullWidth, itemWidth } = TicketWalletStyles
     const { activeSlide } = this.state
-    const tickets = this.ticketData
+
+    const { activeTab } = navigation.state.params
+    let renderData
+    if (activeTab === 'transfer') {
+      const { event, ticket_activity_items } = this.eventAndTickets
+      renderData = []
+      if (ticket_activity_items) {
+        const transferIds = []
+        Object.keys(ticket_activity_items).forEach((key) => {
+          const ticketActivityItem = ticket_activity_items[key]
+          const transferId = ticketActivityItem[0].transfer_id
+          if (!includes(transferIds, transferId)) {
+            transferIds.push(transferId)
+            renderData.push({ event, ticketActivityItem })
+          }
+        })
+      }
+    } else {
+      renderData = this.ticketData
+    }
+    const numberOfItems = renderData.length
 
     return (
       <View style={ticketWalletStyles.modalContainer}>
@@ -180,7 +222,8 @@ export default class EventsTicket extends Component {
               }}
             />
             <Text style={ticketWalletStyles.closeModalHeader}>
-              Ticket {activeSlide + 1} of {tickets.length}
+              {activeTab === 'transfer' ? 'Transfer' : 'Ticket'}{' '}
+              {activeSlide + 1} of {numberOfItems}
             </Text>
             <Text>&nbsp; &nbsp;</Text>
           </View>
@@ -188,7 +231,7 @@ export default class EventsTicket extends Component {
             ref={(ref) => {
               this._ticketSlider = ref
             }}
-            data={tickets}
+            data={renderData}
             renderItem={this._renderItem}
             sliderWidth={fullWidth}
             itemWidth={itemWidth}
@@ -201,7 +244,7 @@ export default class EventsTicket extends Component {
             removeClippedSubviews={false}
           />
           <Pagination
-            dotsLength={tickets.length}
+            dotsLength={numberOfItems}
             activeDotIndex={activeSlide}
             containerStyle={styles.paginationContainer}
             dotColor={'rgba(255, 255, 255, 0.92)'}

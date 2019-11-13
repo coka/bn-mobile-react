@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "devDependencies": {
+    "@types/react-native": "0.60.22",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-react": "^7.13.0",
@@ -10,7 +11,8 @@
     "jest-expo": "^34.0.0",
     "prettier": "1.18.2",
     "react-native-testing-library": "^1.8.0",
-    "react-test-renderer": "16.3.1"
+    "react-test-renderer": "16.3.1",
+    "typescript": "3.7.2"
   },
   "main": "./node_modules/expo/AppEntry.js",
   "scripts": {
@@ -32,7 +34,7 @@
   },
   "dependencies": {
     "big.js": "^5.2.2",
-    "bn-api-node": "^2.0.9",
+    "bn-api-node": "2.1.0",
     "expo": "^35.0.0",
     "expo-analytics-segment": "^6.0.0",
     "expo-asset": "^6.0.0",

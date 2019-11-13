@@ -1,27 +1,18 @@
-import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Text,
-  View,
-  Linking,
-  Platform,
-  TouchableHighlight,
-  Image,
-  Alert,
-} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import React, { Component } from 'react'
+import { Alert, Image, Text, TouchableHighlight, View } from 'react-native'
+import { Image as CachedImage } from 'react-native-expo-image-cache'
 import QRCode from 'react-native-qrcode'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import imageOverlay from '../../assets/event-img-overlay.png'
-
-import TicketStyles from '../styles/tickets/ticketStyles'
+import { openVenueDirections } from '../directions'
 import SharedStyles from '../styles/shared/sharedStyles'
+import TicketStyles from '../styles/tickets/ticketStyles'
 import TicketWalletStyles from '../styles/tickets/ticketWalletStyles'
 
 const styles = SharedStyles.createStyles()
 const ticketStyles = TicketStyles.createStyles()
 const ticketWalletStyles = TicketWalletStyles.createStyles()
-
-import { Image as CachedImage } from 'react-native-expo-image-cache'
 
 function TicketBottomRow({ children }) {
   return <View style={ticketWalletStyles.bottomNav}>{children}</View>
@@ -100,20 +91,6 @@ export default class Ticket extends Component {
           this.buildQRText()
         }
       )
-    }
-  }
-
-  openVenueDirections = () => {
-    const { ticket } = this.props
-    const { venue } = ticket
-    const daddr = encodeURIComponent(
-      `${venue.address} ${venue.postal_code}, ${venue.city}, ${venue.country}`
-    )
-
-    if (Platform.OS === 'ios') {
-      Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`)
-    } else {
-      Linking.openURL(`http://maps.google.com/?daddr=${daddr}`)
     }
   }
 
@@ -288,7 +265,9 @@ export default class Ticket extends Component {
               <Text numberOfLines={1} style={ticketWalletStyles.details}>
                 {ticket.date} &bull; {ticket.starts} &bull; {ticket.venue}
               </Text>
-              <TouchableHighlight onPress={this.openVenueDirections}>
+              <TouchableHighlight
+                onPress={() => openVenueDirections(ticket.venue)}
+              >
                 <View style={styles.iconLinkContainer}>
                   <Text style={ticketWalletStyles.iconLinkText}>
                     GET DIRECTIONS
