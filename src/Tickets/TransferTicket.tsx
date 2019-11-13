@@ -73,11 +73,14 @@ const TransferTicket = ({
       <View style={[sharedStyles.flexRowFlexStartCenter]}>
         <View>
           <Text style={ticketStyles.ticketHolderHeader}>
-            {/* TODO: Ideally, we would have the original ticket holder in the
-                      root of the model. */}
+            {/*
+             * Here we assume that all transfer activities have been initiated
+             * by the same user, and that there is always at least one transfer
+             * activity.
+             * */}
             {transferActivities[0].initiated_by.full_name}
           </Text>
-          {/* TODO: Display the correct ticket data (?) here. */}
+          {/* TODO: Display correct ticket type names once the API is ready. */}
           {/* <Text style={ticketStyles.ticketHolderSubheader}>
             GENERAL ADMISSION
           </Text> */}
@@ -101,6 +104,44 @@ const TransferTicket = ({
     </ScrollView>
     <View style={ticketWalletStyles.bottomNav}>
       <View>
+        <BottomNavContent
+          cancelTransfer={cancelTransfer}
+          transferActivities={transferActivities}
+        />
+      </View>
+    </View>
+  </View>
+)
+
+interface BottomNavContentProps {
+  cancelTransfer(transferId: string): void
+  transferActivities: Array<TransferActivity>
+}
+
+const BottomNavContent = ({
+  cancelTransfer,
+  transferActivities,
+}: BottomNavContentProps): JSX.Element => {
+  const lastTransferActivity = transferActivities[0]
+  switch (lastTransferActivity.action) {
+    case 'Accepted':
+      return (
+        <View style={ticketWalletStyles.bottomNavLinkContainer}>
+          <Text style={ticketWalletStyles.bottomNavLinkText}>
+            TRANSFER COMPLETED
+          </Text>
+        </View>
+      )
+    case 'Cancelled':
+      return (
+        <View style={ticketWalletStyles.bottomNavLinkContainer}>
+          <Text style={ticketWalletStyles.bottomNavLinkText}>
+            TRANSFER CANCELLED
+          </Text>
+        </View>
+      )
+    case 'Started':
+      return (
         <TouchableHighlight
           underlayColor="rgba(0, 0, 0, 0)"
           onPress={() => cancelTransfer(transferActivities[0].transfer_id)}
@@ -112,10 +153,9 @@ const TransferTicket = ({
             <Icon style={ticketWalletStyles.bottomNavIcon} name="launch" />
           </View>
         </TouchableHighlight>
-      </View>
-    </View>
-  </View>
-)
+      )
+  }
+}
 
 const styles = StyleSheet.create({
   activityContainer: {
