@@ -3,32 +3,37 @@ import { apiErrorAlert, server } from '../constants/Server'
 import { eventDateTimes } from '../time'
 
 interface State {
-  // because Unstated won't allow states which are arrays at the root
-  data: Array<{
-    event: any
-    ticket_activity_items: any
-  }>
+  data: Array<Transfer>
+  isCancelling: boolean
 }
 
 class TicketTransfersContainer extends Container<State> {
-  state = { data: [] }
+  state = {
+    data: [],
+    isCancelling: false,
+  }
 
   fetchTransfers = async () => {
     const response = await server.transfers.activity()
-    this.setState(transformTransferActivityData({ data: response.data.data }))
+    this.setState({ data: transformTransferActivityData(response.data.data) })
   }
 
   cancelTransfer = async (transferId: string) => {
     try {
+      await this.setState({ isCancelling: true })
       await server.transfers.cancel({ id: transferId })
+      await this.setState({ isCancelling: false })
     } catch (error) {
+      await this.setState({ isCancelling: false })
       apiErrorAlert(error, 'Failed to transfer ticket.')
     }
   }
 }
 
-const transformTransferActivityData = (state: State): State => {
-  state.data.forEach(({ event }) => {
+const transformTransferActivityData = (
+  data: Array<Transfer>
+): Array<Transfer> => {
+  data.forEach(({ event }) => {
     const { event_start, door_time } = eventDateTimes(event.localized_times)
 
     event.formattedDate = event_start.toFormat('EEE, MMMM d')
@@ -36,7 +41,7 @@ const transformTransferActivityData = (state: State): State => {
     event.formattedStart = event_start.toFormat('t')
   })
 
-  return state
+  return data
 }
 
 export default TicketTransfersContainer

@@ -1,3 +1,8 @@
+interface Transfer {
+  event: Event
+  ticket_activity_items: Array<TransferActivity>
+}
+
 interface TransferActivity {
   accepted_by: User
   action: TransferActivityAction

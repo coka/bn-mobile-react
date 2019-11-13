@@ -1,6 +1,8 @@
 interface Event {
   formattedDate: string
+  formattedDoors: string
   formattedStart: string
+  localized_times: any
   name: string
   promo_image_url: string
   venue: Venue

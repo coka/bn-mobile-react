@@ -149,13 +149,17 @@ export default class EventsTicket extends Component {
       },
       screenProps: {
         store: { redeemTicketInfo, cancelTicketTransfer },
-        transfers: { cancelTransfer },
+        transfers: {
+          cancelTransfer,
+          state: { isCancelling },
+        },
       },
     } = this.props
     return activeTab === 'transfer' ? (
       <TransferTicket
         event={item.event}
         cancelTransfer={cancelTransfer}
+        isCancelling={isCancelling}
         transferActivities={item.ticketActivityItem}
       />
     ) : (

@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   StyleSheet,
@@ -20,6 +21,7 @@ import TransferActivityEvent from './TransferActivityEvent'
 interface Props {
   event: Event
   cancelTransfer(transferId: string): void
+  isCancelling: boolean
   transferActivities: Array<TransferActivity>
 }
 
@@ -30,6 +32,7 @@ const ticketWalletStyles = TicketWalletStyles.createStyles()
 const TransferTicket = ({
   event,
   cancelTransfer,
+  isCancelling,
   transferActivities,
 }: Props) => (
   <View>
@@ -106,6 +109,7 @@ const TransferTicket = ({
       <View>
         <BottomNavContent
           cancelTransfer={cancelTransfer}
+          isCancelling={isCancelling}
           transferActivities={transferActivities}
         />
       </View>
@@ -115,13 +119,23 @@ const TransferTicket = ({
 
 interface BottomNavContentProps {
   cancelTransfer(transferId: string): void
+  isCancelling: boolean
   transferActivities: Array<TransferActivity>
 }
 
 const BottomNavContent = ({
   cancelTransfer,
+  isCancelling,
   transferActivities,
 }: BottomNavContentProps): JSX.Element => {
+  if (isCancelling) {
+    return (
+      <View style={ticketWalletStyles.bottomNavLinkContainer}>
+        <ActivityIndicator color={colors.brand} />
+      </View>
+    )
+  }
+
   const lastTransferActivity = transferActivities[0]
   switch (lastTransferActivity.action) {
     case 'Accepted':
