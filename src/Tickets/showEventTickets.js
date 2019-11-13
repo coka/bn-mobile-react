@@ -209,7 +209,8 @@ export default class EventsTicket extends Component {
               }}
             />
             <Text style={ticketWalletStyles.closeModalHeader}>
-              Ticket {activeSlide + 1} of {numberOfItems}
+              {activeTab === 'transfer' ? 'Transfer' : 'Ticket'}{' '}
+              {activeSlide + 1} of {numberOfItems}
             </Text>
             <Text>&nbsp; &nbsp;</Text>
           </View>
