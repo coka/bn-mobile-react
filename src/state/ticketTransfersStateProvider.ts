@@ -5,24 +5,29 @@ import { eventDateTimes } from '../time'
 interface State {
   data: Array<Transfer>
   isCancelling: boolean
+  shouldRefresh: boolean
 }
 
 class TicketTransfersContainer extends Container<State> {
   state = {
     data: [],
     isCancelling: false,
+    shouldRefresh: false,
   }
 
   fetchTransfers = async () => {
     const response = await server.transfers.activity()
-    this.setState({ data: transformTransferActivityData(response.data.data) })
+    this.setState({
+      data: transformTransferActivityData(response.data.data),
+      shouldRefresh: false,
+    })
   }
 
   cancelTransfer = async (transferId: string, onCompleted: () => void) => {
     try {
       await this.setState({ isCancelling: true })
       await server.transfers.cancel({ id: transferId })
-      await this.setState({ isCancelling: false })
+      await this.setState({ isCancelling: false, shouldRefresh: true })
       onCompleted()
     } catch (error) {
       await this.setState({ isCancelling: false })

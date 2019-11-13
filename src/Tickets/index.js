@@ -92,8 +92,16 @@ export default class MyTickets extends Component {
           setPurchasedTicket,
           state: { purchasedTicket },
         },
+        transfers: {
+          fetchTransfers,
+          state: { shouldRefresh },
+        },
       },
     } = this.props
+
+    if (shouldRefresh) {
+      fetchTransfers()
+    }
 
     return (
       <View style={styles.containerDark}>

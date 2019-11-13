@@ -185,15 +185,17 @@ export default class EventsTicket extends Component {
     if (activeTab === 'transfer') {
       const { event, ticket_activity_items } = this.eventAndTickets
       renderData = []
-      const transferIds = []
-      Object.keys(ticket_activity_items).forEach((key) => {
-        const ticketActivityItem = ticket_activity_items[key]
-        const transferId = ticketActivityItem[0].transfer_id
-        if (!includes(transferIds, transferId)) {
-          transferIds.push(transferId)
-          renderData.push({ event, ticketActivityItem })
-        }
-      })
+      if (ticket_activity_items) {
+        const transferIds = []
+        Object.keys(ticket_activity_items).forEach((key) => {
+          const ticketActivityItem = ticket_activity_items[key]
+          const transferId = ticketActivityItem[0].transfer_id
+          if (!includes(transferIds, transferId)) {
+            transferIds.push(transferId)
+            renderData.push({ event, ticketActivityItem })
+          }
+        })
+      }
     } else {
       renderData = this.ticketData
     }
