@@ -40,7 +40,7 @@ const TransferActivityEvent = ({
           {activity.destination_addresses}
         </Text>
         <Text style={styles.date}>
-          {DateTime.fromISO(activity.occurred_at).toFormat('EEE, MMMM d, y t')}
+          {DateTime.fromISO(activity.occurred_at, { zone: "UTC" }).toLocal().toFormat('EEE, MMMM d, y t')}
         </Text>
       </View>
     </View>
