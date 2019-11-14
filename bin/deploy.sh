@@ -23,7 +23,7 @@ usage() {
     FASTLANE_ITC_TEAM_ID: The Big Neon Itunes connect Team ID (119447135)
 
     Optional environment variables:
-    PLATFORM: Only deploy to one platform (android,ios,all) [all]
+    PLATFORM: Only deploy to one platform (android,ios,none,all) [all]
     Requirements
 HELP_USAGE
 }
